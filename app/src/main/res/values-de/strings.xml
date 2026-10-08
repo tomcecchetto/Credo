@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Credo</string>
+    <string name="Hello">Hallo %1$s</string>
+    <string name="Goodbye">Tschuess %1$s</string>>
+</resources>
