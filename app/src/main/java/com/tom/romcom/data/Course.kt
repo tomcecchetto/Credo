@@ -16,7 +16,6 @@ import androidx.room.PrimaryKey
 )
 data class Course(
     val name: String,
-    val professor: String,
     val credits: Double,
     val color: Long,
     val semesterId: Int,

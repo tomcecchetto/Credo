@@ -21,6 +21,7 @@ data class Lecture(
     val room: String,
     val epochDay: Long,
     val isHappening: Boolean = true,
+    val isEditedByUser: Boolean = false,
     val startMinuteOfDay: Int,
     val endMinuteOfDay: Int,
     val calendarUid: String?,
