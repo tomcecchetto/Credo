@@ -1,5 +1,6 @@
 <resources>
-    <string name="app_name">Credo</string>
-    <string name="Hello">Hello %1$s</string>
-    <string name="Goodbye">Goodbye %1$s</string>
+    <string name="app_name" translatable="false">Credo</string>
+    <string name="Calendar">Calendar</string>
+    <string name="Progress">Progress</string>
+    <string name="Tasks">Tasks</string>
 </resources>
