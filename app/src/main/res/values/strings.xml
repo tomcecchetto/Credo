@@ -3,4 +3,5 @@
     <string name="Calendar">Calendar</string>
     <string name="Progress">Progress</string>
     <string name="Tasks">Task</string>
+    <string name="No_courses_yet">No courses yet</string>
 </resources>

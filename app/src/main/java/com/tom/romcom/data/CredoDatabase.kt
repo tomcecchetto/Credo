@@ -12,6 +12,8 @@ import androidx.room.RoomDatabase
 )
 abstract class CredoDatabase : RoomDatabase() {
 
+    abstract fun courseDao() : CourseDao
+
     companion object {
         @Volatile
         private var INSTANCE: CredoDatabase? = null

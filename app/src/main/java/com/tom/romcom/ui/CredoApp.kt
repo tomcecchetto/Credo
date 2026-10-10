@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.ViewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.calendar.CalendarScreen
 import com.tom.romcom.ui.progress.ProgressScreen
@@ -77,4 +78,5 @@ fun CredoApp(
             }
         }
     }
+    class CredoViewModel : ViewModel()
 }

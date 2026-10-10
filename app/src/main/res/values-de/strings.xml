@@ -2,4 +2,5 @@
     <string name="Calendar">Kalender</string>
     <string name="Progress">Fortschritt</string>
     <string name="Tasks">Aufgaben</string>
+    <string name="No_courses_yet">Keine Faecher</string>
 </resources>
