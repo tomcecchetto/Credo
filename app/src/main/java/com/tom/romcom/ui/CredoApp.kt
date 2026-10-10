@@ -78,5 +78,4 @@ fun CredoApp(
             }
         }
     }
-    class CredoViewModel : ViewModel()
 }
