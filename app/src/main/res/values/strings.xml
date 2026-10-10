@@ -2,5 +2,5 @@
     <string name="app_name" translatable="false">Credo</string>
     <string name="Calendar">Calendar</string>
     <string name="Progress">Progress</string>
-    <string name="Tasks">Tasks</string>
+    <string name="Tasks">Task</string>
 </resources>
