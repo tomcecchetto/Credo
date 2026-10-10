@@ -13,6 +13,7 @@ import androidx.room.RoomDatabase
 abstract class CredoDatabase : RoomDatabase() {
 
     abstract fun courseDao() : CourseDao
+    abstract fun semesterDao() : SemesterDao
 
     companion object {
         @Volatile
