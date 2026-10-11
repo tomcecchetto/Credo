@@ -18,9 +18,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
+import com.tom.romcom.ui.CredoTopBar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,14 +37,8 @@ fun ProgressScreen(
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets(0,0,0,0),
-        topBar = {
-            CenterAlignedTopAppBar(
-                windowInsets = WindowInsets(0, 0, 0, 0),
-                title = { Text(stringResource(R.string.courses)) },
-            )
-        }
+        topBar = { CredoTopBar(stringResource(R.string.Progress)) }
     ) { innerPadding ->
-
         when {
             semester == null ->
                 Column(
