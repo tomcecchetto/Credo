@@ -2,7 +2,6 @@ package com.tom.romcom.ui
 
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
@@ -17,7 +16,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.ViewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.calendar.CalendarScreen
 import com.tom.romcom.ui.progress.ProgressScreen
@@ -30,6 +28,7 @@ enum class Tab {
 
 @Composable
 fun MainArea(
+    onAddSemester: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var selectedTab by rememberSaveable { mutableStateOf(Tab.PROGRESS) }
@@ -42,7 +41,7 @@ fun MainArea(
                 NavigationBarItem(
                     selected = selectedTab == Tab.PROGRESS,
                     onClick = { selectedTab = Tab.PROGRESS },
-                    label = {Text(stringResource(R.string.Progress))},
+                    label = {Text(stringResource(R.string.progress))},
                     icon = { Icon(painterResource(
                         R.drawable.ic_progress),
                         contentDescription = null) }
@@ -50,7 +49,7 @@ fun MainArea(
                 NavigationBarItem(
                     selected = selectedTab == Tab.CALENDAR,
                     onClick = { selectedTab = Tab.CALENDAR },
-                    label = {Text(stringResource(R.string.Calendar))},
+                    label = {Text(stringResource(R.string.calendar))},
                     icon = { Icon(painterResource(
                         R.drawable.ic_calenar),
                         contentDescription = null) }
@@ -58,7 +57,7 @@ fun MainArea(
                 NavigationBarItem(
                     selected = selectedTab == Tab.TASK,
                     onClick = { selectedTab = Tab.TASK },
-                    label = { Text(stringResource(R.string.Tasks))},
+                    label = { Text(stringResource(R.string.tasks))},
                     icon = {
                         Icon(
                             painterResource(R.drawable.ic_tasks),
@@ -74,7 +73,7 @@ fun MainArea(
             .padding(innerPadding)
         ) {
             when (selectedTab) {
-                Tab.PROGRESS -> ProgressScreen()
+                Tab.PROGRESS -> ProgressScreen(onAddSemester = onAddSemester)
                 Tab.CALENDAR -> CalendarScreen()
                 Tab.TASK -> TaskScreen()
             }

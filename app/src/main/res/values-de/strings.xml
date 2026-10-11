@@ -1,8 +1,8 @@
 <resources>
-    <string name="Calendar">Kalender</string>
-    <string name="Progress">Fortschritt</string>
-    <string name="Tasks">Aufgaben</string>
-    <string name="No_courses_yet">Keine Fächer</string>
+    <string name="calendar">Kalender</string>
+    <string name="progress">Fortschritt</string>
+    <string name="tasks">Aufgaben</string>
+    <string name="no_courses_yet">Keine Fächer</string>
     <string name="welcome">Willkommen</string>
     <string name="courses">Fächer</string>
     <string name="add_semester">Semester hinzufügen</string>

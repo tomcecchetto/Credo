@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name" translatable="false">Credo</string>
-    <string name="Calendar">Calendar</string>
-    <string name="Progress">Progress</string>
-    <string name="Tasks">Task</string>
-    <string name="No_courses_yet">No courses yet</string>
+    <string name="calendar">Calendar</string>
+    <string name="progress">Progress</string>
+    <string name="tasks">Task</string>
+    <string name="no_courses_yet">No courses yet</string>
     <string name="welcome">Welcome</string>
     <string name="courses">courses</string>
     <string name="add_semester">add semester</string>

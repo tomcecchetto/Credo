@@ -14,11 +14,12 @@ import androidx.compose.ui.text.font.FontWeight
 
 fun CredoTopBar(
     title: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    windowInsets: WindowInsets = WindowInsets(0,0,0,0)
 ) {
     CenterAlignedTopAppBar(
         modifier = modifier,
-        windowInsets = WindowInsets(0,0,0,0),
+        windowInsets = windowInsets,
         title = {
             Text(
                 text = title,

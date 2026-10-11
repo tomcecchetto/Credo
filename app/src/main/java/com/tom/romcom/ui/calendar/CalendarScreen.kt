@@ -23,7 +23,7 @@ fun CalendarScreen(
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets(0,0,0,0),
-        topBar = { CredoTopBar(stringResource(R.string.Calendar)) }
+        topBar = { CredoTopBar(stringResource(R.string.calendar)) }
     ) { innerPadding ->
         LazyColumn(
             modifier = Modifier
