@@ -2,5 +2,9 @@
     <string name="Calendar">Kalender</string>
     <string name="Progress">Fortschritt</string>
     <string name="Tasks">Aufgaben</string>
-    <string name="No_courses_yet">Keine Faecher</string>
+    <string name="No_courses_yet">Keine Fächer</string>
+    <string name="welcome">Willkommen</string>
+    <string name="courses">Fächer</string>
+    <string name="add_semester">Semester hinzufügen</string>
+    <string name="add_course">Fach hinzufügen</string>
 </resources>
