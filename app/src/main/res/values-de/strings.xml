@@ -11,4 +11,5 @@
     <string name="hours_per_credit">Stunden pro ECTS Credit</string>
     <string name="count_lecture_hourss">Vorlesungsstunden den ECTS Lernnforderungen anrechnen?</string>
     <string name="details">Details</string>
+    <string name="cancel">Abbrechen</string>
 </resources>

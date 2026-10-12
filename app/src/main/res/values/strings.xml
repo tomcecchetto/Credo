@@ -12,4 +12,5 @@
     <string name="hours_per_credit">hours per credit</string>
     <string name="count_lecture_hourss">count lecture hours towards ECTS studying requirements?</string>
     <string name="details">details</string>
+    <string name="cancel">cancel</string>
 </resources>
