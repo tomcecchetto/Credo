@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.CredoTopBar
+import com.tom.romcom.ui.formatEpochDay
 
 @Composable
 fun SemesterSetupScreen(
@@ -112,33 +113,36 @@ fun SemesterSetupScreen(
         ) {
             Box {
                 OutlinedTextField(
-                    value = if (viewModel.startEpochDay != null) viewModel.startEpochDay.toString() else "",
+                    value = formatEpochDay(viewModel.startEpochDay),
                     label = { Text(stringResource(R.string.start_of_semester)) },
                     onValueChange = {},
                     readOnly = true,
                     modifier = Modifier
+                        .padding(horizontal = 16.dp)
                         .fillMaxWidth()
+
                 )
                 Box(
                     modifier = Modifier
-                        .matchParentSize()
                         .padding(horizontal = 16.dp)
+                        .matchParentSize()
                         .clickable(onClick = { showStartPicker = true })
                 )
             }
             Box {
                 OutlinedTextField(
-                    value = if (viewModel.endEpochDay != null) viewModel.endEpochDay.toString() else "",
+                    value = formatEpochDay(viewModel.endEpochDay),
                     label = { Text(stringResource(R.string.end_of_semester)) },
                     onValueChange = {},
                     readOnly = true,
                     modifier = Modifier
+                        .padding(horizontal = 16.dp)
                         .fillMaxWidth()
                 )
                 Box(
                     modifier = Modifier
-                        .matchParentSize()
                         .padding(horizontal = 16.dp)
+                        .matchParentSize()
                         .clickable(onClick = { showEndPicker = true })
                 )
             }
@@ -163,7 +167,6 @@ fun SemesterSetupScreen(
                 Switch(
                     checked = viewModel.countLectureHours,
                     onCheckedChange = { viewModel.onCountLectureHoursChange(it) },
-                    modifier = Modifier
                 )
             }
         }
