@@ -13,8 +13,14 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
     private val semesterDao = CredoDatabase.getDatabase(application).semesterDao()
     var hoursPerCredit by mutableStateOf("30")
         private set
+    var countLectureHours by mutableStateOf(false)
+        private set
 
     fun onHoursChange(hours: String){
         hoursPerCredit = hours
+    }
+
+    fun onCountLectureHoursChange(state: Boolean) {
+         countLectureHours = state
     }
 }
