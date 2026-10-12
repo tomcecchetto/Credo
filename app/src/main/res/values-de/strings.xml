@@ -8,4 +8,5 @@
     <string name="add_semester">Semester hinzufügen</string>
     <string name="add_course">Fach hinzufügen</string>
     <string name="back">Zurück</string>
+    <string name="hours_per_credit">Stunden pro ECTS Credit</string>
 </resources>
