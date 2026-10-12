@@ -1,8 +1,6 @@
 package com.tom.romcom.ui.semester
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -33,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.CredoTopBar
-import com.tom.romcom.ui.formatEpochDay
+import com.tom.romcom.ui.DateField
 
 @Composable
 fun SemesterSetupScreen(
@@ -111,41 +109,18 @@ fun SemesterSetupScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            Box {
-                OutlinedTextField(
-                    value = formatEpochDay(viewModel.startEpochDay),
-                    label = { Text(stringResource(R.string.start_of_semester)) },
-                    onValueChange = {},
-                    readOnly = true,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-
-                )
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .matchParentSize()
-                        .clickable(onClick = { showStartPicker = true })
-                )
-            }
-            Box {
-                OutlinedTextField(
-                    value = formatEpochDay(viewModel.endEpochDay),
-                    label = { Text(stringResource(R.string.end_of_semester)) },
-                    onValueChange = {},
-                    readOnly = true,
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .fillMaxWidth()
-                )
-                Box(
-                    modifier = Modifier
-                        .padding(horizontal = 16.dp)
-                        .matchParentSize()
-                        .clickable(onClick = { showEndPicker = true })
-                )
-            }
+            DateField(
+                label = stringResource(R.string.start_of_semester),
+                epochDay = viewModel.startEpochDay,
+                onClick = { showStartPicker = true },
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
+            DateField(
+                label = stringResource(R.string.end_of_semester),
+                epochDay = viewModel.endEpochDay,
+                onClick = { showEndPicker = true },
+                modifier = Modifier.padding(horizontal = 16.dp)
+            )
             OutlinedTextField(
                 value = viewModel.hoursPerCredit,
                 onValueChange = { viewModel.onHoursChange(it) },

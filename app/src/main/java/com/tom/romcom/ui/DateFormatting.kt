@@ -1,5 +1,7 @@
 package com.tom.romcom.ui
 
+import androidx.compose.ui.res.stringResource
+import com.tom.romcom.R
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
