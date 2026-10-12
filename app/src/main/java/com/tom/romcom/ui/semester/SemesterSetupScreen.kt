@@ -22,7 +22,8 @@ fun SemesterSetupScreen(
         contentWindowInsets = WindowInsets(0,0,0,0),
         topBar = { CredoTopBar(
             stringResource(R.string.add_semester),
-            windowInsets = TopAppBarDefaults.windowInsets)
+            windowInsets = TopAppBarDefaults.windowInsets,
+            onBack = onBack)
         }
     ) { innerPadding ->
         LazyColumn(

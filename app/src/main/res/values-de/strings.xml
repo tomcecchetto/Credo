@@ -7,4 +7,5 @@
     <string name="courses">Fächer</string>
     <string name="add_semester">Semester hinzufügen</string>
     <string name="add_course">Fach hinzufügen</string>
+    <string name="back">Zurück</string>
 </resources>
