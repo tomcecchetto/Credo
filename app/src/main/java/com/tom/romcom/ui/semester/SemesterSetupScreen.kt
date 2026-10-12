@@ -1,6 +1,8 @@
 package com.tom.romcom.ui.semester
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -11,7 +13,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Switch
@@ -42,6 +43,32 @@ fun SemesterSetupScreen(
 ) {
     var showStartPicker by rememberSaveable { mutableStateOf(false) }
     val startPickerState = rememberDatePickerState()
+    var showEndPicker by rememberSaveable { mutableStateOf(false) }
+    val endPickerState = rememberDatePickerState()
+
+    if (showEndPicker) {
+        DatePickerDialog(
+            onDismissRequest = { showEndPicker = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    val millis = endPickerState.selectedDateMillis
+                    if (millis != null) {
+                        viewModel.onEndDateSelected(millis)
+                    }
+                    showEndPicker = false
+                }) { Text("OK") }
+            },
+            dismissButton = {
+                TextButton(onClick = {
+                    showEndPicker = false
+                }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        ) {
+            DatePicker(state = endPickerState)
+        }
+    }
 
     if (showStartPicker) {
         DatePickerDialog(
@@ -83,10 +110,43 @@ fun SemesterSetupScreen(
                 .padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
+            Box {
+                OutlinedTextField(
+                    value = if (viewModel.startEpochDay != null) viewModel.startEpochDay.toString() else "",
+                    label = { Text(stringResource(R.string.start_of_semester)) },
+                    onValueChange = {},
+                    readOnly = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .padding(horizontal = 16.dp)
+                        .clickable(onClick = { showStartPicker = true })
+                )
+            }
+            Box {
+                OutlinedTextField(
+                    value = if (viewModel.endEpochDay != null) viewModel.endEpochDay.toString() else "",
+                    label = { Text(stringResource(R.string.end_of_semester)) },
+                    onValueChange = {},
+                    readOnly = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                )
+                Box(
+                    modifier = Modifier
+                        .matchParentSize()
+                        .padding(horizontal = 16.dp)
+                        .clickable(onClick = { showEndPicker = true })
+                )
+            }
             OutlinedTextField(
                 value = viewModel.hoursPerCredit,
                 onValueChange = { viewModel.onHoursChange(it) },
                 label = { Text(stringResource(R.string.hours_per_credit)) },
+                placeholder = { Text("30") },
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 modifier = Modifier
@@ -98,18 +158,13 @@ fun SemesterSetupScreen(
                 modifier = Modifier.padding(horizontal = 16.dp)
             ) {
                 Text(
-                    text = stringResource(R.string.count_lecture_hourss),
+                    text = stringResource(R.string.count_lecture_hours),
                     modifier = Modifier.weight(1f))
                 Switch(
                     checked = viewModel.countLectureHours,
                     onCheckedChange = { viewModel.onCountLectureHoursChange(it) },
                     modifier = Modifier
                 )
-            }
-            OutlinedButton(
-                onClick = { showStartPicker = true }
-            ) {
-                Text(viewModel.startEpochDay.toString())
             }
         }
     }

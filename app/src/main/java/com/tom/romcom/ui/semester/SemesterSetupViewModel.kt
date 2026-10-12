@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit
 class SemesterSetupViewModel(application: Application) : AndroidViewModel(application) {
 
     private val semesterDao = CredoDatabase.getDatabase(application).semesterDao()
-    var hoursPerCredit by mutableStateOf("30")
+    var hoursPerCredit by mutableStateOf("")
         private set
     var countLectureHours by mutableStateOf(false)
         private set

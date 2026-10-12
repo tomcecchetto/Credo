@@ -9,8 +9,10 @@
     <string name="add_semester">add semester</string>
     <string name="add_course">add course</string>
     <string name="back">Back</string>
-    <string name="hours_per_credit">hours per credit</string>
-    <string name="count_lecture_hourss">count lecture hours towards ECTS studying requirements?</string>
+    <string name="hours_per_credit">hours required per credit</string>
+    <string name="count_lecture_hours">count lecture hours towards ECTS studying requirements?</string>
     <string name="details">details</string>
     <string name="cancel">cancel</string>
+    <string name="start_of_semester">start of semester</string>
+    <string name="end_of_semester">end of semester</string>
 </resources>
