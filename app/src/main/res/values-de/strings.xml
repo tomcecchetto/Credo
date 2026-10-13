@@ -17,5 +17,5 @@
     <string name="save">Speichern</string>
     <string name="course_details">Details Fach</string>
     <string name="course_name">Fach</string>
-
+    <string name="credits">ECTS Credits</string>
 </resources>

@@ -18,4 +18,5 @@
     <string name="save">Save</string>
     <string name="course_details">Course details</string>
     <string name="course_name">Course</string>
+    <string name="credits">ECTS Credits</string>
 </resources>
