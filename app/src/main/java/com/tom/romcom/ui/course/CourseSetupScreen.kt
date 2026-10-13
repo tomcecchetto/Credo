@@ -55,7 +55,8 @@ fun CourseSetupScreen(
             CredoTopBar(
                 title = stringResource(R.string.course_details),
                 windowInsets = TopAppBarDefaults.windowInsets,
-                onBack = onBack
+                onBack = onBack,
+                onSave = {}
             )
         }
     ) { innerPadding ->
@@ -95,7 +96,7 @@ fun CourseSetupScreen(
             Row(
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 courseColors.forEach { color ->
                     Box(
