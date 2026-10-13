@@ -25,13 +25,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.CredoTopBar
 
 @Composable
 fun CourseSetupScreen(
     onBack: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    viewModel: CourseSetupViewModel = viewModel()
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -58,8 +60,8 @@ fun CourseSetupScreen(
         ) {
             OutlinedTextField(
                 label = { Text(stringResource(R.string.course_name)) },
-                value = "",
-                onValueChange = {},
+                value = viewModel.name,
+                onValueChange = { viewModel.onNameChange(it) },
                 keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(onNext = {focusManager.moveFocus(focusDirection = FocusDirection.Down)}),
                 singleLine = true,
@@ -69,8 +71,8 @@ fun CourseSetupScreen(
             )
             OutlinedTextField(
                 label = { Text(stringResource(R.string.credits)) },
-                value = "",
-                onValueChange = {},
+                value = viewModel.credits,
+                onValueChange = { viewModel.onCreditsChange(it) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {focusManager.clearFocus()}),
                 singleLine = true,
