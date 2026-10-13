@@ -5,7 +5,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.tom.romcom.data.CredoDatabase
+import com.tom.romcom.data.Semester
+import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 
@@ -44,4 +47,27 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
             return start != null && end != null && end > start && (hoursPerCredit.isEmpty() || (hoursPerCredit.toIntOrNull()
                 ?: 0) > 0)
         }
+
+    fun save(
+        onDone: () -> Unit
+    ) {
+        val start = startEpochDay
+        val end = endEpochDay
+        if (start == null || end == null)
+            return
+        val hours = hoursPerCredit.toIntOrNull() ?: 30
+
+        val semester = Semester(
+            startEpochDay = start,
+            endEpochDay = end,
+            hoursPerCredit = hours,
+            countLectureHours = countLectureHours
+        )
+        viewModelScope.launch {
+            semesterDao.insert(semester)
+            onDone()
+        }
+    }
 }
+
+

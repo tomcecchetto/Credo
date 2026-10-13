@@ -36,6 +36,7 @@ import com.tom.romcom.ui.DateField
 
 @Composable
 fun SemesterSetupScreen(
+    onSaved: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SemesterSetupViewModel = viewModel()
@@ -49,8 +50,9 @@ fun SemesterSetupScreen(
             stringResource(R.string.details),
             windowInsets = TopAppBarDefaults.windowInsets,
             onBack = onBack,
-            onSave = {},
-            saveEnabled = viewModel.canSave)
+            saveEnabled = viewModel.canSave,
+            onSave = { viewModel.save(onDone = onSaved) },
+            )
         }
     ) { innerPadding ->
         Column(

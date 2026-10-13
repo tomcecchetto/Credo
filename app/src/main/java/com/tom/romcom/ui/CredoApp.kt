@@ -24,7 +24,9 @@ fun CredoApp() {
                 MainArea(onAddSemester = { backStack.add(SemesterSetupRoute)})
             }
             entry<SemesterSetupRoute> {
-                SemesterSetupScreen(onBack = {backStack.removeLastOrNull()})
+                SemesterSetupScreen(
+                    onBack = {backStack.removeLastOrNull()},
+                    onSaved = {backStack.removeLastOrNull()})
             }
         }
     )
