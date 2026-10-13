@@ -36,4 +36,12 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
     fun onEndDateSelected(millis: Long) {
         endEpochDay = TimeUnit.MILLISECONDS.toDays(millis)
     }
+
+    val canSave: Boolean
+        get() {
+            val start = startEpochDay
+            val end = endEpochDay
+            return start != null && end != null && end > start && (hoursPerCredit.isEmpty() || (hoursPerCredit.toIntOrNull()
+                ?: 0) > 0)
+        }
 }
