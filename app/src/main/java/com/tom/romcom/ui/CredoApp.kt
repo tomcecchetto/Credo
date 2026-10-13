@@ -6,6 +6,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
+import com.tom.romcom.ui.course.CourseSetupScreen
 import com.tom.romcom.ui.semester.SemesterSetupScreen
 
 @Composable
@@ -21,12 +22,20 @@ fun CredoApp() {
         onBack = { backStack.removeLastOrNull() },
         entryProvider = entryProvider {
             entry<MainAreaRoute> {
-                MainArea(onAddSemester = { backStack.add(SemesterSetupRoute)})
+                MainArea(
+                    onAddSemester = { backStack.add(SemesterSetupRoute) },
+                    onAddCourse = { backStack.add(CourseSetupRoute) }
+                )
             }
             entry<SemesterSetupRoute> {
                 SemesterSetupScreen(
-                    onBack = {backStack.removeLastOrNull()},
-                    onSaved = {backStack.removeLastOrNull()})
+                    onBack = { backStack.removeLastOrNull() },
+                    onSaved = { backStack.removeLastOrNull()} )
+            }
+            entry< CourseSetupRoute> {
+                CourseSetupScreen(
+                    onBack = { backStack.removeLastOrNull() }
+                )
             }
         }
     )

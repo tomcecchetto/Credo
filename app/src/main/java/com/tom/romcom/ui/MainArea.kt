@@ -28,6 +28,7 @@ enum class Tab {
 
 @Composable
 fun MainArea(
+    onAddCourse: () -> Unit,
     onAddSemester: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -73,7 +74,9 @@ fun MainArea(
             .padding(innerPadding)
         ) {
             when (selectedTab) {
-                Tab.PROGRESS -> ProgressScreen(onAddSemester = onAddSemester)
+                Tab.PROGRESS -> ProgressScreen(
+                    onAddSemester = onAddSemester,
+                    onAddCourse = onAddCourse)
                 Tab.CALENDAR -> CalendarScreen()
                 Tab.TASK -> TaskScreen()
             }

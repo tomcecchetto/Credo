@@ -23,6 +23,7 @@ import com.tom.romcom.ui.CredoTopBar
 
 @Composable
 fun ProgressScreen(
+    onAddCourse: () -> Unit,
     onAddSemester: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProgressViewModel = viewModel()
@@ -61,7 +62,7 @@ fun ProgressScreen(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Button(
-                        onClick = {},
+                        onClick = onAddCourse
                     ) {
                         Text(stringResource(R.string.add_course))
                     }

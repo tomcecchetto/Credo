@@ -8,3 +8,6 @@ data object MainAreaRoute : NavKey
 
 @Serializable
 data object SemesterSetupRoute : NavKey
+
+@Serializable
+data object CourseSetupRoute : NavKey

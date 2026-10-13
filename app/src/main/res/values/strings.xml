@@ -16,4 +16,6 @@
     <string name="start_of_semester">Start of semester</string>
     <string name="end_of_semester">End of semester</string>
     <string name="save">Save</string>
+    <string name="course_details">Course details</string>
+    <string name="course_name">Course</string>
 </resources>
