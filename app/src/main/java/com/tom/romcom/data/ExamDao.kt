@@ -1,0 +1,24 @@
+package com.tom.romcom.data
+
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface ExamDao{
+
+    @Query("SELECT * FROM Exam WHERE courseId = :courseId ORDER BY epochDay")
+    fun getExamsForCourse(courseId: Int): Flow<List<Exam>>
+
+    @Insert
+    suspend fun insert(exam: Exam)
+
+    @Update
+    suspend fun update(exam: Exam)
+
+    @Delete
+    suspend fun delete(exam: Exam)
+}

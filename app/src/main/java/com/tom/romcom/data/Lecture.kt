@@ -13,7 +13,7 @@ import androidx.room.PrimaryKey
         childColumns = ["courseId"],
         onDelete = ForeignKey.CASCADE
     )],
-    indices = [Index("courseId"), Index(value = ["calendarUid"], unique = true)]
+    indices = [Index(value = ["courseId"]), Index(value = ["calendarUid"], unique = true)]
 )
 
 data class Lecture(

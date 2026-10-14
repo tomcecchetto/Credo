@@ -7,13 +7,20 @@ import androidx.room.RoomDatabase
 
 @Database(
     version = 1,
-    entities = [Lecture::class, Task::class, Course::class, StudySession::class, Semester::class],
+    entities = [
+        Lecture::class,
+        Task::class,
+        Course::class,
+        StudySession::class,
+        Semester::class,
+        Exam::class],
     exportSchema = false
 )
 abstract class CredoDatabase : RoomDatabase() {
 
     abstract fun courseDao() : CourseDao
     abstract fun semesterDao() : SemesterDao
+    abstract fun examDao() : ExamDao
 
     companion object {
         @Volatile
