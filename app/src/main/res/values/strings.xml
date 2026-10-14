@@ -19,4 +19,5 @@
     <string name="course_details">Course details</string>
     <string name="course_name">Course</string>
     <string name="credits">ECTS Credits</string>
+    <string name="credits_value">%1$s ECTS</string>
 </resources>

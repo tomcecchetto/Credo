@@ -8,6 +8,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExtendedFloatingActionButton
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,11 +18,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.CredoTopBar
+import com.tom.romcom.ui.course.CourseCard
 
 @Composable
 fun ProgressScreen(
@@ -34,8 +39,16 @@ fun ProgressScreen(
 
     Scaffold(
         modifier = modifier,
-        contentWindowInsets = WindowInsets(0,0,0,0),
-        topBar = { CredoTopBar(stringResource(R.string.progress)) }
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        topBar = { CredoTopBar(stringResource(R.string.progress)) },
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            if (semester != null) {
+                ExtendedFloatingActionButton(onClick = onAddCourse) {
+                    Icon(painterResource(R.drawable.ic_add_course), contentDescription = stringResource(R.string.add_course))
+                }
+            }
+        }
     ) { innerPadding ->
         when {
             semester == null ->
@@ -72,11 +85,9 @@ fun ProgressScreen(
             else -> LazyColumn(
                 modifier = Modifier
                     .padding(innerPadding)
-                    .fillMaxSize(),
             ) {
                 items(courses, key = { it.id }) { course ->
-                    Text(
-                        text = course.name)
+                    CourseCard(course = course)
                 }
             }
         }
