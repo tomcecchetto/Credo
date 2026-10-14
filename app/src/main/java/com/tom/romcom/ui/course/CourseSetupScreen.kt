@@ -42,6 +42,7 @@ import com.tom.romcom.ui.courseColors
 
 @Composable
 fun CourseSetupScreen(
+    onSaved: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CourseSetupViewModel = viewModel()
@@ -56,7 +57,8 @@ fun CourseSetupScreen(
                 title = stringResource(R.string.course_details),
                 windowInsets = TopAppBarDefaults.windowInsets,
                 onBack = onBack,
-                onSave = {}
+                saveEnabled = viewModel.canSave,
+                onSave = {viewModel.save(onDone = onSaved)}
             )
         }
     ) { innerPadding ->

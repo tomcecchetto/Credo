@@ -75,7 +75,8 @@ fun ProgressScreen(
                     .fillMaxSize(),
             ) {
                 items(courses, key = { it.id }) { course ->
-                    course.name
+                    Text(
+                        text = course.name)
                 }
             }
         }

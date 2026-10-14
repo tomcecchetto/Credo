@@ -5,9 +5,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.tom.romcom.data.Course
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.ui.courseColors
 import kotlinx.coroutines.flow.first
@@ -28,6 +28,9 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         private set
 
     private var semesterId: Int? = null
+
+    private val creditsValue: Double? get() = credits.replace(',', '.').toDoubleOrNull()
+
 
     init {
         viewModelScope.launch {
@@ -53,4 +56,28 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         color = courseColor
     }
 
+    val canSave: Boolean
+        get() {
+            return name.isNotBlank() && (creditsValue ?: 0.0) > 0.0
+        }
+
+    fun save(
+        onDone: () -> Unit
+    ) {
+        val semId = semesterId
+        val creditsNum = credits.replace(',', '.').toDoubleOrNull()
+        if (name.isBlank() || creditsNum == null || semId == null)
+            return
+
+        val course = Course(
+            name = name,
+            credits = creditsNum,
+            color = color,
+            semesterId = semId
+        )
+        viewModelScope.launch {
+            courseDao.insert(course)
+            onDone()
+        }
+    }
 }

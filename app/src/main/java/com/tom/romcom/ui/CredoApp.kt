@@ -34,7 +34,8 @@ fun CredoApp() {
             }
             entry< CourseSetupRoute> {
                 CourseSetupScreen(
-                    onBack = { backStack.removeLastOrNull() }
+                    onBack = { backStack.removeLastOrNull() },
+                    onSaved = { backStack.removeLastOrNull() }
                 )
             }
         }
