@@ -40,6 +40,7 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
         endEpochDay = TimeUnit.MILLISECONDS.toDays(millis)
     }
 
+
     val canSave: Boolean
         get() {
             val start = startEpochDay
