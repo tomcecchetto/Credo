@@ -18,8 +18,8 @@ import androidx.room.PrimaryKey
 data class Exam(
     val courseId: Int,
     val epochDay: Long,
-    val startMinuteOfDay: Int?,
-    val endMinuteOfDay: Int?,
-    val room: String?,
+    val startMinuteOfDay: Int? = null,
+    val endMinuteOfDay: Int? = null,
+    val room: String? = null,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 )

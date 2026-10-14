@@ -9,14 +9,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tom.romcom.data.Course
 import com.tom.romcom.data.CredoDatabase
+import com.tom.romcom.data.Exam
 import com.tom.romcom.ui.courseColors
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 class CourseSetupViewModel(application: Application) : AndroidViewModel(application) {
 
     private val courseDao = CredoDatabase.getDatabase(context = application).courseDao()
     private val semesterDao = CredoDatabase.getDatabase(context = application).semesterDao()
+    private val examDao = CredoDatabase.getDatabase(context = application).examDao()
 
     var name by mutableStateOf("")
         private set
@@ -27,9 +30,14 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
     var color by mutableLongStateOf(courseColors.first())
         private set
 
+    var examEpochDay by mutableStateOf<Long?>(null)
+        private set
+
     private var semesterId: Int? = null
 
     private val creditsValue: Double? get() = credits.replace(',', '.').toDoubleOrNull()
+
+
 
 
     init {
@@ -56,6 +64,10 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         color = courseColor
     }
 
+    fun onExamDateSelected(millis: Long) {
+        examEpochDay = TimeUnit.MILLISECONDS.toDays(millis)
+    }
+
     val canSave: Boolean
         get() {
             return name.isNotBlank() && (creditsValue ?: 0.0) > 0.0
@@ -65,7 +77,9 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         onDone: () -> Unit
     ) {
         val semId = semesterId
-        val creditsNum = credits.replace(',', '.').toDoubleOrNull()
+        val creditsNum = creditsValue
+        val examDate = examEpochDay
+
         if (name.isBlank() || creditsNum == null || semId == null)
             return
 
@@ -76,7 +90,10 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
             semesterId = semId
         )
         viewModelScope.launch {
-            courseDao.insert(course)
+            val newId = courseDao.insert(course).toInt()
+            if (examDate != null) {
+                examDao.insert(Exam(courseId = newId, epochDay = examDate))
+            }
             onDone()
         }
     }

@@ -2,6 +2,7 @@ package com.tom.romcom.ui.progress
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -43,9 +44,10 @@ fun ProgressScreen(
         topBar = { CredoTopBar(stringResource(R.string.progress)) },
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            if (semester != null) {
+            if (courses.isNotEmpty()) {
                 ExtendedFloatingActionButton(onClick = onAddCourse) {
                     Icon(painterResource(R.drawable.ic_add_course), contentDescription = stringResource(R.string.add_course))
+                    Text(stringResource(R.string.add_course))
                 }
             }
         }
@@ -84,7 +86,8 @@ fun ProgressScreen(
 
             else -> LazyColumn(
                 modifier = Modifier
-                    .padding(innerPadding)
+                    .padding(innerPadding),
+                contentPadding = PaddingValues(bottom = 88.dp)
             ) {
                 items(courses, key = { it.id }) { course ->
                     CourseCard(course = course)

@@ -2,7 +2,7 @@
     <string name="app_name" translatable="false">Credo</string>
     <string name="calendar">Calendar</string>
     <string name="progress">Progress</string>
-    <string name="tasks">Task</string>
+    <string name="tasks">Tasks</string>
     <string name="no_courses_yet">No courses yet</string>
     <string name="welcome">Welcome</string>
     <string name="courses">Courses</string>
@@ -20,4 +20,5 @@
     <string name="course_name">Course</string>
     <string name="credits">ECTS Credits</string>
     <string name="credits_value">%1$s ECTS</string>
+    <string name="exam_date">Exam date (optional)</string>
 </resources>

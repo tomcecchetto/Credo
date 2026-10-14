@@ -38,6 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.CredoTopBar
+import com.tom.romcom.ui.DateField
 import com.tom.romcom.ui.courseColors
 
 @Composable
@@ -90,6 +91,14 @@ fun CourseSetupScreen(
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {focusManager.clearFocus()}),
                 singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+            DateField(
+                label = stringResource(R.string.exam_date),
+                epochDay = viewModel.examEpochDay,
+                onDateSelected = { viewModel.onExamDateSelected(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)

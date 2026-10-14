@@ -14,7 +14,7 @@ interface CourseDao {
     fun getCoursesForSemester(semesterId: Int): Flow<List<Course>>
 
     @Insert
-    suspend fun insert(course: Course)
+    suspend fun insert(course: Course): Long
 
     @Update
     suspend fun update(course: Course)
