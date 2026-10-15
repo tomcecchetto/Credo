@@ -36,6 +36,10 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
 
     private var semesterId: Int? = null
 
+    private var editingCourseId: Int? = null
+
+    private var loadedExam: Exam? = null
+
     private var loaded = false
 
     private val creditsValue: Double? get() = credits.replace(',', '.').toDoubleOrNull()
@@ -70,11 +74,13 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     name = course.name
                     credits = formatCredits(course.credits)
                     color = course.color
-                    examEpochDay = examDao.getExamsForCourse(courseId).first().firstOrNull()?.epochDay
+                    editingCourseId = courseId
+                    semesterId = course.semesterId
+                    loadedExam = examDao.getExamsForCourse(courseId).first().firstOrNull()
+                    examEpochDay = loadedExam?.epochDay
                 }
             }
-        }
-        else {
+        } else {
             viewModelScope.launch {
                 semesterId = semesterDao.getCurrentSemester().first()?.id
                 val semId = semesterId
@@ -98,6 +104,8 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         val semId = semesterId
         val creditsNum = creditsValue
         val examDate = examEpochDay
+        val editId = editingCourseId
+        val exam = loadedExam
 
         if (name.isBlank() || creditsNum == null || semId == null)
             return
@@ -109,9 +117,15 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
             semesterId = semId
         )
         viewModelScope.launch {
-            val newId = courseDao.insert(course).toInt()
+            val id = if (editId != null) {
+                courseDao.update(course.copy(id = editId))
+                editId
+            } else courseDao.insert(course).toInt()
+
             if (examDate != null) {
-                examDao.insert(Exam(courseId = newId, epochDay = examDate))
+                if (exam != null) {
+                    examDao.update(exam.copy(epochDay = examDate))
+                } else examDao.insert(Exam(courseId = id, epochDay = examDate))
             }
             onDone()
         }
