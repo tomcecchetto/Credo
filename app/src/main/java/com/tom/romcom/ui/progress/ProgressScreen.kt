@@ -24,8 +24,10 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
+import com.tom.romcom.data.Exam
 import com.tom.romcom.ui.CredoTopBar
 import com.tom.romcom.ui.course.CourseCard
+import java.time.LocalDate
 
 @Composable
 fun ProgressScreen(
@@ -37,6 +39,9 @@ fun ProgressScreen(
 ) {
     val courses by viewModel.courses.collectAsState(initial = emptyList())
     val semester by viewModel.semester.collectAsState(initial = null)
+    val exams by viewModel.exams.collectAsState(initial = emptyList())
+
+    val today = LocalDate.now().toEpochDay()
 
     Scaffold(
         modifier = modifier,
@@ -83,14 +88,14 @@ fun ProgressScreen(
                     }
                 }
             }
-
             else -> LazyColumn(
                 modifier = Modifier
                     .padding(innerPadding),
                 contentPadding = PaddingValues(bottom = 88.dp)
             ) {
                 items(courses, key = { it.id }) { course ->
-                    CourseCard(course = course)
+                    val nextExam = exams.firstOrNull { it.courseId == course.id && it.epochDay >= today }
+                    CourseCard(course = course, nextExam = nextExam)
                 }
             }
         }

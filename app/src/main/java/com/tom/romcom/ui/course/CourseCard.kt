@@ -16,17 +16,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.tom.romcom.R
 import com.tom.romcom.data.Course
+import com.tom.romcom.data.Exam
 import com.tom.romcom.ui.formatCredits
+import java.time.LocalDate
 
 @Composable
 fun CourseCard(
     course: Course,
-    modifier: Modifier = Modifier
-) {
+    nextExam: Exam? = null,
+    modifier: Modifier = Modifier,
+
+    ) {
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -53,7 +58,20 @@ fun CourseCard(
                     style = MaterialTheme.typography.titleMedium)
                 Text(
                     text = stringResource(R.string.credits_value, formatCredits(course.credits)),
-                    style = MaterialTheme.typography.bodySmall)
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+
+                val today = LocalDate.now().toEpochDay()
+                if (nextExam != null) {
+                    val daysLeft = (nextExam.epochDay - today).toInt()
+                    Text(
+                        text = if (daysLeft == 0) stringResource(R.string.exam_today) else pluralStringResource(R.plurals.exam_in_days,daysLeft, daysLeft),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = if (daysLeft in 1..7)
+                            MaterialTheme.colorScheme.error else
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
     }

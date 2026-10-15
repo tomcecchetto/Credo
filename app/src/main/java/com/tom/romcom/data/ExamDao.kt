@@ -12,6 +12,8 @@ interface ExamDao{
 
     @Query("SELECT * FROM Exam WHERE courseId = :courseId ORDER BY epochDay")
     fun getExamsForCourse(courseId: Int): Flow<List<Exam>>
+    @Query("SELECT Exam.* FROM Exam INNER JOIN Course ON Exam.courseId = Course.id WHERE Course.semesterId = :semesterId ORDER BY Exam.epochDay")
+    fun getExamsForSemester(semesterId: Int): Flow<List<Exam>>
 
     @Insert
     suspend fun insert(exam: Exam)

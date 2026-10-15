@@ -20,4 +20,9 @@
     <string name="credits">ECTS Credits</string>
     <string name="credits_value">%1$s ECTS</string>
     <string name="exam_date">Prüfungsdatum (optional)</string>
+    <string name="exam_today">Prüfung heute. Viel Glück!</string>
+    <plurals name="exam_in_days">
+        <item quantity="one">Prüfung in %d Tag</item>
+        <item quantity="other">Prüfung in %d Tagen</item>
+    </plurals>
 </resources>
