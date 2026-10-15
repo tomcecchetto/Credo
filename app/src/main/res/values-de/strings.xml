@@ -21,6 +21,11 @@
     <string name="credits_value">%1$s ECTS</string>
     <string name="exam_date">Prüfungsdatum (optional)</string>
     <string name="exam_today">Prüfung heute. Viel Glück!</string>
+    <string name="delete">Löschen</string>
+    <string name="discard_course">Fach löschen?</string>
+    <string name="delete_course_titles">Dies kann nicht rückgängig gemacht werden</string>
+
+
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
         <item quantity="other">Prüfung in %d Tagen</item>

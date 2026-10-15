@@ -18,13 +18,19 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
@@ -46,6 +52,7 @@ import com.tom.romcom.ui.courseColors
 fun CourseSetupScreen(
     courseId : Int?,
     onSaved: () -> Unit,
+    onDeleted: () -> Unit,
     onBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CourseSetupViewModel = viewModel()
@@ -54,6 +61,25 @@ fun CourseSetupScreen(
         viewModel.load(courseId)
     }
     val focusManager = LocalFocusManager.current
+    var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text(stringResource(R.string.discard_course)) },
+            text = { Text(stringResource(R.string.delete_course_titles)) },
+            confirmButton = {
+                TextButton(onClick = { viewModel.delete(onDone = onDeleted) ; showDeleteDialog = false}) {
+                    Text(stringResource(R.string.delete))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDeleteDialog = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
 
 
     Scaffold(
@@ -65,7 +91,8 @@ fun CourseSetupScreen(
                 windowInsets = TopAppBarDefaults.windowInsets,
                 onBack = onBack,
                 saveEnabled = viewModel.canSave,
-                onSave = {viewModel.save(onDone = onSaved)}
+                onSave = {viewModel.save(onDone = onSaved)},
+                onDelete = if (courseId != null) { { showDeleteDialog = true } } else null
             )
         }
     ) { innerPadding ->
@@ -125,7 +152,8 @@ fun CourseSetupScreen(
                             .border(
                                 width = if (color == viewModel.color) 3.dp else 0.dp,
                                 color = MaterialTheme.colorScheme.onSurface,
-                                shape = CircleShape)
+                                shape = CircleShape
+                            )
                     )
                 }
             }

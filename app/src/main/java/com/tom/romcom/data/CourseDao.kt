@@ -14,6 +14,8 @@ interface CourseDao {
     fun getCoursesForSemester(semesterId: Int): Flow<List<Course>>
     @Query("SELECT * FROM Course WHERE id = :courseId")
     suspend fun getCourse(courseId: Int): Course?
+    @Query("DELETE FROM Course WHERE id = :courseId")
+    suspend fun deleteById(courseId: Int)
 
     @Insert
     suspend fun insert(course: Course): Long

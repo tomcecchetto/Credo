@@ -44,6 +44,8 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
 
     private val creditsValue: Double? get() = credits.replace(',', '.').toDoubleOrNull()
 
+    private var loadedCourse: Course? = null
+
 
     fun onNameChange(courseName: String) {
         name = courseName
@@ -78,6 +80,7 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     semesterId = course.semesterId
                     loadedExam = examDao.getExamsForCourse(courseId).first().firstOrNull()
                     examEpochDay = loadedExam?.epochDay
+                    loadedCourse = course
                 }
             }
         } else {
@@ -106,19 +109,29 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         val examDate = examEpochDay
         val editId = editingCourseId
         val exam = loadedExam
+        val original = loadedCourse
 
         if (name.isBlank() || creditsNum == null || semId == null)
             return
 
-        val course = Course(
-            name = name,
-            credits = creditsNum,
-            color = color,
-            semesterId = semId
-        )
+        val course =
+            if (original != null) {
+                original.copy(
+                    name = name,
+                    credits = creditsNum,
+                    color = color
+                )
+            } else {
+                Course(
+                    name = name,
+                    credits = creditsNum,
+                    color = color,
+                    semesterId = semId
+                )
+            }
         viewModelScope.launch {
             val id = if (editId != null) {
-                courseDao.update(course.copy(id = editId))
+                courseDao.update(course)
                 editId
             } else courseDao.insert(course).toInt()
 
@@ -127,6 +140,14 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     examDao.update(exam.copy(epochDay = examDate))
                 } else examDao.insert(Exam(courseId = id, epochDay = examDate))
             }
+            onDone()
+        }
+    }
+
+    fun delete(onDone: () -> Unit) {
+        val editId = editingCourseId ?: return
+        viewModelScope.launch {
+            courseDao.deleteById(editId)
             onDone()
         }
     }
