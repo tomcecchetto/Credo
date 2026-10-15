@@ -33,6 +33,7 @@ import java.time.LocalDate
 fun ProgressScreen(
     onAddCourse: () -> Unit,
     onAddSemester: () -> Unit,
+    onCourseClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ProgressViewModel = viewModel()
 
@@ -95,7 +96,11 @@ fun ProgressScreen(
             ) {
                 items(courses, key = { it.id }) { course ->
                     val nextExam = exams.firstOrNull { it.courseId == course.id && it.epochDay >= today }
-                    CourseCard(course = course, nextExam = nextExam)
+                    CourseCard(
+                        course = course,
+                        nextExam = nextExam,
+                        onClick = { onCourseClick(course.id) }
+                    )
                 }
             }
         }

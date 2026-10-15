@@ -28,6 +28,7 @@ import java.time.LocalDate
 @Composable
 fun CourseCard(
     course: Course,
+    onClick: () -> Unit,
     nextExam: Exam? = null,
     modifier: Modifier = Modifier,
 
@@ -35,7 +36,8 @@ fun CourseCard(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        onClick = onClick
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

@@ -11,6 +11,7 @@ import com.tom.romcom.data.Course
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Exam
 import com.tom.romcom.ui.courseColors
+import com.tom.romcom.ui.formatCredits
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -35,22 +36,10 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
 
     private var semesterId: Int? = null
 
+    private var loaded = false
+
     private val creditsValue: Double? get() = credits.replace(',', '.').toDoubleOrNull()
 
-
-
-
-    init {
-        viewModelScope.launch {
-            semesterId = semesterDao.getCurrentSemester().first()?.id
-            val semId = semesterId
-            if (semId != null) {
-                val courses = courseDao.getCoursesForSemester(semId).first()
-                val taken = courses.map { it.color }
-                color = courseColors.firstOrNull { it !in taken } ?: courseColors.first()
-            }
-        }
-    }
 
     fun onNameChange(courseName: String) {
         name = courseName
@@ -66,6 +55,36 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
 
     fun onExamDateSelected(millis: Long) {
         examEpochDay = TimeUnit.MILLISECONDS.toDays(millis)
+    }
+
+    fun load(courseId: Int?) {
+
+        if (loaded)
+            return
+        loaded = true
+
+        if (courseId != null) {
+            viewModelScope.launch {
+                val course = courseDao.getCourse(courseId)
+                if (course != null) {
+                    name = course.name
+                    credits = formatCredits(course.credits)
+                    color = course.color
+                    examEpochDay = examDao.getExamsForCourse(courseId).first().firstOrNull()?.epochDay
+                }
+            }
+        }
+        else {
+            viewModelScope.launch {
+                semesterId = semesterDao.getCurrentSemester().first()?.id
+                val semId = semesterId
+                if (semId != null) {
+                    val courses = courseDao.getCoursesForSemester(semId).first()
+                    val taken = courses.map { it.color }
+                    color = courseColors.firstOrNull { it !in taken } ?: courseColors.first()
+                }
+            }
+        }
     }
 
     val canSave: Boolean

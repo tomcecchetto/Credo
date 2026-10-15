@@ -24,7 +24,8 @@ fun CredoApp() {
             entry<MainAreaRoute> {
                 MainArea(
                     onAddSemester = { backStack.add(SemesterSetupRoute) },
-                    onAddCourse = { backStack.add(CourseSetupRoute) }
+                    onAddCourse = { backStack.add(CourseSetupRoute()) },
+                    onCourseClick = { id -> backStack.add(CourseSetupRoute(id)) }
                 )
             }
             entry<SemesterSetupRoute> {
@@ -32,10 +33,11 @@ fun CredoApp() {
                     onBack = { backStack.removeLastOrNull() },
                     onSaved = { backStack.removeLastOrNull() })
             }
-            entry<CourseSetupRoute> {
+            entry<CourseSetupRoute> { route ->
                 CourseSetupScreen(
                     onBack = { backStack.removeLastOrNull() },
-                    onSaved = { backStack.removeLastOrNull() }
+                    onSaved = { backStack.removeLastOrNull() },
+                    courseId = route.courseId
                 )
             }
         }

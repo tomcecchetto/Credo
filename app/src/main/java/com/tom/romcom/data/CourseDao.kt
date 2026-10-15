@@ -12,6 +12,8 @@ interface CourseDao {
 
     @Query("SELECT * FROM Course WHERE semesterId = :semesterId ORDER BY name")
     fun getCoursesForSemester(semesterId: Int): Flow<List<Course>>
+    @Query("SELECT * FROM Course WHERE id = :courseId")
+    suspend fun getCourse(courseId: Int): Course?
 
     @Insert
     suspend fun insert(course: Course): Long

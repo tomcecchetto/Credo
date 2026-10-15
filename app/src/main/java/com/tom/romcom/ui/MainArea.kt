@@ -30,6 +30,7 @@ enum class Tab {
 fun MainArea(
     onAddCourse: () -> Unit,
     onAddSemester: () -> Unit,
+    onCourseClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     var selectedTab by rememberSaveable { mutableStateOf(Tab.PROGRESS) }
@@ -76,7 +77,8 @@ fun MainArea(
             when (selectedTab) {
                 Tab.PROGRESS -> ProgressScreen(
                     onAddSemester = onAddSemester,
-                    onAddCourse = onAddCourse)
+                    onAddCourse = onAddCourse,
+                    onCourseClick = onCourseClick)
                 Tab.CALENDAR -> CalendarScreen()
                 Tab.TASK -> TaskScreen()
             }
