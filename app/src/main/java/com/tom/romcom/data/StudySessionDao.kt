@@ -20,6 +20,10 @@ interface StudySessionDao {
     @Query("SELECT * FROM StudySession WHERE endTime IS NULL LIMIT 1")
     suspend fun getRunningSessionNow(): StudySession?
 
+
+    @Query("SELECT * FROM Course WHERE id = :sessionId")
+    suspend fun getSessionById(sessionId: Int): StudySession?
+
     @Transaction
     suspend fun startIfNoneRunning(session: StudySession) {
         if (getRunningSessionNow() == null) {

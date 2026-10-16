@@ -24,6 +24,7 @@ import com.tom.romcom.ui.formatDuration
 
 @Composable
 fun StudySessionRow(
+    onClick: () -> Unit,
     session: StudySession,
     course: Course,
     modifier: Modifier = Modifier,
@@ -32,7 +33,8 @@ fun StudySessionRow(
     Card(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 4.dp)
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        onClick = onClick
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

@@ -12,3 +12,6 @@ data object SemesterSetupRoute : NavKey
 @Serializable
 data class CourseSetupRoute(val courseId: Int? = null) : NavKey
 
+@Serializable
+data class SessionEditRoute(val sessionId: Int? = null) : NavKey
+

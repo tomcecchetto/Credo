@@ -29,6 +29,8 @@ enum class Tab {
 
 @Composable
 fun MainArea(
+    onAddSession: () -> Unit,
+    onSessionClick: (Int) -> Unit,
     onAddCourse: () -> Unit,
     onAddSemester: () -> Unit,
     onCourseClick: (Int) -> Unit,
@@ -104,7 +106,10 @@ fun MainArea(
                     onCourseClick = onCourseClick
                 )
 
-                Tab.STUDY -> StudySessionScreen()
+                Tab.STUDY -> StudySessionScreen(
+                    onSessionClick = onSessionClick,
+                    onAddSession = onAddSession
+                )
                 Tab.CALENDAR -> CalendarScreen()
                 Tab.TASK -> TaskScreen()
             }

@@ -51,7 +51,7 @@ fun ProgressScreen(
         floatingActionButton = {
             if (courses.isNotEmpty()) {
                 ExtendedFloatingActionButton(onClick = onAddCourse) {
-                    Icon(painterResource(R.drawable.ic_add_course), contentDescription = stringResource(R.string.add_course))
+                    Icon(painterResource(R.drawable.ic_add), contentDescription = stringResource(R.string.add_course))
                     Text(stringResource(R.string.add_course))
                 }
             }

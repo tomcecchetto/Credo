@@ -28,6 +28,8 @@
     <string name="start">Start</string>
     <string name="stop">Stopp</string>
     <string name="add_course_first">Füge zuerst ein Fach hinzu</string>
+    <string name="session">Lerneinheit</string>
+    <string name="add_session">Lerneinheit hinzufügen</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

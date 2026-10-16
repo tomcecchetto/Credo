@@ -29,6 +29,8 @@
     <string name="start">Start</string>
     <string name="stop">Stop</string>
     <string name="add_course_first">Add a course first</string>
+    <string name="session">Session</string>
+    <string name="add_session">Add study session</string>
 
 
 

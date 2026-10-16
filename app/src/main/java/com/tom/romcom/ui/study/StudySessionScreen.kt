@@ -15,6 +15,9 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
@@ -30,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -42,6 +46,8 @@ import kotlin.time.Duration.Companion.milliseconds
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudySessionScreen(
+    onAddSession: () -> Unit,
+    onSessionClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: StudyViewModel = viewModel()
 ) {
@@ -62,12 +68,20 @@ fun StudySessionScreen(
             CredoTopBar(
                 title = stringResource(R.string.study_session),
             )
+        },
+        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onAddSession
+            ) {
+                Icon(painterResource(R.drawable.ic_add), contentDescription = stringResource(R.string.add_session))
+            }
         }
     ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(innerPadding),
         ) {
             // local copy so Kotlin can smart-cast the delegated value
             val running = runningSession
@@ -149,14 +163,15 @@ fun StudySessionScreen(
             LazyColumn(
                 state = listState,
                 modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(bottom = 16.dp)
+                contentPadding = PaddingValues(bottom = 88.dp)
             ) {
                 items(items = finishedSessions, key = { it.id }) { session ->
                     val course = courses.firstOrNull { it.id == session.courseId }
                     if (course != null) {
                         StudySessionRow(
                             session = session,
-                            course = course
+                            course = course,
+                            onClick = { onSessionClick(session.id) }
                         )
                     }
                 }
