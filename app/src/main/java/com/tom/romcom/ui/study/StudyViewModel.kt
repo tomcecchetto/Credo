@@ -20,7 +20,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalCoroutinesApi::class)
 class StudyViewModel(application: Application) : AndroidViewModel(application) {
 
-    val db = CredoDatabase.getDatabase(application)
+    private val db = CredoDatabase.getDatabase(application)
     private val studySessionDao = db.studySessionDao()
     private val semesterDao = db.semesterDao()
     private val courseDao = db.courseDao()
@@ -43,6 +43,11 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
     fun start() {
         val selectedId = selectedCourseId ?: return
         viewModelScope.launch {
+            val courseExists = courses.first().any { it.id == selectedId }
+            if (!courseExists) {
+                selectedCourseId = null
+                return@launch
+            }
             studySessionDao.startIfNoneRunning(
                 StudySession(
                     courseId = selectedId,
@@ -59,7 +64,6 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
                 studySessionDao.update(
                     running.copy(endTime = System.currentTimeMillis())
                 )
-
             }
         }
     }
