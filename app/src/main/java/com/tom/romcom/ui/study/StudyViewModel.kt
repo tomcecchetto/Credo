@@ -30,7 +30,10 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
     var selectedCourseId by mutableStateOf<Int?>(null)
         private set
     val runningSession: Flow<StudySession?> = studySessionDao.getRunningSession()
-    val finishedSessions: Flow<List<StudySession>> = studySessionDao.getFinishedSessions()
+    val finishedSessions: Flow<List<StudySession>> = semester.flatMapLatest { current ->
+        if (current == null) flowOf(emptyList())
+        else studySessionDao.getFinishedSessionsForSemester(current.id)
+    }
     val courses: Flow<List<Course>> = semester.flatMapLatest { current ->
         if (current == null) flowOf(emptyList())
         else courseDao.getCoursesForSemester(current.id)

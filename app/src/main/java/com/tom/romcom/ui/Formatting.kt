@@ -1,7 +1,9 @@
 package com.tom.romcom.ui
 
 import java.text.NumberFormat
+import java.time.Instant
 import java.time.LocalDate
+import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
 import java.util.Locale
@@ -23,4 +25,11 @@ fun formatDuration(millis: Long): String {
     val minutes = (seconds % 3600) / 60
     val secs = seconds % 60
     return "%d:%02d:%02d".format(Locale.ROOT, hours, minutes, secs)
+}
+
+fun formatDateTime(millis: Long): String {
+    val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT)
+    return Instant.ofEpochMilli(millis)
+        .atZone(ZoneId.systemDefault())
+        .format(formatter)
 }

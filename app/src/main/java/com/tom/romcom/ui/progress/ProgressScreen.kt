@@ -24,7 +24,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
-import com.tom.romcom.data.Exam
 import com.tom.romcom.ui.CredoTopBar
 import com.tom.romcom.ui.course.CourseCard
 import java.time.LocalDate
