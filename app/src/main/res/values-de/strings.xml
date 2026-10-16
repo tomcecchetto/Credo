@@ -24,7 +24,7 @@
     <string name="delete">Löschen</string>
     <string name="discard_course">Fach löschen?</string>
     <string name="delete_course_titles">Dies kann nicht rückgängig gemacht werden</string>
-
+    <string name="study_session">Lernen</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

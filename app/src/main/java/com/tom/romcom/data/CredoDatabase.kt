@@ -21,6 +21,7 @@ abstract class CredoDatabase : RoomDatabase() {
     abstract fun courseDao() : CourseDao
     abstract fun semesterDao() : SemesterDao
     abstract fun examDao() : ExamDao
+    abstract fun studySessionDao() : StudySessionDao
 
     companion object {
         @Volatile

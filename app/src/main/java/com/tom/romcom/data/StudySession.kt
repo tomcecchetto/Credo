@@ -17,6 +17,6 @@ import androidx.room.PrimaryKey
 data class StudySession(
     val courseId: Int,
     val startTime: Long,
-    val endTime: Long?,
+    val endTime: Long? = null,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 )

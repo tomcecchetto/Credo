@@ -19,10 +19,11 @@ import androidx.compose.ui.res.stringResource
 import com.tom.romcom.R
 import com.tom.romcom.ui.calendar.CalendarScreen
 import com.tom.romcom.ui.progress.ProgressScreen
+import com.tom.romcom.ui.study.StudySessionScreen
 import com.tom.romcom.ui.tasks.TaskScreen
 
 enum class Tab {
-    PROGRESS, CALENDAR, TASK
+    PROGRESS, STUDY, CALENDAR, TASK
 }
 
 
@@ -43,23 +44,44 @@ fun MainArea(
                 NavigationBarItem(
                     selected = selectedTab == Tab.PROGRESS,
                     onClick = { selectedTab = Tab.PROGRESS },
-                    label = {Text(stringResource(R.string.progress))},
-                    icon = { Icon(painterResource(
-                        R.drawable.ic_progress),
-                        contentDescription = null) }
+                    label = { Text(stringResource(R.string.progress)) },
+                    icon = {
+                        Icon(
+                            painterResource(
+                                R.drawable.ic_progress
+                            ),
+                            contentDescription = null
+                        )
+                    }
+                )
+                NavigationBarItem(
+                    selected = selectedTab == Tab.STUDY,
+                    onClick = { selectedTab = Tab.STUDY },
+                    label = { Text(stringResource(R.string.study_session)) },
+                    icon = {
+                        Icon(
+                            painterResource(R.drawable.ic_timer),
+                            contentDescription = null
+                        )
+                    }
                 )
                 NavigationBarItem(
                     selected = selectedTab == Tab.CALENDAR,
                     onClick = { selectedTab = Tab.CALENDAR },
-                    label = {Text(stringResource(R.string.calendar))},
-                    icon = { Icon(painterResource(
-                        R.drawable.ic_calenar),
-                        contentDescription = null) }
+                    label = { Text(stringResource(R.string.calendar)) },
+                    icon = {
+                        Icon(
+                            painterResource(
+                                R.drawable.ic_calendar
+                            ),
+                            contentDescription = null
+                        )
+                    }
                 )
                 NavigationBarItem(
                     selected = selectedTab == Tab.TASK,
                     onClick = { selectedTab = Tab.TASK },
-                    label = { Text(stringResource(R.string.tasks))},
+                    label = { Text(stringResource(R.string.tasks)) },
                     icon = {
                         Icon(
                             painterResource(R.drawable.ic_tasks),
@@ -71,14 +93,18 @@ fun MainArea(
             }
         }
     ) { innerPadding ->
-        Box(modifier = Modifier
-            .padding(innerPadding)
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
         ) {
             when (selectedTab) {
                 Tab.PROGRESS -> ProgressScreen(
                     onAddSemester = onAddSemester,
                     onAddCourse = onAddCourse,
-                    onCourseClick = onCourseClick)
+                    onCourseClick = onCourseClick
+                )
+
+                Tab.STUDY -> StudySessionScreen()
                 Tab.CALENDAR -> CalendarScreen()
                 Tab.TASK -> TaskScreen()
             }
