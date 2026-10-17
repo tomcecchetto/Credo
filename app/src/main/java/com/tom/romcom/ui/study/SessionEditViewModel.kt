@@ -104,7 +104,6 @@ class SessionEditViewModel(application: Application) : AndroidViewModel(applicat
             }
         }
     }
-
     fun save(onDone: () -> Unit) {
         val cId = courseId
         val day = epochDay
@@ -137,6 +136,13 @@ class SessionEditViewModel(application: Application) : AndroidViewModel(applicat
             onDone()
         }
 
+    }
+    fun delete(onDone: () -> Unit) {
+        val loadedSess = loadedSession ?: return
+        viewModelScope.launch {
+            sessionDao.delete(loadedSess)
+            onDone()
+        }
     }
 }
 

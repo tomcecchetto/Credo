@@ -23,13 +23,14 @@
     <string name="exam_today">Prüfung heute. Viel Glück!</string>
     <string name="delete">Löschen</string>
     <string name="discard_course">Fach löschen?</string>
-    <string name="delete_course_titles">Dies kann nicht rückgängig gemacht werden</string>
+    <string name="cannot_be_undone">Dies kann nicht rückgängig gemacht werden</string>
     <string name="study_session">Lernen</string>
     <string name="start">Start</string>
     <string name="stop">Stopp</string>
     <string name="add_course_first">Füge zuerst ein Fach hinzu</string>
     <string name="session">Lerneinheit</string>
     <string name="add_session">Lerneinheit hinzufügen</string>
+    <string name="delete_session">Lerneinheit löschen?</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

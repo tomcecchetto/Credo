@@ -49,7 +49,8 @@ fun CredoApp() {
                 SessionEditScreen(
                     sessionId = route.sessionId,
                     onBack ={ backStack.removeLastOrNull() },
-                    onSaved = { backStack.removeLastOrNull() }
+                    onSaved = { backStack.removeLastOrNull() },
+                    onDeleted = { backStack.removeLastOrNull() }
                 )
             }
         }

@@ -67,7 +67,7 @@ fun CourseSetupScreen(
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
             title = { Text(stringResource(R.string.discard_course)) },
-            text = { Text(stringResource(R.string.delete_course_titles)) },
+            text = { Text(stringResource(R.string.cannot_be_undone)) },
             confirmButton = {
                 TextButton(onClick = { viewModel.delete(onDone = onDeleted) ; showDeleteDialog = false}) {
                     Text(stringResource(R.string.delete))
