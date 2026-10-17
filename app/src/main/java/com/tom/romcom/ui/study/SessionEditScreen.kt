@@ -9,9 +9,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
-import androidx.compose.material3.MenuAnchorType
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -31,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.CredoTopBar
+import com.tom.romcom.ui.DateField
+import com.tom.romcom.ui.TimeField
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -105,7 +107,9 @@ fun SessionEditScreen(
                             readOnly = true,
                             label = { Text(stringResource(R.string.course_name)) },
                             trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(open) },
-                            modifier = Modifier.menuAnchor(MenuAnchorType.PrimaryNotEditable).fillMaxWidth()
+                            modifier = Modifier
+                                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryNotEditable)
+                                .fillMaxWidth()
                         )
 
                         ExposedDropdownMenu(
@@ -123,6 +127,21 @@ fun SessionEditScreen(
                             }
                         }
                     }
+                    DateField(
+                        label = stringResource(R.string.date),
+                        epochDay = viewModel.epochDay,
+                        onDateSelected = { viewModel.onDateSelected(it) }
+                    )
+                    TimeField(
+                        label = stringResource(R.string.start_time),
+                        minuteOfDay = viewModel.startMinute,
+                        onTimeSelected = { viewModel.onStartTimeSelected(it) }
+                    )
+                    TimeField(
+                        label = stringResource(R.string.end_time),
+                        minuteOfDay = viewModel.endMinute,
+                        onTimeSelected = { viewModel.onEndTimeSelected(it) }
+                    )
                 }
             }
         }

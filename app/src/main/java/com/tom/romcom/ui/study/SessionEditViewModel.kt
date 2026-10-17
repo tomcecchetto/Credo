@@ -103,6 +103,7 @@ class SessionEditViewModel(application: Application) : AndroidViewModel(applicat
                 }
             }
         }
+        else epochDay = LocalDate.now().toEpochDay()
     }
     fun save(onDone: () -> Unit) {
         val cId = courseId

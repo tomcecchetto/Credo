@@ -3,6 +3,7 @@ package com.tom.romcom.ui
 import java.text.NumberFormat
 import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
@@ -32,4 +33,10 @@ fun formatDateTime(millis: Long): String {
     return Instant.ofEpochMilli(millis)
         .atZone(ZoneId.systemDefault())
         .format(formatter)
+}
+
+fun formatMinuteOfDay(minute : Int?): String {
+    if (minute == null) return ""
+    val formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+    return LocalTime.of(minute / 60, minute % 60).format(formatter)
 }

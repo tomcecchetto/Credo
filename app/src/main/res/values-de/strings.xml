@@ -31,6 +31,9 @@
     <string name="session">Lerneinheit</string>
     <string name="add_session">Lerneinheit hinzufügen</string>
     <string name="delete_session">Lerneinheit löschen?</string>
+    <string name="date">Datum</string>
+    <string name="start_time">Startzeit</string>
+    <string name="end_time">Endzeit</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

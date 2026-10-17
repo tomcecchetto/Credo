@@ -21,7 +21,7 @@ interface StudySessionDao {
     suspend fun getRunningSessionNow(): StudySession?
 
 
-    @Query("SELECT * FROM Course WHERE id = :sessionId")
+    @Query("SELECT * FROM StudySession WHERE id = :sessionId")
     suspend fun getSessionById(sessionId: Int): StudySession?
 
     @Transaction

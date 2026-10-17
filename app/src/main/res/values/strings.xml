@@ -32,6 +32,9 @@
     <string name="session">Session</string>
     <string name="add_session">Add study session</string>
     <string name="delete_session">Delete session?</string>
+    <string name="date">Date</string>
+    <string name="start_time">Start time</string>
+    <string name="end_time">End time</string>
 
 
     <plurals name="exam_in_days">
