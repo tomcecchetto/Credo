@@ -6,11 +6,9 @@ import java.time.LocalDate
 fun expectedHours(
     startDay: Long,
     endDay: Long,
-    credits: Double,
-    hoursPerCredit: Int,
+    totalHours: Double,
     today: Long = LocalDate.now().toEpochDay()
 ): Double {
-    val totalHours = credits * hoursPerCredit
     val totalDays = endDay - startDay
     if (totalDays <= 0) return totalHours
     val daysPassed = today - startDay

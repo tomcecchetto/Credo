@@ -111,8 +111,8 @@ fun ProgressScreen(
                     val endDay =
                         courseExam?.epochDay ?: currentSemester.endEpochDay
                     val expected =
-                        expectedHours(credits = course.credits,
-                            hoursPerCredit = currentSemester.hoursPerCredit,
+                        expectedHours(
+                            totalHours = totalHours,
                             endDay = endDay,
                             startDay = currentSemester.startEpochDay,
                             today = today)
