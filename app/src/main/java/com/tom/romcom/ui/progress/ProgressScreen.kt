@@ -108,7 +108,7 @@ fun ProgressScreen(
                     val courseExam =
                         exams.firstOrNull { it.courseId == course.id }
                     val totalHours =
-                        (course.credits * currentSemester.hoursPerCredit - course.lectureHours).coerceAtLeast(0.0)
+                        (course.credits * currentSemester.hoursPerCredit - (course.lectureHoursPerWeek * currentSemester.lectureWeeks)).coerceAtLeast(0.0)
                     val endDay =
                         courseExam?.epochDay ?: currentSemester.endEpochDay
                     val expected =

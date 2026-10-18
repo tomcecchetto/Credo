@@ -90,7 +90,7 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     loadedExam = examDao.getExamsForCourse(courseId).first().firstOrNull()
                     examEpochDay = loadedExam?.epochDay
                     loadedCourse = course
-                    lectureHours = if (course.lectureHours > 0.0) formatNumber(course.lectureHours) else ""
+                    lectureHours = if (course.lectureHoursPerWeek > 0.0) formatNumber(course.lectureHoursPerWeek) else ""
                 }
             }
         } else {
@@ -131,7 +131,7 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     name = name,
                     credits = creditsNum,
                     color = color,
-                    lectureHours = lectureHoursNum
+                    lectureHoursPerWeek = lectureHoursNum
                 )
             } else {
                 Course(
@@ -139,7 +139,7 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     credits = creditsNum,
                     color = color,
                     semesterId = semId,
-                    lectureHours = lectureHoursNum
+                    lectureHoursPerWeek = lectureHoursNum
                 )
             }
         viewModelScope.launch {

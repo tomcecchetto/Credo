@@ -35,7 +35,8 @@
     <string name="start_time">Start time</string>
     <string name="end_time">End time</string>
     <string name="hours_diff">%1$s h</string>
-    <string name="lecture_hours">Lecture hours</string>
+    <string name="lecture_hours_per_week">Lecture hours per week (60 min)</string>
+    <string name="lecture_weeks">Lecture weeks</string>
 
 
     <plurals name="exam_in_days">

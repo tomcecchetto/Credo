@@ -121,18 +121,18 @@ fun CourseSetupScreen(
                 label = { Text(stringResource(R.string.credits)) },
                 value = viewModel.credits,
                 onValueChange = { viewModel.onCreditsChange(it) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = {focusManager.moveFocus(focusDirection = FocusDirection.Down)}),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(onNext = {focusManager.moveFocus(focusDirection = FocusDirection.Down)}),
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             )
             OutlinedTextField(
-                label = { Text(stringResource(R.string.lecture_hours)) },
+                label = { Text(stringResource(R.string.lecture_hours_per_week)) },
                 value = viewModel.lectureHours,
                 onValueChange = { viewModel.onLectureHoursChange(it) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
                 keyboardActions = KeyboardActions(onDone = {focusManager.clearFocus()}),
                 singleLine = true,
                 modifier = Modifier

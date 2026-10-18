@@ -23,6 +23,9 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
     var endEpochDay by mutableStateOf<Long?>(null)
         private set
 
+    var lectureWeeks by mutableStateOf("14")
+        private set
+
     fun onHoursChange(hours: String) {
         hoursPerCredit = hours
     }
@@ -33,6 +36,10 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
 
     fun onEndDateSelected(millis: Long) {
         endEpochDay = TimeUnit.MILLISECONDS.toDays(millis)
+    }
+
+    fun onLectureWeeksChange(weeks: String) {
+        lectureWeeks = weeks
     }
 
 
@@ -52,11 +59,13 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
         if (start == null || end == null)
             return
         val hours = hoursPerCredit.toIntOrNull() ?: 30
+        val weeks = lectureWeeks.toIntOrNull() ?: 14
 
         val semester = Semester(
             startEpochDay = start,
             endEpochDay = end,
             hoursPerCredit = hours,
+            lectureWeeks = weeks
         )
         viewModelScope.launch {
             semesterDao.insert(semester)

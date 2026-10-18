@@ -19,6 +19,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -74,6 +75,17 @@ fun SemesterSetupScreen(
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
             OutlinedTextField(
+                label = { Text(stringResource(R.string.lecture_weeks)) },
+                value = viewModel.lectureWeeks,
+                onValueChange = { viewModel.onLectureWeeksChange(it) },
+                singleLine = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number, imeAction = ImeAction.Next),
+                keyboardActions = KeyboardActions(onNext = {focusManager.moveFocus(focusDirection = FocusDirection.Down)}),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+            OutlinedTextField(
                 label = { Text(stringResource(R.string.hours_per_credit)) },
                 value = viewModel.hoursPerCredit,
                 onValueChange = { viewModel.onHoursChange(it) },
@@ -85,6 +97,7 @@ fun SemesterSetupScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             )
+
         }
     }
 }

@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey
     indices = [Index("semesterId")]
 )
 data class Course(
-    val lectureHours: Double = 0.0,
+    val lectureHoursPerWeek: Double = 0.0,
     val name: String,
     val credits: Double,
     val color: Long,
