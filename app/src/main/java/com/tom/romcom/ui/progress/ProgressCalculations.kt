@@ -26,3 +26,4 @@ fun hoursDonePerCourse(
         .sumOf { (it.endTime ?: it.startTime) - it.startTime }
     return millisDone / 3_600_000.0
 }
+

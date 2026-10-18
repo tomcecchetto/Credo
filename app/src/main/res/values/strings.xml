@@ -35,6 +35,7 @@
     <string name="date">Date</string>
     <string name="start_time">Start time</string>
     <string name="end_time">End time</string>
+    <string name="hours_diff">%1$s h</string>
 
 
     <plurals name="exam_in_days">

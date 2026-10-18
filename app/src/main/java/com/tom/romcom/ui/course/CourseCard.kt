@@ -23,10 +23,15 @@ import com.tom.romcom.R
 import com.tom.romcom.data.Course
 import com.tom.romcom.data.Exam
 import com.tom.romcom.ui.formatCredits
+import com.tom.romcom.ui.formatHoursDiff
+import com.tom.romcom.ui.progress.HoursTrack
 import java.time.LocalDate
 
 @Composable
 fun CourseCard(
+    totalHours: Double,
+    expectedHours: Double,
+    hoursDone: Double,
     course: Course,
     onClick: () -> Unit,
     nextExam: Exam? = null,
@@ -73,6 +78,16 @@ fun CourseCard(
                             MaterialTheme.colorScheme.error else
                                 MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                }
+                Row(verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                    HoursTrack(
+                        totalHours = totalHours,
+                        expectedHours = expectedHours,
+                        hoursDone = hoursDone,
+                        modifier = Modifier.weight(1f)
+                    )
+                    Text(stringResource(R.string.hours_diff, formatHoursDiff(hoursDone - expectedHours)))
                 }
             }
         }

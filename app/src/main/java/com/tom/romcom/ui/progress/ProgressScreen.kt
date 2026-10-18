@@ -40,6 +40,7 @@ fun ProgressScreen(
     val courses by viewModel.courses.collectAsState(initial = emptyList())
     val semester by viewModel.semester.collectAsState(initial = null)
     val exams by viewModel.exams.collectAsState(initial = emptyList())
+    val finishedSessions by viewModel.finishedSessions.collectAsState(initial = emptyList())
 
     val today = LocalDate.now().toEpochDay()
 
@@ -51,14 +52,18 @@ fun ProgressScreen(
         floatingActionButton = {
             if (courses.isNotEmpty()) {
                 ExtendedFloatingActionButton(onClick = onAddCourse) {
-                    Icon(painterResource(R.drawable.ic_add), contentDescription = stringResource(R.string.add_course))
+                    Icon(
+                        painterResource(R.drawable.ic_add),
+                        contentDescription = stringResource(R.string.add_course)
+                    )
                     Text(stringResource(R.string.add_course))
                 }
             }
         }
     ) { innerPadding ->
+        val currentSemester = semester
         when {
-            semester == null ->
+            currentSemester == null ->
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -88,14 +93,33 @@ fun ProgressScreen(
                     }
                 }
             }
+
             else -> LazyColumn(
                 modifier = Modifier
                     .padding(innerPadding),
                 contentPadding = PaddingValues(bottom = 88.dp)
             ) {
+
                 items(courses, key = { it.id }) { course ->
-                    val nextExam = exams.firstOrNull { it.courseId == course.id && it.epochDay >= today }
+                    val nextExam =
+                        exams.firstOrNull { it.courseId == course.id && it.epochDay >= today }
+                    val hoursDone =
+                        hoursDonePerCourse(courseId = course.id, sessions = finishedSessions)
+                    val courseExam =
+                        exams.firstOrNull { it.courseId == course.id }
+                    val totalHours = course.credits * currentSemester.hoursPerCredit
+                    val endDay =
+                        courseExam?.epochDay ?: currentSemester.endEpochDay
+                    val expected =
+                        expectedHours(credits = course.credits,
+                            hoursPerCredit = currentSemester.hoursPerCredit,
+                            endDay = endDay,
+                            startDay = currentSemester.startEpochDay,
+                            today = today)
                     CourseCard(
+                        totalHours = totalHours,
+                        expectedHours = expected,
+                        hoursDone = hoursDone,
                         course = course,
                         nextExam = nextExam,
                         onClick = { onCourseClick(course.id) }
