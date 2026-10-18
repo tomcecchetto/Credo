@@ -17,8 +17,7 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
     private val semesterDao = CredoDatabase.getDatabase(application).semesterDao()
     var hoursPerCredit by mutableStateOf("")
         private set
-    var countLectureHours by mutableStateOf(false)
-        private set
+
     var startEpochDay by mutableStateOf<Long?>(null)
         private set
     var endEpochDay by mutableStateOf<Long?>(null)
@@ -26,10 +25,6 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
 
     fun onHoursChange(hours: String) {
         hoursPerCredit = hours
-    }
-
-    fun onCountLectureHoursChange(state: Boolean) {
-        countLectureHours = state
     }
 
     fun onStartDateSelected(millis: Long) {
@@ -62,7 +57,6 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
             startEpochDay = start,
             endEpochDay = end,
             hoursPerCredit = hours,
-            countLectureHours = countLectureHours
         )
         viewModelScope.launch {
             semesterDao.insert(semester)

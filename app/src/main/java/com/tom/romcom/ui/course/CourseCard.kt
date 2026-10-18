@@ -22,7 +22,7 @@ import androidx.compose.ui.unit.dp
 import com.tom.romcom.R
 import com.tom.romcom.data.Course
 import com.tom.romcom.data.Exam
-import com.tom.romcom.ui.formatCredits
+import com.tom.romcom.ui.formatNumber
 import com.tom.romcom.ui.formatHoursDiff
 import com.tom.romcom.ui.progress.HoursTrack
 import java.time.LocalDate
@@ -64,7 +64,7 @@ fun CourseCard(
                     text = course.name,
                     style = MaterialTheme.typography.titleMedium)
                 Text(
-                    text = stringResource(R.string.credits_value, formatCredits(course.credits)),
+                    text = stringResource(R.string.credits_value, formatNumber(course.credits)),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant)
 

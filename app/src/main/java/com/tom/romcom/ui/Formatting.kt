@@ -14,10 +14,10 @@ fun formatEpochDay(epochDay: Long?): String {
     return if (epochDay != null) LocalDate.ofEpochDay(epochDay).format(formatter) else ""
 }
 
-fun formatCredits(credits: Double): String {
+fun formatNumber(input: Double): String {
     val formatter = NumberFormat.getNumberInstance()
     formatter.maximumFractionDigits = 2
-    return formatter.format(credits)
+    return formatter.format(input)
 }
 
 fun formatDuration(millis: Long): String {

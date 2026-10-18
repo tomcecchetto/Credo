@@ -9,7 +9,6 @@ data class Semester(
     val startEpochDay: Long,
     val endEpochDay: Long,
     val hoursPerCredit: Int,
-    val countLectureHours: Boolean,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 )
 

@@ -14,7 +14,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -86,18 +85,6 @@ fun SemesterSetupScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.padding(horizontal = 16.dp)
-            ) {
-                Text(
-                    text = stringResource(R.string.count_lecture_hours),
-                    modifier = Modifier.weight(1f))
-                Switch(
-                    checked = viewModel.countLectureHours,
-                    onCheckedChange = { viewModel.onCountLectureHoursChange(it) },
-                )
-            }
         }
     }
 }

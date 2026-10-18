@@ -122,6 +122,17 @@ fun CourseSetupScreen(
                 value = viewModel.credits,
                 onValueChange = { viewModel.onCreditsChange(it) },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
+                keyboardActions = KeyboardActions(onDone = {focusManager.moveFocus(focusDirection = FocusDirection.Down)}),
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+            OutlinedTextField(
+                label = { Text(stringResource(R.string.lecture_hours)) },
+                value = viewModel.lectureHours,
+                onValueChange = { viewModel.onLectureHoursChange(it) },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next),
                 keyboardActions = KeyboardActions(onDone = {focusManager.clearFocus()}),
                 singleLine = true,
                 modifier = Modifier

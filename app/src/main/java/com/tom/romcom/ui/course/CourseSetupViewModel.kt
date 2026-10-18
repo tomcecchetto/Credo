@@ -11,7 +11,7 @@ import com.tom.romcom.data.Course
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Exam
 import com.tom.romcom.ui.courseColors
-import com.tom.romcom.ui.formatCredits
+import com.tom.romcom.ui.formatNumber
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -34,6 +34,9 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
     var examEpochDay by mutableStateOf<Long?>(null)
         private set
 
+    var lectureHours by mutableStateOf("")
+        private set
+
     private var semesterId: Int? = null
 
     private var editingCourseId: Int? = null
@@ -45,6 +48,8 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
     private val creditsValue: Double? get() = credits.replace(',', '.').toDoubleOrNull()
 
     private var loadedCourse: Course? = null
+
+    private val lectureHoursValue: Double? get() = lectureHours.replace(',', '.').toDoubleOrNull()
 
 
     fun onNameChange(courseName: String) {
@@ -63,6 +68,10 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         examEpochDay = TimeUnit.MILLISECONDS.toDays(millis)
     }
 
+    fun onLectureHoursChange(courseLectureHours: String) {
+        lectureHours = courseLectureHours
+    }
+
     fun load(courseId: Int?) {
 
         if (loaded)
@@ -74,13 +83,14 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                 val course = courseDao.getCourse(courseId)
                 if (course != null) {
                     name = course.name
-                    credits = formatCredits(course.credits)
+                    credits = formatNumber(course.credits)
                     color = course.color
                     editingCourseId = courseId
                     semesterId = course.semesterId
                     loadedExam = examDao.getExamsForCourse(courseId).first().firstOrNull()
                     examEpochDay = loadedExam?.epochDay
                     loadedCourse = course
+                    lectureHours = if (course.lectureHours > 0.0) formatNumber(course.lectureHours) else ""
                 }
             }
         } else {
@@ -110,6 +120,7 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         val editId = editingCourseId
         val exam = loadedExam
         val original = loadedCourse
+        val lectureHoursNum = lectureHoursValue ?: 0.0
 
         if (name.isBlank() || creditsNum == null || semId == null)
             return
@@ -119,14 +130,16 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                 original.copy(
                     name = name,
                     credits = creditsNum,
-                    color = color
+                    color = color,
+                    lectureHours = lectureHoursNum
                 )
             } else {
                 Course(
                     name = name,
                     credits = creditsNum,
                     color = color,
-                    semesterId = semId
+                    semesterId = semId,
+                    lectureHours = lectureHoursNum
                 )
             }
         viewModelScope.launch {
