@@ -13,7 +13,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.tom.romcom"
+        applicationId = "com.tom.credo"
         minSdk = 26
         targetSdk = 37
         versionCode = 1
