@@ -5,6 +5,9 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
 
 }
+ksp {
+    arg("room.schemaLocation", "$projectDir/schemas")
+}
 
 android {
     namespace = "com.tom.romcom"

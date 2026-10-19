@@ -14,7 +14,7 @@ import androidx.room.RoomDatabase
         StudySession::class,
         Semester::class,
         Exam::class],
-    exportSchema = false
+    exportSchema = true
 )
 abstract class CredoDatabase : RoomDatabase() {
 
