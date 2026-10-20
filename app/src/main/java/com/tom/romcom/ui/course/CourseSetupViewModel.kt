@@ -37,6 +37,15 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
     var lectureHours by mutableStateOf("")
         private set
 
+    var praktikumHoursPerSession by mutableStateOf("")
+        private set
+
+    var praktikumSessions by mutableStateOf("")
+        private set
+
+    var plannedHoursPerWeek by mutableStateOf("")
+        private set
+
     private var semesterId: Int? = null
 
     private var editingCourseId: Int? = null
@@ -50,6 +59,12 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
     private var loadedCourse: Course? = null
 
     private val lectureHoursValue: Double? get() = lectureHours.replace(',', '.').toDoubleOrNull()
+
+    private val praktikumHoursValue: Double? get() = praktikumHoursPerSession.replace(',', '.').toDoubleOrNull()
+
+    private val plannedHoursPerWeekValue: Double? get() = plannedHoursPerWeek.replace(',', '.').toDoubleOrNull()
+
+    private val praktikumSessionsValue: Int? get() = praktikumSessions.toIntOrNull()
 
 
     fun onNameChange(courseName: String) {
@@ -72,6 +87,18 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         lectureHours = courseLectureHours
     }
 
+    fun onPraktikumHoursPerSessionChange(hoursPerSession: String) {
+        praktikumHoursPerSession = hoursPerSession
+    }
+
+    fun onPraktikumSessionsChange(praktSession: String) {
+        praktikumSessions = praktSession
+    }
+
+    fun onPlannedHoursPerWeekChange(hoursPerWeek: String) {
+        plannedHoursPerWeek = hoursPerWeek
+    }
+
     fun load(courseId: Int?) {
 
         if (loaded)
@@ -91,6 +118,9 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     examEpochDay = loadedExam?.epochDay
                     loadedCourse = course
                     lectureHours = if (course.lectureHoursPerWeek > 0.0) formatNumber(course.lectureHoursPerWeek) else ""
+                    praktikumHoursPerSession = if (course.praktikumHoursPerSession == 0.0) "" else formatNumber(course.praktikumHoursPerSession)
+                    praktikumSessions = if (course.praktikumSessions == 0) "" else course.praktikumSessions.toString()
+                    plannedHoursPerWeek = if (course.plannedHoursPerWeek == 0.0) "" else formatNumber(course.plannedHoursPerWeek)
                 }
             }
         } else {
@@ -121,6 +151,9 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         val exam = loadedExam
         val original = loadedCourse
         val lectureHoursNum = lectureHoursValue ?: 0.0
+        val praktHours = praktikumHoursValue ?: 0.0
+        val plannedHours = plannedHoursPerWeekValue ?: 0.0
+        val praktSess = praktikumSessionsValue ?: 0
 
         if (name.isBlank() || creditsNum == null || semId == null)
             return
@@ -131,7 +164,10 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     name = name,
                     credits = creditsNum,
                     color = color,
-                    lectureHoursPerWeek = lectureHoursNum
+                    lectureHoursPerWeek = lectureHoursNum,
+                    praktikumHoursPerSession = praktHours,
+                    plannedHoursPerWeek = plannedHours,
+                    praktikumSessions = praktSess
                 )
             } else {
                 Course(
@@ -139,7 +175,10 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     credits = creditsNum,
                     color = color,
                     semesterId = semId,
-                    lectureHoursPerWeek = lectureHoursNum
+                    lectureHoursPerWeek = lectureHoursNum,
+                    praktikumHoursPerSession = praktHours,
+                    plannedHoursPerWeek = plannedHours,
+                    praktikumSessions = praktSess
                 )
             }
         viewModelScope.launch {

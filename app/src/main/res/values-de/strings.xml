@@ -1,4 +1,5 @@
 <resources>
+
     <string name="calendar">Kalender</string>
     <string name="progress">Fortschritt</string>
     <string name="tasks">Aufgaben</string>
@@ -36,6 +37,11 @@
     <string name="hours_diff">%1$s h</string>
     <string name="lecture_hours_per_week">Vorlesungsstunden pro Woche (60 min)</string>
     <string name="lecture_weeks">Vorlesungswochen</string>
+    <string name="planned_hours_per_week">Geplante Lernstunden pro Woche</string>
+    <string name="lab_hours_per_session">Stunden pro Praktikum</string>
+    <string name="lab_sessions_per_semester">Praktika pro Semester</string>
+    <string name="if_lab">Falls Fach Praktikum hat: </string>
+
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

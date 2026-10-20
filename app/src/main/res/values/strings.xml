@@ -37,6 +37,10 @@
     <string name="hours_diff">%1$s h</string>
     <string name="lecture_hours_per_week">Lecture hours per week (60 min)</string>
     <string name="lecture_weeks">Lecture weeks</string>
+    <string name="planned_hours_per_week">Planned hours per week</string>
+    <string name="lab_hours_per_session">Lab hours per session</string>
+    <string name="lab_sessions_per_semester">Lab sessions per semester</string>
+    <string name="if_lab">If course has lab</string>
 
 
     <plurals name="exam_in_days">

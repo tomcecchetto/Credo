@@ -50,7 +50,7 @@ import com.tom.romcom.ui.courseColors
 
 @Composable
 fun CourseSetupScreen(
-    courseId : Int?,
+    courseId: Int?,
     onSaved: () -> Unit,
     onDeleted: () -> Unit,
     onBack: () -> Unit,
@@ -69,7 +69,9 @@ fun CourseSetupScreen(
             title = { Text(stringResource(R.string.discard_course)) },
             text = { Text(stringResource(R.string.cannot_be_undone)) },
             confirmButton = {
-                TextButton(onClick = { viewModel.delete(onDone = onDeleted) ; showDeleteDialog = false}) {
+                TextButton(onClick = {
+                    viewModel.delete(onDone = onDeleted); showDeleteDialog = false
+                }) {
                     Text(stringResource(R.string.delete))
                 }
             },
@@ -84,15 +86,17 @@ fun CourseSetupScreen(
 
     Scaffold(
         modifier = modifier,
-        contentWindowInsets = WindowInsets(0,0,0,0),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             CredoTopBar(
                 title = stringResource(R.string.course_details),
                 windowInsets = TopAppBarDefaults.windowInsets,
                 onBack = onBack,
                 saveEnabled = viewModel.canSave,
-                onSave = {viewModel.save(onDone = onSaved)},
-                onDelete = if (courseId != null) { { showDeleteDialog = true } } else null
+                onSave = { viewModel.save(onDone = onSaved) },
+                onDelete = if (courseId != null) {
+                    { showDeleteDialog = true }
+                } else null
             )
         }
     ) { innerPadding ->
@@ -110,8 +114,11 @@ fun CourseSetupScreen(
                 label = { Text(stringResource(R.string.course_name)) },
                 value = viewModel.name,
                 onValueChange = { viewModel.onNameChange(it) },
-                keyboardOptions = KeyboardOptions(capitalization = KeyboardCapitalization.Sentences, imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(onNext = {focusManager.moveFocus(focusDirection = FocusDirection.Down)}),
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Sentences,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }),
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -121,8 +128,11 @@ fun CourseSetupScreen(
                 label = { Text(stringResource(R.string.credits)) },
                 value = viewModel.credits,
                 onValueChange = { viewModel.onCreditsChange(it) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Next),
-                keyboardActions = KeyboardActions(onNext = {focusManager.moveFocus(focusDirection = FocusDirection.Down)}),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }),
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -132,8 +142,25 @@ fun CourseSetupScreen(
                 label = { Text(stringResource(R.string.lecture_hours_per_week)) },
                 value = viewModel.lectureHours,
                 onValueChange = { viewModel.onLectureHoursChange(it) },
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal, imeAction = ImeAction.Done),
-                keyboardActions = KeyboardActions(onDone = {focusManager.clearFocus()}),
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Next) }),
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+            OutlinedTextField(
+                label = { Text(stringResource(R.string.planned_hours_per_week)) },
+                value = viewModel.plannedHoursPerWeek,
+                onValueChange = { viewModel.onPlannedHoursPerWeekChange(it) },
+                keyboardOptions = KeyboardOptions(
+                    keyboardType = KeyboardType.Decimal,
+                    imeAction = ImeAction.Done
+                ),
+                keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
                 singleLine = true,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -147,7 +174,50 @@ fun CourseSetupScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
             )
-
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.if_lab),
+                    style = MaterialTheme.typography.labelLarge,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    OutlinedTextField(
+                        label = { Text(stringResource(R.string.lab_hours_per_session)) },
+                        value = viewModel.praktikumHoursPerSession,
+                        onValueChange = { viewModel.onPraktikumHoursPerSessionChange(it) },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Decimal,
+                            imeAction = ImeAction.Next
+                        ),
+                        keyboardActions = KeyboardActions(onNext = {
+                            focusManager.moveFocus(
+                                focusDirection = FocusDirection.Next
+                            )
+                        }),
+                        singleLine = true,
+                        modifier = Modifier.weight(1f)
+                    )
+                    OutlinedTextField(
+                        label = { Text(stringResource(R.string.lab_sessions_per_semester)) },
+                        value = viewModel.praktikumSessions,
+                        onValueChange = { viewModel.onPraktikumSessionsChange(it) },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number,
+                            imeAction = ImeAction.Done
+                        ),
+                        keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+                        singleLine = true,
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
             Row(
                 modifier = Modifier
                     .padding(horizontal = 16.dp),
@@ -168,6 +238,7 @@ fun CourseSetupScreen(
                     )
                 }
             }
+
         }
     }
 }
