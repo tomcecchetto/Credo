@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface CourseDao {
 
-    @Query("SELECT * FROM Course WHERE semesterId = :semesterId ORDER BY name")
+    @Query("SELECT * FROM Course WHERE semesterId = :semesterId ORDER BY name COLLATE LOCALIZED")
     fun getCoursesForSemester(semesterId: Int): Flow<List<Course>>
     @Query("SELECT * FROM Course WHERE id = :courseId")
     suspend fun getCourse(courseId: Int): Course?

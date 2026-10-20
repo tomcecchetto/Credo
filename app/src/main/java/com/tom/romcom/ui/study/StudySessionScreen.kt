@@ -74,7 +74,10 @@ fun StudySessionScreen(
             FloatingActionButton(
                 onClick = onAddSession
             ) {
-                Icon(painterResource(R.drawable.ic_add), contentDescription = stringResource(R.string.add_session))
+                Icon(
+                    painterResource(R.drawable.ic_add),
+                    contentDescription = stringResource(R.string.add_session)
+                )
             }
         }
     ) { innerPadding ->
@@ -160,19 +163,21 @@ fun StudySessionScreen(
                     }
                 }
             }
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.weight(1f),
-                contentPadding = PaddingValues(bottom = 88.dp)
-            ) {
-                items(items = finishedSessions, key = { it.id }) { session ->
-                    val course = courses.firstOrNull { it.id == session.courseId }
-                    if (course != null) {
-                        StudySessionRow(
-                            session = session,
-                            course = course,
-                            onClick = { onSessionClick(session.id) }
-                        )
+            if (running == null) {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(bottom = 88.dp)
+                ) {
+                    items(items = finishedSessions, key = { it.id }) { session ->
+                        val course = courses.firstOrNull { it.id == session.courseId }
+                        if (course != null) {
+                            StudySessionRow(
+                                session = session,
+                                course = course,
+                                onClick = { onSessionClick(session.id) }
+                            )
+                        }
                     }
                 }
             }
