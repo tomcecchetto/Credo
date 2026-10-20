@@ -71,13 +71,15 @@ fun StudySessionScreen(
         },
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = onAddSession
-            ) {
-                Icon(
-                    painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.add_session)
-                )
+            if (runningSession == null) {
+                FloatingActionButton(
+                    onClick = onAddSession
+                ) {
+                    Icon(
+                        painterResource(R.drawable.ic_add),
+                        contentDescription = stringResource(R.string.add_session)
+                    )
+                }
             }
         }
     ) { innerPadding ->
