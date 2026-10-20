@@ -45,10 +45,11 @@ fun CourseCard(
     nextExam: Exam? = null,
     hasExam: Boolean,
     modifier: Modifier = Modifier,
-    viewModel: ProgressViewModel = viewModel()
 
     ) {
-    val exams by viewModel.exams.collectAsState(initial = emptyList())
+    val hoursDiffWidth = 60.dp
+    val textModifierWidth = 50.dp
+
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -100,11 +101,12 @@ fun CourseCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
+
                     Text(
                         text = if (hasExam) stringResource(R.string.exam) else stringResource(R.string.semester),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.width(50.dp)
+                        modifier = Modifier.width(textModifierWidth)
                     )
                     HoursTrack(
                         totalHours = totalHours,
@@ -118,7 +120,7 @@ fun CourseCard(
                             formatHoursDiff(hoursDone - expectedHours)
                         ),
                         textAlign = TextAlign.End,
-                        modifier = Modifier.width(60.dp)
+                        modifier = Modifier.width(hoursDiffWidth)
                     )
                 }
                 if (course.plannedHoursPerWeek > 0.0) {
@@ -126,11 +128,12 @@ fun CourseCard(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
+
                         Text(
                             text = stringResource(R.string.plan),
                             style = MaterialTheme.typography.labelSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.width(44.dp)
+                            modifier = Modifier.width(textModifierWidth)
                         )
                         HoursTrack(
                             totalHours = planTotalHours,
@@ -144,7 +147,7 @@ fun CourseCard(
                                 formatHoursDiff(hoursDone - planExpectedHours)
                             ),
                             textAlign = TextAlign.End,
-                            modifier = Modifier.width(60.dp)
+                            modifier = Modifier.width(hoursDiffWidth)
                         )
                     }
                 }
