@@ -45,6 +45,8 @@
     <string name="plan">Geplant</string>
     <string name="clear">Datum löschen</string>
     <string name="semester">Semester</string>
+    <string name="course_color">Fachfarbe</string>
+    <string name="color">Farbe</string>
 
 
     <plurals name="exam_in_days">

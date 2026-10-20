@@ -1,11 +1,7 @@
 package com.tom.romcom.ui.course
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -13,9 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -33,9 +27,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusDirection
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -45,9 +37,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
+import com.tom.romcom.ui.ColorField
 import com.tom.romcom.ui.CredoTopBar
 import com.tom.romcom.ui.DateField
-import com.tom.romcom.ui.courseColors
 
 @Composable
 fun CourseSetupScreen(
@@ -122,6 +114,14 @@ fun CourseSetupScreen(
                 ),
                 keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Down) }),
                 singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+            ColorField(
+                label = stringResource(R.string.color),
+                color = viewModel.color,
+                onColorSelected = { viewModel.onColorChange(it) },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp)
@@ -221,27 +221,6 @@ fun CourseSetupScreen(
                     )
                 }
             }
-            Row(
-                modifier = Modifier
-                    .padding(horizontal = 16.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                courseColors.forEach { color ->
-                    Box(
-                        modifier = Modifier
-                            .size(30.dp)
-                            .clip(shape = CircleShape)
-                            .background(Color(color))
-                            .clickable { viewModel.onColorChange(color) }
-                            .border(
-                                width = if (color == viewModel.color) 3.dp else 0.dp,
-                                color = MaterialTheme.colorScheme.onSurface,
-                                shape = CircleShape
-                            )
-                    )
-                }
-            }
-
         }
     }
 }
