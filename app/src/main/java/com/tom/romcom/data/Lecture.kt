@@ -1,5 +1,6 @@
 package com.tom.romcom.data
 
+import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
@@ -25,5 +26,6 @@ data class Lecture(
     val startMinuteOfDay: Int,
     val endMinuteOfDay: Int,
     val calendarUid: String?,
+    @ColumnInfo(defaultValue = "1") val attended: Boolean = true,
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
 )
