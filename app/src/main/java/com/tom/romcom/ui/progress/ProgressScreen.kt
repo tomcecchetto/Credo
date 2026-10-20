@@ -101,6 +101,7 @@ fun ProgressScreen(
             ) {
 
                 items(courses, key = { it.id }) { course ->
+                    // calcs for first progress bar that has exam date as end date
                     val nextExam =
                         exams.firstOrNull { it.courseId == course.id && it.epochDay >= today }
                     val hoursDone =
@@ -108,7 +109,7 @@ fun ProgressScreen(
                     val courseExam =
                         exams.firstOrNull { it.courseId == course.id }
                     val totalHours =
-                        (course.credits * currentSemester.hoursPerCredit - (course.lectureHoursPerWeek * currentSemester.lectureWeeks)).coerceAtLeast(0.0)
+                        (course.credits * currentSemester.hoursPerCredit - (course.lectureHoursPerWeek * currentSemester.lectureWeeks) - (course.praktikumSessions * course.praktikumHoursPerSession)).coerceAtLeast(0.0)
                     val endDay =
                         courseExam?.epochDay ?: currentSemester.endEpochDay
                     val expected =
@@ -117,9 +118,20 @@ fun ProgressScreen(
                             endDay = endDay,
                             startDay = currentSemester.startEpochDay,
                             today = today)
+                    // calcs for second progress bar that has semester end day as end date
+                    val planTotalHours = (course.credits * currentSemester.hoursPerCredit - (course.plannedHoursPerWeek * currentSemester.lectureWeeks)).coerceAtLeast(0.0)
+                    val planExpectedHours =
+                        expectedHours(
+                            startDay = currentSemester.startEpochDay,
+                            endDay = currentSemester.endEpochDay,
+                            totalHours = planTotalHours,
+                            today = today
+                        )
                     CourseCard(
                         totalHours = totalHours,
+                        planTotalHours = planTotalHours,
                         expectedHours = expected,
+                        planExpectedHours = planExpectedHours,
                         hoursDone = hoursDone,
                         course = course,
                         nextExam = nextExam,

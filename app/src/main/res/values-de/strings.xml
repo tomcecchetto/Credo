@@ -41,6 +41,8 @@
     <string name="lab_hours_per_session">Stunden pro Praktikum</string>
     <string name="lab_sessions_per_semester">Praktika pro Semester</string>
     <string name="if_lab">Falls Fach Praktikum hat: </string>
+    <string name="exam">Prüfung</string>
+    <string name="plan">Geplant</string>
 
 
     <plurals name="exam_in_days">

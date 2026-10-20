@@ -41,7 +41,8 @@
     <string name="lab_hours_per_session">Lab hours per session</string>
     <string name="lab_sessions_per_semester">Lab sessions per semester</string>
     <string name="if_lab">If course has lab</string>
-
+    <string name="exam">Exam</string>
+    <string name="plan">Plan</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>
