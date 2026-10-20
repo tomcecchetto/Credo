@@ -1,12 +1,13 @@
 package com.tom.romcom.data
 
 import android.content.Context
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    version = 1,
+    version = 2,
     entities = [
         Lecture::class,
         Task::class,
@@ -14,7 +15,8 @@ import androidx.room.RoomDatabase
         StudySession::class,
         Semester::class,
         Exam::class],
-    exportSchema = true
+    exportSchema = true,
+    autoMigrations = [AutoMigration(from = 1, to = 2)]
 )
 abstract class CredoDatabase : RoomDatabase() {
 
