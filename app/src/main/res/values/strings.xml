@@ -44,6 +44,7 @@
     <string name="exam">Exam</string>
     <string name="plan">Plan</string>
     <string name="clear">Clear Date</string>
+    <string name="semester">Semester</string>
 
 
     <plurals name="exam_in_days">

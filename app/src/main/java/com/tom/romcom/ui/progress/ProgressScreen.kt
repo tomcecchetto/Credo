@@ -134,6 +134,7 @@ fun ProgressScreen(
                         planExpectedHours = planExpectedHours,
                         hoursDone = hoursDone,
                         course = course,
+                        hasExam = courseExam != null,
                         nextExam = nextExam,
                         onClick = { onCourseClick(course.id) }
                     )

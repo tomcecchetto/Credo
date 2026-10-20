@@ -14,6 +14,8 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,12 +23,14 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.data.Course
 import com.tom.romcom.data.Exam
 import com.tom.romcom.ui.formatNumber
 import com.tom.romcom.ui.formatHoursDiff
 import com.tom.romcom.ui.progress.HoursTrack
+import com.tom.romcom.ui.progress.ProgressViewModel
 import java.time.LocalDate
 
 @Composable
@@ -39,9 +43,12 @@ fun CourseCard(
     course: Course,
     onClick: () -> Unit,
     nextExam: Exam? = null,
+    hasExam: Boolean,
     modifier: Modifier = Modifier,
+    viewModel: ProgressViewModel = viewModel()
 
     ) {
+    val exams by viewModel.exams.collectAsState(initial = emptyList())
     Card(
         modifier = modifier
             .fillMaxWidth()
@@ -94,10 +101,10 @@ fun CourseCard(
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     Text(
-                        text = stringResource(R.string.exam),
+                        text = if (hasExam) stringResource(R.string.exam) else stringResource(R.string.semester),
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.width(44.dp)
+                        modifier = Modifier.width(50.dp)
                     )
                     HoursTrack(
                         totalHours = totalHours,
