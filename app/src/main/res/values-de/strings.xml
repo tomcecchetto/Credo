@@ -43,6 +43,7 @@
     <string name="if_lab">Falls Fach Praktikum hat: </string>
     <string name="exam">Prüfung</string>
     <string name="plan">Geplant</string>
+    <string name="clear">Datum löschen</string>
 
 
     <plurals name="exam_in_days">

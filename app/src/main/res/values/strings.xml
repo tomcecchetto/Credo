@@ -43,6 +43,8 @@
     <string name="if_lab">If course has lab</string>
     <string name="exam">Exam</string>
     <string name="plan">Plan</string>
+    <string name="clear">Clear Date</string>
+
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>

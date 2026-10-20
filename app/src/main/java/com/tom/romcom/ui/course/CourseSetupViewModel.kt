@@ -83,6 +83,10 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         examEpochDay = TimeUnit.MILLISECONDS.toDays(millis)
     }
 
+    fun onExamDateCleared() {
+        examEpochDay = null
+    }
+
     fun onLectureHoursChange(courseLectureHours: String) {
         lectureHours = courseLectureHours
     }
@@ -191,6 +195,8 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                 if (exam != null) {
                     examDao.update(exam.copy(epochDay = examDate))
                 } else examDao.insert(Exam(courseId = id, epochDay = examDate))
+            } else if (exam != null) {
+                examDao.delete(exam)
             }
             onDone()
         }
