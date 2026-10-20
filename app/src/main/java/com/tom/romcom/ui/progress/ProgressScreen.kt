@@ -119,7 +119,8 @@ fun ProgressScreen(
                             startDay = currentSemester.startEpochDay,
                             today = today)
                     // calcs for second progress bar that has semester end day as end date
-                    val planTotalHours = (course.credits * currentSemester.hoursPerCredit - (course.plannedHoursPerWeek * currentSemester.lectureWeeks)).coerceAtLeast(0.0)
+                    val planTotalHours =
+                        course.plannedHoursPerWeek * currentSemester.lectureWeeks
                     val planExpectedHours =
                         expectedHours(
                             startDay = currentSemester.startEpochDay,
