@@ -7,7 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    version = 3,
+    version = 4,
     entities = [
         Lecture::class,
         Task::class,
@@ -19,7 +19,8 @@ import androidx.room.RoomDatabase
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
-        AutoMigration(from = 2, to = 3)
+        AutoMigration(from = 2, to = 3),
+        AutoMigration(from = 3, to = 4)
     ]
 )
 abstract class CredoDatabase : RoomDatabase() {
