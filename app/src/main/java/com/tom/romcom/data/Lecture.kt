@@ -13,12 +13,19 @@ import androidx.room.PrimaryKey
         parentColumns = ["id"],
         childColumns = ["courseId"],
         onDelete = ForeignKey.CASCADE
+    ), ForeignKey(
+        entity = RecurringSlot::class,
+        parentColumns = ["id"],
+        childColumns = ["slotId"],
+        onDelete = ForeignKey.CASCADE
     )],
-    indices = [Index(value = ["courseId"]), Index(value = ["calendarUid"], unique = true)]
+    indices = [Index(value = ["courseId"]), Index(value = ["calendarUid"], unique = true), Index(
+        value = ["slotId"]
+    )]
 )
-
+// import always sets slotId, manual form always sets courseId
 data class Lecture(
-    val courseId: Int,
+    val courseId: Int? = null,
     val room: String,
     val epochDay: Long,
     val isHappening: Boolean = true,
@@ -26,6 +33,7 @@ data class Lecture(
     val startMinuteOfDay: Int,
     val endMinuteOfDay: Int,
     val calendarUid: String?,
+    val slotId: Int? = null,
     @ColumnInfo(defaultValue = "1") val attended: Boolean = true,
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
 )

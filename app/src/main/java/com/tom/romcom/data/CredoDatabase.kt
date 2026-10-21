@@ -14,7 +14,8 @@ import androidx.room.RoomDatabase
         Course::class,
         StudySession::class,
         Semester::class,
-        Exam::class],
+        Exam::class,
+        RecurringSlot:: class],
     exportSchema = true,
     autoMigrations = [
         AutoMigration(from = 1, to = 2),
