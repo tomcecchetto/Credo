@@ -37,7 +37,7 @@ fun formatDateTime(millis: Long): String {
 
 fun formatMinuteOfDay(minute: Int?): String {
     if (minute == null) return ""
-    val formatter = DateTimeFormatter.ofLocalizedTime(FormatStyle.SHORT)
+    val formatter = DateTimeFormatter.ofPattern("HH:mm")
     return LocalTime.of(minute / 60, minute % 60).format(formatter)
 }
 
