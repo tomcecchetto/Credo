@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tom.romcom.calendarimport.CalendarImporter
 import com.tom.romcom.data.CredoDatabase
+import com.tom.romcom.data.RecurringSlot
 import kotlinx.coroutines.launch
 
 class CalendarViewModel(application: Application) : AndroidViewModel(application = application) {
@@ -22,5 +23,10 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             importer.importFile(text)
         }
+    }
+
+    fun setAttending(slot: RecurringSlot, attending: Boolean) {
+        val slotCopy = slot.copy(attending = attending)
+        viewModelScope.launch { slotDao.update(slotCopy) }
     }
 }

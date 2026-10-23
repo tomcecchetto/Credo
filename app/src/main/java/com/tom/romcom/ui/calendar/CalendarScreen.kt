@@ -25,8 +25,6 @@ fun CalendarScreen(
     modifier: Modifier = Modifier,
     viewModel: CalendarViewModel = viewModel()
 ) {
-    val slots by viewModel.slots.collectAsState(initial = emptyList())
-    val lectures by viewModel.lectures.collectAsState(initial = emptyList())
     val slotsWithInfo by viewModel.slotsWithInfo.collectAsState(initial = emptyList())
 
     val context = LocalContext.current
@@ -55,7 +53,9 @@ fun CalendarScreen(
                     Text(stringResource(R.string.import_calendar))
                 }
             }
-            items(slotsWithInfo) { info -> SlotRow(info) }
+            items(slotsWithInfo) { info -> SlotRow(
+                info = info,
+                onAttendingChange = { checked -> viewModel.setAttending(info.slot, checked) }) }
         }
     }
 }
