@@ -18,11 +18,23 @@ interface RecurringSlotDao {
         startMinuteOfDay: Int
     ): RecurringSlot?
 
+    @Query("SELECT * FROM RecurringSlot ORDER BY dayOfWeek, startMinuteOfDay")
+    fun getAllSlots(): Flow<List<RecurringSlot>>
+
+    @Query("SELECT RecurringSlot.*, " +
+            "COUNT(Lecture.id) AS lectureCount," +
+            "MAX(Lecture.endMinuteOfDay) AS endMinuteOfDay," +
+            "MAX(Lecture.room) AS room " +
+            "FROM RecurringSlot " +
+            "JOIN Lecture ON Lecture.slotId = RecurringSlot.id " +
+            "GROUP BY slotId " +
+            "ORDER BY RecurringSlot.dayOfWeek, RecurringSlot.startMinuteOfDay")
+    fun getSlotsWithInfo(): Flow<List<SlotWithInfo>>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(slot: RecurringSlot): Long
 
-    @Query("SELECT * FROM RecurringSlot ORDER BY dayOfWeek, startMinuteOfDay")
-    fun getAllSlots(): Flow<List<RecurringSlot>>
+
 
     @Update
     suspend fun update(slot: RecurringSlot)
