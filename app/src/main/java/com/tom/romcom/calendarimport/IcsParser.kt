@@ -37,8 +37,8 @@ fun parseIcs(text: String): List<IcsEvent> {
                 uid = c["UID"] ?: continue,
                 summary = c["SUMMARY"] ?: continue,
                 location = c["LOCATION"] ?: "",
-                start = parseIcsTime(startTime),
-                end = parseIcsTime(endTime)
+                start = runCatching { parseIcsTime(startTime) }.getOrNull() ?: continue,
+                end = runCatching { parseIcsTime(endTime) }.getOrNull() ?: continue
             ))
         } else if (current != null && ":" in line) {
             val (key, value) = line.split(":", limit = 2)
