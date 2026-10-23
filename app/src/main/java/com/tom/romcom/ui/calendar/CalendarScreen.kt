@@ -54,7 +54,7 @@ fun CalendarScreen(
                     Text(stringResource(R.string.import_calendar))
                 }
             }
-            items(slotsWithInfo) { info -> SlotRow(
+            items(items = slotsWithInfo, key = { it.slot.id }) { info -> SlotRow(
                 info = info,
                 onAttendingChange = { checked -> viewModel.setAttending(info.slot, checked) },
                 courses = courses,
