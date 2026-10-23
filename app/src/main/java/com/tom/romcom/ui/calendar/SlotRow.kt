@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.tom.romcom.data.Course
 import com.tom.romcom.data.SlotWithInfo
 import com.tom.romcom.ui.formatMinuteOfDay
 import java.time.DayOfWeek
@@ -20,7 +21,9 @@ import java.util.Locale
 @Composable
 fun SlotRow(
     info: SlotWithInfo,
+    courses: List<Course>,
     onAttendingChange: (Boolean) -> Unit,
+    onCourseSelected: (Int?) -> Unit
 ) {
     val day = DayOfWeek.of(info.slot.dayOfWeek).getDisplayName(TextStyle.SHORT, Locale.getDefault())
     val start = formatMinuteOfDay(info.slot.startMinuteOfDay)
@@ -48,6 +51,13 @@ fun SlotRow(
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
+            if (info.slot.attending) {
+                CourseDropdown(
+                    courses = courses,
+                    selectedCourseId = info.slot.courseId,
+                    onCourseSelected = onCourseSelected
+                )
+            }
         }
     }
 }

@@ -26,6 +26,7 @@ fun CalendarScreen(
     viewModel: CalendarViewModel = viewModel()
 ) {
     val slotsWithInfo by viewModel.slotsWithInfo.collectAsState(initial = emptyList())
+    val courses by viewModel.courses.collectAsState(initial = emptyList())
 
     val context = LocalContext.current
     val picker = rememberLauncherForActivityResult(
@@ -55,7 +56,10 @@ fun CalendarScreen(
             }
             items(slotsWithInfo) { info -> SlotRow(
                 info = info,
-                onAttendingChange = { checked -> viewModel.setAttending(info.slot, checked) }) }
+                onAttendingChange = { checked -> viewModel.setAttending(info.slot, checked) },
+                courses = courses,
+                onCourseSelected = { courseId -> viewModel.setCourseId(info.slot, courseId = courseId) }
+            ) }
         }
     }
 }

@@ -48,6 +48,7 @@
     <string name="course_color">Fachfarbe</string>
     <string name="color">Farbe</string>
     <string name="import_calendar">Kalender importieren</string>
+    <string name="no_course">Kein Fach</string>
 
 
     <plurals name="exam_in_days">
