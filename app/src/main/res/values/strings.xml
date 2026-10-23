@@ -47,6 +47,7 @@
     <string name="semester">Semester</string>
     <string name="course_color">Course color</string>
     <string name="color">Color</string>
+    <string name="import_calendar">Import calendar</string>
 
 
     <plurals name="exam_in_days">
