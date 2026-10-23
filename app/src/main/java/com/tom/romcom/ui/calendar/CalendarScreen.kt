@@ -48,13 +48,13 @@ fun CalendarScreen(
         ) {
             item {
                 Button(
-                    onClick = { picker.launch(arrayOf("*/*")) } // TODO: "text/calendar" instead of */*
+                    onClick = { picker.launch(arrayOf("text/calendar")) }
                 ) {
                     Text(stringResource(R.string.import_calendar))
                 }
             }
             item {
-                Text("Slots size: ${slots.size} \n Lectures size: ${lectures.size}")
+                Text("slot: ${slots.size} \n lectures: ${lectures.size} \n title: ${slots.firstOrNull()?.title}")
             }
         }
     }

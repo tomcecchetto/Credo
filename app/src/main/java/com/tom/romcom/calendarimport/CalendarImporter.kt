@@ -26,7 +26,8 @@ class CalendarImporter(
                 slot = RecurringSlot(
                     seriesId = seriesId,
                     startMinuteOfDay = startMinute,
-                    dayOfWeek = dayOfWeek
+                    dayOfWeek = dayOfWeek,
+                    title = slotEvents.first().summary
                 )
             ).toInt()
             val slotId = if (newId != -1) newId else slotDao.findBySeriesDayStart(
