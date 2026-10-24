@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
@@ -28,15 +27,11 @@ fun CalendarScreen(
     val slotsWithInfo by viewModel.slotsWithInfo.collectAsState(initial = emptyList())
     val courses by viewModel.courses.collectAsState(initial = emptyList())
 
-    val context = LocalContext.current
     val picker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
-        val text =
-            context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
-        if (text == null) return@rememberLauncherForActivityResult
-        viewModel.importCalendar(text)
+        else viewModel.importCalendar(uri)
     }
     Scaffold(
         modifier = modifier,

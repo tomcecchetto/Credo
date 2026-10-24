@@ -1,6 +1,7 @@
 package com.tom.romcom.ui.calendar
 
 import android.app.Application
+import android.net.Uri
 import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -13,11 +14,13 @@ import com.tom.romcom.data.Course
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.RecurringSlot
 import com.tom.romcom.data.Semester
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CalendarViewModel(application: Application) : AndroidViewModel(application = application) {
@@ -41,9 +44,12 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         else courseDao.getCoursesForSemester(current.id)
     }
 
-    fun importCalendar(text: String) {
+    fun importCalendar(uri: Uri) {
         viewModelScope.launch {
             try {
+                val text = withContext(Dispatchers.IO) {
+                    getApplication<Application>().contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+                } ?: error("Could not read file")
                 val count = importer.importFile(text)
                 importMessage = if (count > 0) getApplication<Application>().resources.getQuantityString(R.plurals.lectures, count, count)
                 else getApplication<Application>().getString(R.string.no_events_found)

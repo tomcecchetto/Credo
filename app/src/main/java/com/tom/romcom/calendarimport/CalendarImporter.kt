@@ -1,11 +1,14 @@
 package com.tom.romcom.calendarimport
 
+import android.net.Uri
 import androidx.room.withTransaction
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Lecture
 import com.tom.romcom.data.LectureDao
 import com.tom.romcom.data.RecurringSlot
 import com.tom.romcom.data.RecurringSlotDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 class CalendarImporter(
     private val slotDao: RecurringSlotDao,
@@ -13,13 +16,15 @@ class CalendarImporter(
     private val database: CredoDatabase,
 ) {
     suspend fun importFile(text: String): Int {
-        val events = parseIcs(text)
-        val groups = events.groupBy {
-            Triple(
-                it.seriesId,
-                it.start.hour * 60 + it.start.minute,
-                it.start.dayOfWeek.value
-            )
+        val events = withContext(Dispatchers.Default) { parseIcs(text) }
+        val groups = withContext(Dispatchers.Default) {
+            events.groupBy {
+                Triple(
+                    it.seriesId,
+                    it.start.hour * 60 + it.start.minute,
+                    it.start.dayOfWeek.value
+                )
+            }
         }
         database.withTransaction {
 
