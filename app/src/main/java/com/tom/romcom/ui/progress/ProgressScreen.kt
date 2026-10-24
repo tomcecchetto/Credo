@@ -40,6 +40,7 @@ fun ProgressScreen(
     val courses by viewModel.courses.collectAsState(initial = emptyList())
     val semester by viewModel.semester.collectAsState(initial = null)
     val exams by viewModel.exams.collectAsState(initial = emptyList())
+    val classHoursPerCourse by viewModel.classHoursPerCourse.collectAsState(initial = emptyList())
     val finishedSessions by viewModel.finishedSessions.collectAsState(initial = emptyList())
 
     val today = LocalDate.now().toEpochDay()
@@ -108,8 +109,9 @@ fun ProgressScreen(
                         hoursDonePerCourse(courseId = course.id, sessions = finishedSessions)
                     val courseExam =
                         exams.firstOrNull { it.courseId == course.id }
-                    val totalHours =
-                        (course.credits * currentSemester.hoursPerCredit - (course.lectureHoursPerWeek * currentSemester.lectureWeeks) - (course.praktikumSessions * course.praktikumHoursPerSession)).coerceAtLeast(0.0)
+                    val importedHours = classHoursPerCourse.firstOrNull { it.courseId == course.id }?.classHours
+                    val classHours = classHoursForCourse(course, currentSemester.lectureWeeks, importedHours)
+                    val totalHours = (course.credits * currentSemester.hoursPerCredit - classHours).coerceAtLeast(0.0)
                     val endDay =
                         courseExam?.epochDay ?: currentSemester.endEpochDay
                     val expected =

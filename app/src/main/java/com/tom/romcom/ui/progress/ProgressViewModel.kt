@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tom.romcom.data.Course
+import com.tom.romcom.data.CourseClassHours
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Exam
 import com.tom.romcom.data.Semester
@@ -22,6 +23,7 @@ class ProgressViewModel(application: Application) : AndroidViewModel(application
     private val semesterDao = db.semesterDao()
     private val examDao = db.examDao()
     private val studySessionDao = db.studySessionDao()
+    private val lectureDao = db.lectureDao()
 
     val semester: Flow<Semester?> = semesterDao.getCurrentSemester()
 
@@ -37,6 +39,7 @@ class ProgressViewModel(application: Application) : AndroidViewModel(application
         if (current == null) flowOf(emptyList())
         else courseDao.getCoursesForSemester(current.id)
     }
+    val classHoursPerCourse: Flow<List<CourseClassHours>> = lectureDao.getClassHoursPerCourse()
 
     fun addCourse(course: Course) {
         viewModelScope.launch { courseDao.insert(course) }

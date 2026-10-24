@@ -1,5 +1,6 @@
 package com.tom.romcom.ui.progress
 
+import com.tom.romcom.data.Course
 import com.tom.romcom.data.StudySession
 import java.time.LocalDate
 
@@ -23,5 +24,14 @@ fun hoursDonePerCourse(
     val millisDone = sessions.filter { courseId == it.courseId }
         .sumOf { (it.endTime ?: it.startTime) - it.startTime }
     return millisDone / 3_600_000.0
+}
+
+fun classHoursForCourse(
+    course: Course,
+    lectureWeeks: Int,
+    importedHours: Double?
+): Double {
+    val manualHours = (course.lectureHoursPerWeek * lectureWeeks) + (course.praktikumSessions * course.praktikumHoursPerSession)
+    return importedHours ?: manualHours
 }
 

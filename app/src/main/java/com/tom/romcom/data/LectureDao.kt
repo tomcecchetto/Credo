@@ -14,4 +14,14 @@ interface LectureDao {
 
     @Query("SELECT * FROM Lecture ORDER BY epochDay, startMinuteOfDay")
     fun getAllLectures(): Flow<List<Lecture>>
+
+    @Query("SELECT RecurringSlot.courseId AS courseId, " +
+            "SUM(Lecture.endMinuteOfDay - Lecture.startMinuteOfDay) / 60.0 AS classHours " +
+            "FROM Lecture " +
+            "JOIN RecurringSlot ON RecurringSlot.id = Lecture.slotId " +
+            "WHERE Lecture.isHappening = 1 " +
+            "AND RecurringSlot.attending = 1 " +
+            "AND RecurringSlot.courseId IS NOT NULL " +
+            "GROUP BY RecurringSlot.courseId")
+    fun getClassHoursPerCourse() : Flow<List<CourseClassHours>>
 }
