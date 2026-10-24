@@ -1,6 +1,7 @@
 package com.tom.romcom.ui.calendar
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tom.romcom.calendarimport.CalendarImporter
@@ -36,7 +37,11 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     fun importCalendar(text: String) {
         viewModelScope.launch {
-            importer.importFile(text)
+            try {
+                importer.importFile(text)
+            } catch (e: Exception) {
+                Log.e("Credo", "Import failed", e)
+            }
         }
     }
 
