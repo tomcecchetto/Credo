@@ -34,7 +34,7 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val semester: Flow<Semester?> = semesterDao.getCurrentSemester()
     var importMessage by mutableStateOf<String?>(null)
         private set
-    private val importer = CalendarImporter(slotDao, lectureDao)
+    private val importer = CalendarImporter(slotDao, lectureDao, db)
 
     val courses: Flow<List<Course>> = semester.flatMapLatest { current ->
         if (current == null) flowOf(emptyList())
