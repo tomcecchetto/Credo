@@ -49,10 +49,16 @@
     <string name="color">Color</string>
     <string name="import_calendar">Import calendar</string>
     <string name="no_course">No course</string>
+    <string name="import_failed">Import failed</string>
+    <string name="no_events_found">No events found in this file</string>
 
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>
         <item quantity="other">Exam in %d days</item>
+    </plurals>
+    <plurals name="lectures">
+        <item quantity="one">Imported %d lecture</item>
+        <item quantity="other">Imported %d lectures</item>
     </plurals>
 </resources>

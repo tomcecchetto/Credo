@@ -49,10 +49,15 @@
     <string name="color">Farbe</string>
     <string name="import_calendar">Kalender importieren</string>
     <string name="no_course">Kein Fach</string>
-
+    <string name="import_failed">Importieren fehlgeschlagen</string>
+    <string name="no_events_found">Keine Lektionen in dieser Datei gefunden</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
         <item quantity="other">Prüfung in %d Tagen</item>
+    </plurals>
+    <plurals name="lectures">
+        <item quantity="one">%d Lektion importiert</item>
+        <item quantity="other">%d Lektionen importiert</item>
     </plurals>
 </resources>

@@ -9,7 +9,7 @@ class CalendarImporter(
     private val slotDao: RecurringSlotDao,
     private val lectureDao: LectureDao
 ) {
-    suspend fun importFile(text: String) {
+    suspend fun importFile(text: String): Int {
         val events = parseIcs(text)
         val groups = events.groupBy {
             Triple(
@@ -49,5 +49,6 @@ class CalendarImporter(
             }
         }
         lectureDao.insertAll(lectures)
+        return events.size
     }
 }

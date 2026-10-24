@@ -31,16 +31,16 @@ fun CalendarScreen(
     val context = LocalContext.current
     val picker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
-    ) {
-        uri ->
+    ) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
-        val text = context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+        val text =
+            context.contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
         if (text == null) return@rememberLauncherForActivityResult
         viewModel.importCalendar(text)
     }
     Scaffold(
         modifier = modifier,
-        contentWindowInsets = WindowInsets(0,0,0,0),
+        contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = { CredoTopBar(stringResource(R.string.calendar)) }
     ) { innerPadding ->
         LazyColumn(
@@ -53,13 +53,24 @@ fun CalendarScreen(
                 ) {
                     Text(stringResource(R.string.import_calendar))
                 }
+                val message = viewModel.importMessage
+                if (message != null) {
+                    Text(message)
+                }
             }
-            items(items = slotsWithInfo, key = { it.slot.id }) { info -> SlotRow(
-                info = info,
-                onAttendingChange = { checked -> viewModel.setAttending(info.slot, checked) },
-                courses = courses,
-                onCourseSelected = { courseId -> viewModel.setCourseId(info.slot, courseId = courseId) }
-            ) }
+            items(items = slotsWithInfo, key = { it.slot.id }) { info ->
+                SlotRow(
+                    info = info,
+                    onAttendingChange = { checked -> viewModel.setAttending(info.slot, checked) },
+                    courses = courses,
+                    onCourseSelected = { courseId ->
+                        viewModel.setCourseId(
+                            info.slot,
+                            courseId = courseId
+                        )
+                    }
+                )
+            }
         }
     }
 }
