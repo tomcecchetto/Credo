@@ -52,6 +52,7 @@
     <string name="import_failed">Import failed</string>
     <string name="no_events_found">No events found in this file</string>
     <string name="calendar_empty">Import your calendar from OpenOLAT to see your lectures here</string>
+    <string name="hours_this_week">This week: studied for %1$s hours</string>
 
 
     <plurals name="exam_in_days">

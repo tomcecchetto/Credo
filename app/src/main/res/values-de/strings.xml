@@ -52,6 +52,7 @@
     <string name="import_failed">Importieren fehlgeschlagen</string>
     <string name="no_events_found">Keine Lektionen in dieser Datei gefunden</string>
     <string name="calendar_empty">Importiere deinen Kalender aus OpenOLAT, um deine Lektionen hier zu sehen</string>
+    <string name="hours_this_week">Diese Woche: %1$s Stunden gelernt</string>
 
 
     <plurals name="exam_in_days">

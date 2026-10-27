@@ -3,6 +3,9 @@ package com.tom.romcom.ui.progress
 import com.tom.romcom.data.Course
 import com.tom.romcom.data.StudySession
 import java.time.LocalDate
+import java.time.DayOfWeek
+import java.time.ZoneId
+import java.time.temporal.TemporalAdjusters
 
 fun expectedHours(
     startDay: Long,
@@ -33,5 +36,16 @@ fun classHoursForCourse(
 ): Double {
     val manualHours = (course.lectureHoursPerWeek * lectureWeeks) + (course.praktikumSessions * course.praktikumHoursPerSession)
     return importedHours ?: manualHours
+}
+
+fun hoursThisWeek(
+    sessions: List<StudySession>,
+    today: LocalDate = LocalDate.now()
+): Double {
+    val mondayMillis = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
+        .atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    val millisDone = sessions.filter { it.startTime >= mondayMillis }
+        .sumOf { (it.endTime ?: it.startTime) - it.startTime}
+    return millisDone / 3_600_000.0
 }
 
