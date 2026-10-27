@@ -2,7 +2,9 @@ package com.tom.romcom.ui.calendar
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
@@ -44,14 +46,14 @@ fun SlotRow(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
                     text = info.slot.title,
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.weight(1f).padding(end = 8.dp),
                     style = MaterialTheme.typography.titleMedium,
                     color = textColor,
                     maxLines = 1,
@@ -63,6 +65,7 @@ fun SlotRow(
                     color = textColor
                 )
             }
+            Spacer(modifier = Modifier.height(4.dp))
                 Text(
                     text = "${info.room} · ${info.lectureCount}×",
                     style = MaterialTheme.typography.bodySmall,
