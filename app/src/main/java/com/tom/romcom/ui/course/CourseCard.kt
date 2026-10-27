@@ -36,6 +36,7 @@ import com.tom.romcom.ui.formatNumber
 import com.tom.romcom.ui.formatHoursDiff
 import com.tom.romcom.ui.progress.HoursTrack
 import com.tom.romcom.ui.progress.ProgressViewModel
+import com.tom.romcom.ui.theme.Amber
 import java.time.LocalDate
 import kotlin.math.abs
 
@@ -102,7 +103,7 @@ fun CourseCard(
                         ),
                         style = MaterialTheme.typography.bodySmall,
                         color = if (daysLeft in 1..7)
-                            MaterialTheme.colorScheme.error else
+                            Amber else
                             MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }

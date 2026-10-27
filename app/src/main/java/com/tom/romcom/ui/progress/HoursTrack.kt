@@ -9,6 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.tom.romcom.ui.theme.Amber
+import com.tom.romcom.ui.theme.Green
 
 @Composable
 fun HoursTrack(
@@ -17,8 +19,8 @@ fun HoursTrack(
     hoursDone: Double,
     modifier: Modifier = Modifier
 ) {
-    val behind = Color(0xFFF2B266)
-    val ahead = Color(0xFF2E7D32)
+    val behind = Amber
+    val ahead = Green
     val trackColor = MaterialTheme.colorScheme.outlineVariant
     val expectedColor = MaterialTheme.colorScheme.outline
 
