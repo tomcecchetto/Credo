@@ -17,7 +17,7 @@ fun HoursTrack(
     hoursDone: Double,
     modifier: Modifier = Modifier
 ) {
-    val behind = MaterialTheme.colorScheme.error
+    val behind = Color(0xFFF2B266)
     val ahead = Color(0xFF2E7D32)
     val trackColor = MaterialTheme.colorScheme.outlineVariant
     val expectedColor = MaterialTheme.colorScheme.outline

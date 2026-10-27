@@ -31,11 +31,13 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.data.Course
 import com.tom.romcom.data.Exam
+import com.tom.romcom.ui.formatHours
 import com.tom.romcom.ui.formatNumber
 import com.tom.romcom.ui.formatHoursDiff
 import com.tom.romcom.ui.progress.HoursTrack
 import com.tom.romcom.ui.progress.ProgressViewModel
 import java.time.LocalDate
+import kotlin.math.abs
 
 @Composable
 fun CourseCard(
@@ -51,8 +53,9 @@ fun CourseCard(
     modifier: Modifier = Modifier,
 
     ) {
-    val hoursDiffWidth = 60.dp
+    val hoursDiffWidth = 85.dp
     val textModifierWidth = 50.dp
+    val numberStyle = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum")
 
     Card(
         modifier = modifier
@@ -107,7 +110,7 @@ fun CourseCard(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
-
+                    val (prefix, value) = formatDiffText(hoursDone - expectedHours)
                     Text(
                         text = if (hasExam) stringResource(R.string.exam) else stringResource(R.string.semester),
                         style = MaterialTheme.typography.labelSmall,
@@ -120,21 +123,27 @@ fun CourseCard(
                         hoursDone = hoursDone,
                         modifier = Modifier.weight(1f)
                     )
-                    Text(
-                        text = stringResource(
-                            R.string.hours_diff,
-                            formatHoursDiff(hoursDone - expectedHours)
-                        ),
-                        textAlign = TextAlign.End,
-                        modifier = Modifier.width(hoursDiffWidth)
-                    )
+                    Row(
+                        Modifier.width(hoursDiffWidth)
+                    ) {
+                        Text(
+                            text = prefix,
+                            style = numberStyle,
+                            modifier = Modifier.weight(1f)
+                        )
+                        Text(
+                            text = value,
+                            style = numberStyle
+
+                        )
+                    }
                 }
                 if (course.plannedHoursPerWeek > 0.0) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
                     ) {
-
+                        val (planPrefix, planValue) = formatDiffText(hoursDone - planExpectedHours)
                         Text(
                             text = stringResource(R.string.plan),
                             style = MaterialTheme.typography.labelSmall,
@@ -147,17 +156,28 @@ fun CourseCard(
                             expectedHours = planExpectedHours,
                             modifier = Modifier.weight(1f)
                         )
-                        Text(
-                            text = stringResource(
-                                R.string.hours_diff,
-                                formatHoursDiff(hoursDone - planExpectedHours)
-                            ),
-                            textAlign = TextAlign.End,
-                            modifier = Modifier.width(hoursDiffWidth)
-                        )
+                        Row(
+                            Modifier.width(hoursDiffWidth)
+                        ) {
+                            Text(
+                                text = planPrefix,
+                                style = numberStyle,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Text(
+                                text = planValue,
+                                style = numberStyle
+                            )
+                        }
                     }
                 }
             }
         }
     }
+}
+
+@Composable
+fun formatDiffText(diff: Double): Pair<String, String> {
+    return if (diff >= 0) "" to stringResource(R.string.hours_diff, formatHoursDiff(diff))
+    else stringResource(R.string.to_go) to stringResource(R.string.hours_diff, formatHours(abs(diff)))
 }

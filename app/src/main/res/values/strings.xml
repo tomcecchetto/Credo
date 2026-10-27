@@ -53,6 +53,7 @@
     <string name="no_events_found">No events found in this file</string>
     <string name="calendar_empty">Import your calendar from OpenOLAT to see your lectures here</string>
     <string name="hours_this_week">This week: studied for %1$s hours</string>
+    <string name="to_go">still</string>
 
 
     <plurals name="exam_in_days">
