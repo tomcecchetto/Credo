@@ -51,6 +51,7 @@
     <string name="no_course">No course</string>
     <string name="import_failed">Import failed</string>
     <string name="no_events_found">No events found in this file</string>
+    <string name="calendar_empty">Import your calendar from OpenOLAT to see your lectures here</string>
 
 
     <plurals name="exam_in_days">

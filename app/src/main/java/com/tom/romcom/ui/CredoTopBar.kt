@@ -25,6 +25,7 @@ fun CredoTopBar(
     onBack: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
+    onImport: (() -> Unit)? = null,
     saveEnabled: Boolean = true
 
 ) {
@@ -69,6 +70,12 @@ fun CredoTopBar(
                         painterResource(R.drawable.ic_check),
                         contentDescription = stringResource(R.string.save)
                     )
+                }
+            }
+            if (onImport != null) {
+                IconButton(onClick = onImport) {
+                    Icon(painterResource(R.drawable.ic_download),
+                        contentDescription = stringResource(R.string.import_calendar))
                 }
             }
         }
