@@ -19,8 +19,8 @@ android {
         applicationId = "com.tom.credo"
         minSdk = 26
         targetSdk = 37
-        versionCode = 5
-        versionName = "1.3.1"
+        versionCode = 6
+        versionName = "1.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
