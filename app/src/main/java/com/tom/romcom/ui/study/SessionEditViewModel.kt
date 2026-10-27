@@ -76,7 +76,7 @@ class SessionEditViewModel(application: Application) : AndroidViewModel(applicat
             val day = epochDay
             val start = startMinute
             val end = endMinute
-            return start != null && end != null && end > start && day != null && cId != null
+            return start != null && end != null && end != start && day != null && cId != null
         }
 
     fun load(sessionId: Int?) {
@@ -112,10 +112,12 @@ class SessionEditViewModel(application: Application) : AndroidViewModel(applicat
         val endMin = endMinute
         val loadedSess = loadedSession
 
-        if (cId == null || day == null || startMin == null || endMin == null || endMin <= startMin) return
+        if (cId == null || day == null || startMin == null || endMin == null || endMin == startMin) return
+        val endDay = if (endMin > startMin) day else day + 1
+
 
         val startMillis = toMillis(day, startMin)
-        val endMillis = toMillis(day, endMin)
+        val endMillis = toMillis(endDay, endMin)
 
         val session =
             if (loadedSess != null) {
