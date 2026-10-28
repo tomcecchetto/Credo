@@ -54,6 +54,7 @@
     <string name="calendar_empty">Import your calendar from OpenOLAT to see your lectures here</string>
     <string name="hours_this_week">This week: studied for %1$s hours</string>
     <string name="to_go">still</string>
+    <string name="goal_reached">Reached weekly goaL</string>
 
 
     <plurals name="exam_in_days">
@@ -63,5 +64,9 @@
     <plurals name="lectures">
         <item quantity="one">Imported %d lecture</item>
         <item quantity="other">Imported %d lectures</item>
+    </plurals>
+    <plurals name="goals_reached">
+        <item quantity="one">%d weekly goal reached</item>
+        <item quantity="other">%d weekly goals reached</item>
     </plurals>
 </resources>

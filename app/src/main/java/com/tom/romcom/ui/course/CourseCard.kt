@@ -12,31 +12,29 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.data.Course
 import com.tom.romcom.data.Exam
 import com.tom.romcom.ui.formatHours
-import com.tom.romcom.ui.formatNumber
 import com.tom.romcom.ui.formatHoursDiff
+import com.tom.romcom.ui.formatNumber
 import com.tom.romcom.ui.progress.HoursTrack
-import com.tom.romcom.ui.progress.ProgressViewModel
 import com.tom.romcom.ui.theme.Amber
+import com.tom.romcom.ui.theme.PurpleHeart
 import java.time.LocalDate
 import kotlin.math.abs
 
@@ -51,6 +49,7 @@ fun CourseCard(
     onClick: () -> Unit,
     nextExam: Exam? = null,
     hasExam: Boolean,
+    goalReached: Boolean,
     modifier: Modifier = Modifier,
 
     ) {
@@ -82,10 +81,23 @@ fun CourseCard(
                 modifier = Modifier
                     .weight(1f)
             ) {
-                Text(
-                    text = course.name,
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(6.dp)
+                ) {
+                    Text(
+                        text = course.name,
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier.weight(1f, fill = false),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    if (goalReached) Icon(painterResource(R.drawable.ic_heart),
+                        contentDescription = stringResource(R.string.goal_reached),
+                        modifier = Modifier.size(16.dp),
+                        tint = PurpleHeart
+                    )
+                }
                 Text(
                     text = stringResource(R.string.credits_value, formatNumber(course.credits)),
                     style = MaterialTheme.typography.bodySmall,

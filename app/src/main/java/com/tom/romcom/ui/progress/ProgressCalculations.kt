@@ -49,3 +49,11 @@ fun hoursThisWeek(
     return millisDone / 3_600_000.0
 }
 
+fun isWeeklyGoalReached(
+    course: Course,
+    sessions: List<StudySession>,
+    today: LocalDate = LocalDate.now()
+): Boolean {
+    val weekHours = hoursThisWeek(sessions.filter { it.courseId == course.id }, today)
+    return (weekHours >= course.plannedHoursPerWeek && course.plannedHoursPerWeek > 0.0)
+}
