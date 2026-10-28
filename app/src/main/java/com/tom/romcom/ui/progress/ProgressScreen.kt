@@ -25,7 +25,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
@@ -147,7 +146,7 @@ fun ProgressScreen(
                     }
                 }
                 items(courses, key = { it.id }) { course ->
-                    // calcs for first progress bar that has exam date as end date
+                    // calculations for first progress bar that has exam date as end date
                     val nextExam =
                         exams.firstOrNull { it.courseId == course.id && it.epochDay >= today }
                     val hoursDone =
@@ -171,22 +170,14 @@ fun ProgressScreen(
                             startDay = currentSemester.startEpochDay,
                             today = today
                         )
-                    // calcs for second progress bar that has semester end day as end date
-                    val planTotalHours =
-                        course.plannedHoursPerWeek * currentSemester.lectureWeeks
-                    val planExpectedHours =
-                        expectedHours(
-                            startDay = currentSemester.startEpochDay,
-                            endDay = currentSemester.endEpochDay,
-                            totalHours = planTotalHours,
-                            today = today
-                        )
+                    // calculations for second progress bar that has semester end day as end date
+                    val plan = planProgressFor(course, currentSemester, finishedSessions, today)
                     val goalReached = isWeeklyGoalReached(course, finishedSessions)
                     CourseCard(
                         totalHours = totalHours,
-                        planTotalHours = planTotalHours,
+                        planTotalHours = plan.planTotalHours,
                         expectedHours = expected,
-                        planExpectedHours = planExpectedHours,
+                        planExpectedHours = plan.planExpectedHours,
                         hoursDone = hoursDone,
                         course = course,
                         hasExam = courseExam != null,

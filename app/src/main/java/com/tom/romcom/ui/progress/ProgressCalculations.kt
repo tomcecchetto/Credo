@@ -1,6 +1,7 @@
 package com.tom.romcom.ui.progress
 
 import com.tom.romcom.data.Course
+import com.tom.romcom.data.Semester
 import com.tom.romcom.data.StudySession
 import java.time.LocalDate
 import java.time.DayOfWeek
@@ -56,4 +57,25 @@ fun isWeeklyGoalReached(
 ): Boolean {
     val weekHours = hoursThisWeek(sessions.filter { it.courseId == course.id }, today)
     return (weekHours >= course.plannedHoursPerWeek && course.plannedHoursPerWeek > 0.0)
+}
+data class PlanProgress(
+    val planTotalHours: Double,
+    val planExpectedHours: Double,
+    val hoursDone: Double
+)
+fun planProgressFor(
+    course: Course,
+    semester: Semester,
+    sessions: List<StudySession>,
+    today: Long = LocalDate.now().toEpochDay()
+): PlanProgress {
+    val hoursDone = hoursDonePerCourse(courseId = course.id, sessions = sessions)
+    val planTotalHours = course.plannedHoursPerWeek * semester.lectureWeeks
+    val planExpectedHours = expectedHours(
+        startDay = semester.startEpochDay,
+        endDay = semester.endEpochDay,
+        totalHours = planTotalHours,
+        today = today
+    )
+    return PlanProgress(hoursDone = hoursDone, planTotalHours = planTotalHours, planExpectedHours = planExpectedHours)
 }
