@@ -55,6 +55,8 @@
     <string name="hours_this_week">Diese Woche: %1$s Stunden gelernt</string>
     <string name="to_go">noch</string>
     <string name="goal_reached">Wochenziel erreicht</string>
+    <string name="add_semester_widget">Lege in Credo zuerst ein Semester an</string>
+    <string name="planned">Geplant</string>
 
 
     <plurals name="exam_in_days">

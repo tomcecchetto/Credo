@@ -55,6 +55,8 @@
     <string name="hours_this_week">This week: studied for %1$s hours</string>
     <string name="to_go">still</string>
     <string name="goal_reached">Reached weekly goaL</string>
+    <string name="add_semester_widget">Add a semester in Credo first</string>
+    <string name="planned">Planned</string>
 
 
     <plurals name="exam_in_days">
