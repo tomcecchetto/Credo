@@ -109,6 +109,7 @@ class CredoWidget : GlanceAppWidget() {
                                 )
                             )
                         }
+                        Spacer(GlanceModifier.height(6.dp))
                         for ((course, progress) in rows) {
 
                             val diff = progress.hoursDone - progress.planExpectedHours
