@@ -68,4 +68,5 @@ dependencies {
     implementation(libs.kotlinx.serialization.core)
     implementation(libs.androidx.lifecycle.viewmodel.navigation3)
     implementation(libs.colorpicker.compose)
+    implementation(libs.androidx.glance.appwidget)
 }
