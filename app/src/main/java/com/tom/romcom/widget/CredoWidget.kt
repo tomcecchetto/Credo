@@ -1,9 +1,7 @@
 package com.tom.romcom.widget
 
 import android.content.Context
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
@@ -33,13 +31,11 @@ import androidx.glance.text.TextStyle
 import androidx.glance.color.ColorProvider
 import com.tom.romcom.R
 import com.tom.romcom.data.CredoDatabase
-import com.tom.romcom.ui.formatHours
 import com.tom.romcom.ui.formatHoursDiff
 import com.tom.romcom.ui.progress.planProgressFor
 import com.tom.romcom.ui.theme.Amber
 import com.tom.romcom.ui.theme.Green
 import kotlinx.coroutines.flow.first
-import kotlin.math.abs
 
 class CredoWidget : GlanceAppWidget() {
 
