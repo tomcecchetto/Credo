@@ -9,8 +9,10 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
+import androidx.glance.LocalSize
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
@@ -41,13 +43,18 @@ import kotlin.math.abs
 
 class CredoWidget : GlanceAppWidget() {
 
+    override val sizeMode = SizeMode.Exact
+
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+
+
         val db = CredoDatabase.getDatabase(context)
         val semesterDao = db.semesterDao()
         val courseDao = db.courseDao()
         val studySessionDao = db.studySessionDao()
 
         val semester = semesterDao.getCurrentSemester().first() ?: provideContent {
+
             GlanceTheme {
                 Box(
                     modifier = GlanceModifier
@@ -73,6 +80,8 @@ class CredoWidget : GlanceAppWidget() {
 
 
         provideContent {
+            val size = LocalSize.current
+            val barWidth = size.width - 48.dp
             GlanceTheme {
                 Box(
                     modifier = GlanceModifier
@@ -105,7 +114,14 @@ class CredoWidget : GlanceAppWidget() {
                             )
                         }
                         for ((course, progress) in rows) {
+
                             val diff = progress.hoursDone - progress.planExpectedHours
+                            val donePlanFraction = (progress.hoursDone / progress.planTotalHours).coerceIn(0.0, 1.0).toFloat()
+                            val expectedPlanFraction = (progress.planExpectedHours / progress.planTotalHours).coerceIn(0.0, 1.0).toFloat()
+                            val doneWidth = barWidth * donePlanFraction
+                            val expectedWidth = barWidth * expectedPlanFraction
+                            val donePlanColor = if (diff >= 0) Green else Amber
+
                             Spacer(GlanceModifier.height(10.dp))
                             Row(
                                 modifier = GlanceModifier
@@ -141,9 +157,45 @@ class CredoWidget : GlanceAppWidget() {
                                         Text(
                                             text = context.getString(R.string.hours_diff, formatHoursDiff(diff = diff)),
                                             style = TextStyle(
-                                                color = if (diff >= 0.0) ColorProvider(Green, Green) else ColorProvider(Amber, Amber)
+                                                color = ColorProvider(donePlanColor, donePlanColor),
+                                                fontSize = 14.sp
                                             )
                                         )
+                                    }
+                                    Spacer(GlanceModifier.height(6.dp))
+                                    Box(
+                                        modifier = GlanceModifier
+                                            .width(barWidth)
+                                            .height(12.dp),
+                                        contentAlignment = Alignment.CenterStart
+                                    ) {
+                                        Box(
+                                            modifier = GlanceModifier
+                                                .fillMaxWidth()
+                                                .height(4.dp)
+                                                .cornerRadius(2.dp)
+                                                .background(GlanceTheme.colors.surfaceVariant)
+                                        ) { }
+                                        Box(
+                                            modifier = GlanceModifier
+                                                .width(doneWidth)
+                                                .height(4.dp)
+                                                .cornerRadius(2.dp)
+                                                .background(ColorProvider(donePlanColor, donePlanColor))
+                                        ) { }
+                                        Row(
+                                            modifier = GlanceModifier.height(12.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            Spacer(GlanceModifier.width(expectedWidth))
+                                            Box(
+                                                modifier = GlanceModifier
+                                                    .height(12.dp)
+                                                    .width(2.dp)
+                                                    .cornerRadius(1.dp)
+                                                    .background(GlanceTheme.colors.onSurface)
+                                            ) { }
+                                        }
                                     }
                                 }
                             }
@@ -157,13 +209,4 @@ class CredoWidget : GlanceAppWidget() {
 
 class CredoWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = CredoWidget()
-}
-
-@Composable
-private fun formatDiffTextWidget(
-    diff: Double,
-    context: Context
-): Pair<String, String> {
-    return if (diff >= 0) "" to context.getString(R.string.hours_diff, formatHoursDiff(diff))
-    else context.getString(R.string.to_go) to context.getString(R.string.hours_diff, formatHours(abs(diff)))
 }
