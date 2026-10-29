@@ -14,6 +14,8 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.cornerRadius
+import androidx.glance.appwidget.lazy.LazyColumn
+import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.layout.Alignment
@@ -113,93 +115,100 @@ class CredoWidget : GlanceAppWidget() {
                                 )
                             )
                         }
-                        Spacer(GlanceModifier.height(6.dp))
-                        for ((course, progress) in rows) {
+                        LazyColumn(modifier = GlanceModifier.defaultWeight()) {
+                            items(rows) { (course, progress) ->
+                                val diff = progress.hoursDone - progress.planExpectedHours
+                                val donePlanFraction = (progress.hoursDone / progress.planTotalHours).coerceIn(0.0, 1.0).toFloat()
+                                val expectedPlanFraction = (progress.planExpectedHours / progress.planTotalHours).coerceIn(0.0, 1.0).toFloat()
+                                val doneWidth = barWidth * donePlanFraction
+                                val expectedWidth = barWidth * expectedPlanFraction
+                                val donePlanColor = if (diff >= 0) Green else Amber
 
-                            val diff = progress.hoursDone - progress.planExpectedHours
-                            val donePlanFraction = (progress.hoursDone / progress.planTotalHours).coerceIn(0.0, 1.0).toFloat()
-                            val expectedPlanFraction = (progress.planExpectedHours / progress.planTotalHours).coerceIn(0.0, 1.0).toFloat()
-                            val doneWidth = barWidth * donePlanFraction
-                            val expectedWidth = barWidth * expectedPlanFraction
-                            val donePlanColor = if (diff >= 0) Green else Amber
-
-                            Spacer(GlanceModifier.height(10.dp))
-                            Row(
-                                modifier = GlanceModifier
-                                    .fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Box(
+                                Row(
                                     modifier = GlanceModifier
-                                        .width(4.dp)
-                                        .height(36.dp)
-                                        .cornerRadius(2.dp)
-                                        .background(Color(course.color))
-                                ) {}
-                                Column(
-                                    modifier = GlanceModifier
-                                        .defaultWeight()
-                                        .padding(start = 12.dp)
+                                        .fillMaxWidth()
+                                        .padding(top = 10.dp)
+                                        .clickable(actionStartActivity<MainActivity>()),
+                                    verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    Row(
-                                        modifier = GlanceModifier
-                                            .fillMaxWidth()
-                                    ) {
-                                        Text(
-                                            text = course.name,
-                                            style = TextStyle(
-                                                color = GlanceTheme.colors.onSurface,
-                                                fontSize = 14.sp,
-                                                fontWeight = FontWeight.Medium
-                                            ),
-                                            maxLines = 1,
-                                            modifier = GlanceModifier.defaultWeight()
-                                        )
-                                        Text(
-                                            text = context.getString(R.string.hours_diff, formatHoursDiff(diff = diff)),
-                                            style = TextStyle(
-                                                color = ColorProvider(donePlanColor, donePlanColor),
-                                                fontSize = 14.sp
-                                            )
-                                        )
-                                    }
-                                    Spacer(GlanceModifier.height(6.dp))
                                     Box(
                                         modifier = GlanceModifier
-                                            .width(barWidth)
-                                            .height(12.dp),
-                                        contentAlignment = Alignment.CenterStart
+                                            .width(4.dp)
+                                            .height(36.dp)
+                                            .cornerRadius(2.dp)
+                                            .background(Color(course.color))
+                                    ) {}
+                                    Column(
+                                        modifier = GlanceModifier
+                                            .defaultWeight()
+                                            .padding(start = 12.dp)
                                     ) {
-                                        Box(
+                                        Row(
                                             modifier = GlanceModifier
                                                 .fillMaxWidth()
-                                                .height(4.dp)
-                                                .cornerRadius(2.dp)
-                                                .background(GlanceTheme.colors.surfaceVariant)
-                                        ) { }
+                                        ) {
+                                            Text(
+                                                text = course.name,
+                                                style = TextStyle(
+                                                    color = GlanceTheme.colors.onSurface,
+                                                    fontSize = 14.sp,
+                                                    fontWeight = FontWeight.Medium
+                                                ),
+                                                maxLines = 1,
+                                                modifier = GlanceModifier.defaultWeight()
+                                            )
+                                            Text(
+                                                text = context.getString(R.string.hours_diff, formatHoursDiff(diff = diff)),
+                                                style = TextStyle(
+                                                    color = ColorProvider(donePlanColor, donePlanColor),
+                                                    fontSize = 14.sp
+                                                )
+                                            )
+                                        }
+                                        Spacer(GlanceModifier.height(6.dp))
                                         Box(
                                             modifier = GlanceModifier
-                                                .width(doneWidth)
-                                                .height(4.dp)
-                                                .cornerRadius(2.dp)
-                                                .background(ColorProvider(donePlanColor, donePlanColor))
-                                        ) { }
-                                        Row(
-                                            modifier = GlanceModifier.height(12.dp),
-                                            verticalAlignment = Alignment.CenterVertically
+                                                .width(barWidth)
+                                                .height(12.dp),
+                                            contentAlignment = Alignment.CenterStart
                                         ) {
-                                            Spacer(GlanceModifier.width(expectedWidth))
                                             Box(
                                                 modifier = GlanceModifier
-                                                    .height(12.dp)
-                                                    .width(2.dp)
-                                                    .cornerRadius(1.dp)
-                                                    .background(GlanceTheme.colors.onSurface)
+                                                    .fillMaxWidth()
+                                                    .height(4.dp)
+                                                    .cornerRadius(2.dp)
+                                                    .background(GlanceTheme.colors.surfaceVariant)
                                             ) { }
+                                            Box(
+                                                modifier = GlanceModifier
+                                                    .width(doneWidth)
+                                                    .height(4.dp)
+                                                    .cornerRadius(2.dp)
+                                                    .background(ColorProvider(donePlanColor, donePlanColor))
+                                            ) { }
+                                            Row(
+                                                modifier = GlanceModifier.height(12.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Spacer(GlanceModifier.width(expectedWidth))
+                                                Box(
+                                                    modifier = GlanceModifier
+                                                        .height(12.dp)
+                                                        .width(2.dp)
+                                                        .cornerRadius(1.dp)
+                                                        .background(GlanceTheme.colors.onSurface)
+                                                ) { }
+                                            }
                                         }
                                     }
                                 }
                             }
+                        }
+
+                        Spacer(GlanceModifier.height(6.dp))
+                        for ((course, progress) in rows) {
+
+
                         }
                     }
                 }
