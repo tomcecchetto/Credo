@@ -57,6 +57,7 @@
     <string name="goal_reached">Wochenziel erreicht</string>
     <string name="add_semester_widget">Lege in Credo zuerst ein Semester an</string>
     <string name="planned">Geplant</string>
+    <string name="edit_semester">Semester bearbeiten</string>
 
 
     <plurals name="exam_in_days">

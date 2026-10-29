@@ -56,7 +56,12 @@ fun ProgressScreen(
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
-        topBar = { CredoTopBar(stringResource(R.string.progress)) },
+        topBar = {
+            CredoTopBar(
+                title = stringResource(R.string.progress),
+                onEdit = if (semester != null) onAddSemester else null
+            )
+        },
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             if (courses.isNotEmpty()) {

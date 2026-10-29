@@ -22,6 +22,7 @@ fun CredoTopBar(
     title: String,
     modifier: Modifier = Modifier,
     windowInsets: WindowInsets = WindowInsets(0, 0, 0, 0),
+    onEdit: (() -> Unit)? = null,
     onBack: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
@@ -76,6 +77,12 @@ fun CredoTopBar(
                 IconButton(onClick = onImport) {
                     Icon(painterResource(R.drawable.ic_download),
                         contentDescription = stringResource(R.string.import_calendar))
+                }
+            }
+            if (onEdit != null) {
+                IconButton(onClick = onEdit) {
+                    Icon(painterResource(R.drawable.ic_edit),
+                        contentDescription = stringResource(R.string.edit_semester))
                 }
             }
         }

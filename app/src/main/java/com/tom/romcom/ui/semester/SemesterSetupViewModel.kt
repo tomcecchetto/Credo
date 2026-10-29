@@ -4,10 +4,13 @@ import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Semester
+import com.tom.romcom.widget.CredoWidget
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
@@ -15,6 +18,8 @@ import java.util.concurrent.TimeUnit
 class SemesterSetupViewModel(application: Application) : AndroidViewModel(application) {
 
     private val semesterDao = CredoDatabase.getDatabase(application).semesterDao()
+    private var loaded = false
+    private var loadedSemester: Semester? = null
     var hoursPerCredit by mutableStateOf("")
         private set
 
@@ -54,6 +59,7 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
     fun save(
         onDone: () -> Unit
     ) {
+        val original = loadedSemester
         val start = startEpochDay
         val end = endEpochDay
         if (start == null || end == null)
@@ -61,15 +67,47 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
         val hours = hoursPerCredit.toIntOrNull() ?: 30
         val weeks = lectureWeeks.toIntOrNull() ?: 14
 
-        val semester = Semester(
-            startEpochDay = start,
-            endEpochDay = end,
-            hoursPerCredit = hours,
-            lectureWeeks = weeks
-        )
+        val semester =
+            if (original != null) {
+                original.copy(
+                    startEpochDay = start,
+                    endEpochDay = end,
+                    hoursPerCredit = hours,
+                    lectureWeeks = weeks
+                )
+            } else {
+                Semester(
+                    startEpochDay = start,
+                    endEpochDay = end,
+                    hoursPerCredit = hours,
+                    lectureWeeks = weeks
+                )
+            }
         viewModelScope.launch {
-            semesterDao.insert(semester)
+            if (original != null) {
+                semesterDao.update(semester)
+            } else {
+                semesterDao.insert(semester)
+            }
+            CredoWidget().updateAll(getApplication())
             onDone()
+        }
+    }
+
+    fun load() {
+        if (loaded)
+            return
+        loaded = true
+
+        viewModelScope.launch {
+            val semester = semesterDao.getCurrentSemester().first()
+            if (semester != null) {
+                startEpochDay = semester.startEpochDay
+                endEpochDay = semester.endEpochDay
+                hoursPerCredit = semester.hoursPerCredit.toString()
+                lectureWeeks = semester.lectureWeeks.toString()
+                loadedSemester = semester
+            }
         }
     }
 }

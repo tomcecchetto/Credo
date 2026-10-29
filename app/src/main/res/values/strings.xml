@@ -54,9 +54,10 @@
     <string name="calendar_empty">Import your calendar from OpenOLAT to see your lectures here</string>
     <string name="hours_this_week">This week: studied for %1$s hours</string>
     <string name="to_go">still</string>
-    <string name="goal_reached">Reached weekly goaL</string>
+    <string name="goal_reached">Weekly goal reached</string>
     <string name="add_semester_widget">Add a semester in Credo first</string>
     <string name="planned">Planned</string>
+    <string name="edit_semester">Edit semester</string>
 
 
     <plurals name="exam_in_days">
