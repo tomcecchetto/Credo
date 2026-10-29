@@ -5,6 +5,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tom.romcom.data.Course
@@ -12,6 +13,7 @@ import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Exam
 import com.tom.romcom.ui.courseColors
 import com.tom.romcom.ui.formatNumber
+import com.tom.romcom.widget.CredoWidget
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -198,6 +200,7 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
             } else if (exam != null) {
                 examDao.delete(exam)
             }
+            CredoWidget().updateAll(getApplication())
             onDone()
         }
     }
@@ -206,6 +209,7 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         val editId = editingCourseId ?: return
         viewModelScope.launch {
             courseDao.deleteById(editId)
+            CredoWidget().updateAll(getApplication())
             onDone()
         }
     }

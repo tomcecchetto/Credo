@@ -4,12 +4,14 @@ import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tom.romcom.data.Course
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Semester
 import com.tom.romcom.data.StudySession
+import com.tom.romcom.widget.CredoWidget
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -67,6 +69,7 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
                 studySessionDao.update(
                     running.copy(endTime = System.currentTimeMillis())
                 )
+                CredoWidget().updateAll(getApplication())
             }
         }
     }
