@@ -18,6 +18,7 @@ import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
@@ -32,15 +33,18 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
-import androidx.glance.color.ColorProvider
 import com.tom.romcom.MainActivity
 import com.tom.romcom.R
+import com.tom.romcom.data.Course
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.ui.formatHoursDiff
+import com.tom.romcom.ui.progress.PlanProgress
 import com.tom.romcom.ui.progress.planProgressFor
 import com.tom.romcom.ui.theme.Amber
 import com.tom.romcom.ui.theme.Green
 import kotlinx.coroutines.flow.first
+import java.time.LocalDateTime
+import kotlin.comparisons.compareBy
 
 class CredoWidget : GlanceAppWidget() {
 
@@ -53,6 +57,8 @@ class CredoWidget : GlanceAppWidget() {
         val semesterDao = db.semesterDao()
         val courseDao = db.courseDao()
         val studySessionDao = db.studySessionDao()
+        val lectureDao = db.lectureDao()
+        val examDao = db.examDao()
 
         val semester = semesterDao.getCurrentSemester().first() ?: provideContent {
 
@@ -76,9 +82,44 @@ class CredoWidget : GlanceAppWidget() {
 
         val courses = courseDao.getCoursesForSemester(semester.id).first()
         val sessions = studySessionDao.getFinishedSessionsForSemester(semester.id).first()
-        val coursesWithPlannedHours = courses.filter { it.plannedHoursPerWeek > 0 }
-        val rows = coursesWithPlannedHours.map { it to planProgressFor(course = it, semester = semester, sessions = sessions) }
 
+        val coursesWithPlannedHours = courses.filter { it.plannedHoursPerWeek > 0 }
+        val rows = coursesWithPlannedHours.map {
+            it to planProgressFor(
+                course = it,
+                semester = semester,
+                sessions = sessions
+            )
+        }
+
+        val now = LocalDateTime.now()
+        val nowMinutes = now.toLocalDate().toEpochDay() * 1440 + now.hour * 60 + now.minute
+        val nextLecture = lectureDao.getNextLecturePerCourse(nowMinutes)
+        val exams = examDao.getExamsForSemester(semester.id).first()
+        val today = now.toLocalDate().toEpochDay()
+
+        fun nextStartFor(courseId: Int): Long? {
+            return nextLecture.firstOrNull { it.courseId == courseId }?.nextStart
+        }
+
+        fun nextExamFor(courseId: Int): Long? {
+            return exams.filter { it.courseId == courseId && it.epochDay >= today }
+                .minOfOrNull { it.epochDay }
+        }
+
+        val sortedRows = rows.sortedWith(
+            compareBy<Pair<Course, PlanProgress>>(
+                { (course, _) ->
+                    when {
+                        nextStartFor(courseId = course.id) != null -> 0
+                        nextExamFor(courseId = course.id) != null -> 1
+                        else -> 2
+                    }
+                },
+                { (course, _) -> nextStartFor(course.id) },
+                { (course, _) -> nextExamFor(course.id) }
+            )
+        )
 
         provideContent {
             val size = LocalSize.current
@@ -104,7 +145,8 @@ class CredoWidget : GlanceAppWidget() {
                                 text = context.getString(R.string.app_name),
                                 style = TextStyle(
                                     color = GlanceTheme.colors.onSurface,
-                                    fontWeight = FontWeight.Bold),
+                                    fontWeight = FontWeight.Bold
+                                ),
                                 modifier = GlanceModifier.defaultWeight()
                             )
                             Text(
@@ -116,10 +158,18 @@ class CredoWidget : GlanceAppWidget() {
                             )
                         }
                         LazyColumn(modifier = GlanceModifier.defaultWeight()) {
-                            items(rows) { (course, progress) ->
+                            items(sortedRows) { (course, progress) ->
                                 val diff = progress.hoursDone - progress.planExpectedHours
-                                val donePlanFraction = (progress.hoursDone / progress.planTotalHours).coerceIn(0.0, 1.0).toFloat()
-                                val expectedPlanFraction = (progress.planExpectedHours / progress.planTotalHours).coerceIn(0.0, 1.0).toFloat()
+                                val donePlanFraction =
+                                    (progress.hoursDone / progress.planTotalHours).coerceIn(
+                                        0.0,
+                                        1.0
+                                    ).toFloat()
+                                val expectedPlanFraction =
+                                    (progress.planExpectedHours / progress.planTotalHours).coerceIn(
+                                        0.0,
+                                        1.0
+                                    ).toFloat()
                                 val doneWidth = barWidth * donePlanFraction
                                 val expectedWidth = barWidth * expectedPlanFraction
                                 val donePlanColor = if (diff >= 0) Green else Amber
@@ -158,9 +208,15 @@ class CredoWidget : GlanceAppWidget() {
                                                 modifier = GlanceModifier.defaultWeight()
                                             )
                                             Text(
-                                                text = context.getString(R.string.hours_diff, formatHoursDiff(diff = diff)),
+                                                text = context.getString(
+                                                    R.string.hours_diff,
+                                                    formatHoursDiff(diff = diff)
+                                                ),
                                                 style = TextStyle(
-                                                    color = ColorProvider(donePlanColor, donePlanColor),
+                                                    color = ColorProvider(
+                                                        donePlanColor,
+                                                        donePlanColor
+                                                    ),
                                                     fontSize = 14.sp
                                                 )
                                             )
@@ -184,7 +240,12 @@ class CredoWidget : GlanceAppWidget() {
                                                     .width(doneWidth)
                                                     .height(4.dp)
                                                     .cornerRadius(2.dp)
-                                                    .background(ColorProvider(donePlanColor, donePlanColor))
+                                                    .background(
+                                                        ColorProvider(
+                                                            donePlanColor,
+                                                            donePlanColor
+                                                        )
+                                                    )
                                             ) { }
                                             Row(
                                                 modifier = GlanceModifier.height(12.dp),
