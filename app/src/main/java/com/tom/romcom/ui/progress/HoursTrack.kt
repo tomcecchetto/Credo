@@ -24,7 +24,6 @@ fun HoursTrack(
     val trackColor = MaterialTheme.colorScheme.outlineVariant
     val expectedColor = MaterialTheme.colorScheme.outline
 
-    if (totalHours <= 0) return
 
     val doneFraction = (hoursDone / totalHours).coerceIn(0.0, 1.0).toFloat()
     val expectedFraction = (expectedHours / totalHours).coerceIn(0.0, 1.0).toFloat()
@@ -39,15 +38,17 @@ fun HoursTrack(
             end = Offset(size.width, y),
             strokeWidth = 4.dp.toPx()
         )
-        drawCircle(
-            color = expectedColor,
-            radius = 6.dp.toPx(),
-            center = Offset(size.width * expectedFraction, y)
-        )
-        drawCircle(
-            color = doneColor,
-            radius = 6.dp.toPx(),
-            center = Offset(size.width * doneFraction, y)
-        )
+        if (totalHours > 0) {
+            drawCircle(
+                color = expectedColor,
+                radius = 6.dp.toPx(),
+                center = Offset(size.width * expectedFraction, y)
+            )
+            drawCircle(
+                color = doneColor,
+                radius = 6.dp.toPx(),
+                center = Offset(size.width * doneFraction, y)
+            )
+        }
     }
 }
