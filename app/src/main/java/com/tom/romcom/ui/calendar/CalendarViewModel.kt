@@ -39,7 +39,12 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val semester: Flow<Semester?> = semesterDao.getCurrentSemester()
     var importMessage by mutableStateOf<String?>(null)
         private set
-    private val importer = CalendarImporter(slotDao, lectureDao, db)
+    private val importer = CalendarImporter(
+        slotDao = slotDao,
+        lectureDao = lectureDao,
+        semesterDao = semesterDao,
+        database = db
+    )
 
     val courses: Flow<List<Course>> = semester.flatMapLatest { current ->
         if (current == null) flowOf(emptyList())
@@ -50,25 +55,34 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             try {
                 val text = withContext(Dispatchers.IO) {
-                    getApplication<Application>().contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+                    getApplication<Application>().contentResolver.openInputStream(uri)
+                        ?.bufferedReader()?.use { it.readText() }
                 } ?: error("Could not read file")
                 val count = importer.importFile(text)
-                importMessage = if (count > 0) getApplication<Application>().resources.getQuantityString(R.plurals.lectures, count, count)
-                else getApplication<Application>().getString(R.string.no_events_found)
+                importMessage =
+                    if (count > 0) getApplication<Application>().resources.getQuantityString(
+                        R.plurals.lectures,
+                        count,
+                        count
+                    )
+                    else getApplication<Application>().getString(R.string.no_events_found)
             } catch (e: Exception) {
                 Log.e("Credo", "Import failed", e)
                 importMessage = getApplication<Application>().getString(R.string.import_failed)
             }
         }
     }
+
     fun setAttending(slot: RecurringSlot, attending: Boolean) {
         val slotCopy = slot.copy(attending = attending)
         viewModelScope.launch { slotDao.update(slotCopy) }
     }
+
     fun setCourseId(slot: RecurringSlot, courseId: Int?) {
         val slotCopy = slot.copy(courseId = courseId)
         viewModelScope.launch { slotDao.update(slotCopy) }
     }
+
     fun createCourseForSlot(
         slot: RecurringSlot,
         name: String,

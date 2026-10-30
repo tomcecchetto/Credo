@@ -1,18 +1,20 @@
 package com.tom.romcom.calendarimport
 
-import android.net.Uri
 import androidx.room.withTransaction
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Lecture
 import com.tom.romcom.data.LectureDao
 import com.tom.romcom.data.RecurringSlot
 import com.tom.romcom.data.RecurringSlotDao
+import com.tom.romcom.data.Semester
+import com.tom.romcom.data.SemesterDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 class CalendarImporter(
     private val slotDao: RecurringSlotDao,
     private val lectureDao: LectureDao,
+    private val semesterDao: SemesterDao,
     private val database: CredoDatabase,
 ) {
     suspend fun importFile(text: String): Int {
@@ -59,6 +61,23 @@ class CalendarImporter(
             }
 
             lectureDao.insertAll(lectures)
+            val existing = semesterDao.getCurrentSemesterOnce()
+            if (existing == null) {
+                val regularEvents = groups
+                    .filter { it.value.size >= 3 }
+                    .flatMap { it.value }
+                val startDay = regularEvents.minOfOrNull { it.start.toLocalDate().toEpochDay() }
+                val endDay = regularEvents.maxOfOrNull { it.end.toLocalDate().toEpochDay() }
+                if (startDay != null && endDay != null) {
+                    val sem = Semester(
+                        startEpochDay = startDay,
+                        endEpochDay = endDay,
+                        hoursPerCredit = 30,
+                        lectureWeeks = (((endDay - startDay) / 7) + 1).toInt()
+                    )
+                    semesterDao.insert(sem)
+                }
+            }
         }
         return events.size
     }

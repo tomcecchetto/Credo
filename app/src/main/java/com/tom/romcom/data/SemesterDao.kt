@@ -13,6 +13,9 @@ interface SemesterDao {
     @Query("SELECT * FROM semester ORDER BY startEpochDay DESC LIMIT 1")
     fun getCurrentSemester(): Flow<Semester?>
 
+    @Query("SELECT * FROM semester ORDER BY startEpochDay DESC LIMIT 1")
+    suspend fun getCurrentSemesterOnce(): Semester?
+
     @Insert
     suspend fun insert(semester: Semester)
 
