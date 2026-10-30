@@ -55,9 +55,7 @@ fun SlotRow(
                     text = info.slot.title,
                     modifier = Modifier.weight(1f).padding(end = 8.dp),
                     style = MaterialTheme.typography.titleMedium,
-                    color = textColor,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
+                    color = textColor
                 )
                 Text(
                     text = "$start - $end",
