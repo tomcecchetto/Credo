@@ -75,7 +75,7 @@ fun CredoTopBar(
             }
             if (onImport != null) {
                 IconButton(onClick = onImport) {
-                    Icon(painterResource(R.drawable.ic_download),
+                    Icon(painterResource(R.drawable.ic_attach),
                         contentDescription = stringResource(R.string.import_calendar))
                 }
             }
