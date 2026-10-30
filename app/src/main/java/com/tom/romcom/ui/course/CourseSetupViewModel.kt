@@ -13,6 +13,7 @@ import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Exam
 import com.tom.romcom.ui.courseColors
 import com.tom.romcom.ui.formatNumber
+import com.tom.romcom.ui.nextFreeColor
 import com.tom.romcom.widget.CredoWidget
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
@@ -135,8 +136,7 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                 val semId = semesterId
                 if (semId != null) {
                     val courses = courseDao.getCoursesForSemester(semId).first()
-                    val taken = courses.map { it.color }
-                    color = courseColors.firstOrNull { it !in taken } ?: courseColors.first()
+                    color = nextFreeColor(courses)
                 }
             }
         }

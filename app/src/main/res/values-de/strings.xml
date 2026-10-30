@@ -58,6 +58,8 @@
     <string name="add_semester_widget">Lege in Credo zuerst ein Semester an</string>
     <string name="planned">Geplant</string>
     <string name="edit_semester">Semester bearbeiten</string>
+    <string name="new_course">+ Neues Fach</string>
+    <string name="add_new_course">Neues Fach hinzufügen</string>
 
 
     <plurals name="exam_in_days">

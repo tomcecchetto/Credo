@@ -85,7 +85,8 @@ fun CalendarScreen(
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
-                            modifier = Modifier.padding(horizontal = 32.dp))
+                            modifier = Modifier.padding(horizontal = 32.dp)
+                        )
                     }
                 }
 
@@ -102,7 +103,8 @@ fun CalendarScreen(
                             textAlign = TextAlign.Center,
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 16.dp, vertical = 8.dp))
+                                .padding(horizontal = 16.dp, vertical = 8.dp)
+                        )
                     }
                 }
                 for ((day, slots) in byDay) {
@@ -129,6 +131,13 @@ fun CalendarScreen(
                                 viewModel.setCourseId(
                                     info.slot,
                                     courseId = courseId
+                                )
+                            },
+                            onCreateCourse = { name, credits ->
+                                viewModel.createCourseForSlot(
+                                    info.slot,
+                                    name = name,
+                                    credits = credits
                                 )
                             }
                         )

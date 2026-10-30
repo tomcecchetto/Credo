@@ -26,7 +26,8 @@ fun SlotRow(
     info: SlotWithInfo,
     courses: List<Course>,
     onAttendingChange: (Boolean) -> Unit,
-    onCourseSelected: (Int?) -> Unit
+    onCourseSelected: (Int?) -> Unit,
+    onCreateCourse: (String, Double) -> Unit
 ) {
     val day = DayOfWeek.of(info.slot.dayOfWeek).getDisplayName(TextStyle.SHORT, Locale.getDefault())
     val start = formatMinuteOfDay(info.slot.startMinuteOfDay)
@@ -75,7 +76,9 @@ fun SlotRow(
                 CourseDropdown(
                     courses = courses,
                     selectedCourseId = info.slot.courseId,
-                    onCourseSelected = onCourseSelected
+                    onCourseSelected = onCourseSelected,
+                    onCreateCourse = onCreateCourse,
+                    suggestedName = info.slot.title
                 )
             }
         }

@@ -14,9 +14,11 @@ import com.tom.romcom.data.Course
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.RecurringSlot
 import com.tom.romcom.data.Semester
+import com.tom.romcom.ui.nextFreeColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
@@ -59,14 +61,32 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
-
     fun setAttending(slot: RecurringSlot, attending: Boolean) {
         val slotCopy = slot.copy(attending = attending)
         viewModelScope.launch { slotDao.update(slotCopy) }
     }
-
     fun setCourseId(slot: RecurringSlot, courseId: Int?) {
         val slotCopy = slot.copy(courseId = courseId)
         viewModelScope.launch { slotDao.update(slotCopy) }
+    }
+    fun createCourseForSlot(
+        slot: RecurringSlot,
+        name: String,
+        credits: Double
+    ) {
+        viewModelScope.launch {
+            val currentSemester = semester.first() ?: return@launch
+            val color = nextFreeColor(courses.first())
+            val newId = courseDao.insert(
+                Course(
+                    name = name,
+                    credits = credits,
+                    color = color,
+                    semesterId = currentSemester.id
+                )
+            ).toInt()
+            val slotCopy = slot.copy(courseId = newId)
+            slotDao.update(slotCopy)
+        }
     }
 }

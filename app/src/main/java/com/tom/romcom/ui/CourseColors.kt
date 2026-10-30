@@ -1,5 +1,7 @@
 package com.tom.romcom.ui
 
+import com.tom.romcom.data.Course
+
 val courseColors = listOf(
     0xFFFF0000,
     0xFFFFFF00,
@@ -12,3 +14,6 @@ val courseColors = listOf(
     0xFF808000,
     0xFFC0C0C0
 )
+fun nextFreeColor(existing: List<Course>): Long {
+    return courseColors.firstOrNull { color -> existing.none { it.color == color } } ?: courseColors.first()
+}
