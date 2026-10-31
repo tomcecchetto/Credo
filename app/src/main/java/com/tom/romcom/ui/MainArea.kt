@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.tom.romcom.R
 import com.tom.romcom.ui.calendar.CalendarScreen
+import com.tom.romcom.ui.calendar.TimetableSetupScreen
 import com.tom.romcom.ui.progress.ProgressScreen
 import com.tom.romcom.ui.study.StudySessionScreen
 import com.tom.romcom.ui.tasks.TaskScreen
@@ -32,6 +33,7 @@ fun MainArea(
     onAddSession: () -> Unit,
     onSessionClick: (Int) -> Unit,
     onAddCourse: () -> Unit,
+    onEditTimetable: () -> Unit,
     onAddSemester: () -> Unit,
     onCourseClick: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -111,7 +113,9 @@ fun MainArea(
                     onSessionClick = onSessionClick,
                     onAddSession = onAddSession
                 )
-                Tab.CALENDAR -> CalendarScreen()
+                Tab.CALENDAR -> CalendarScreen(
+                    onEditTimetable = onEditTimetable
+                )
                 Tab.TASK -> TaskScreen()
             }
         }

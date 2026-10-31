@@ -23,6 +23,7 @@ fun CredoTopBar(
     modifier: Modifier = Modifier,
     windowInsets: WindowInsets = WindowInsets(0, 0, 0, 0),
     onEdit: (() -> Unit)? = null,
+    editDescription: String = stringResource(R.string.edit),
     onBack: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
@@ -82,7 +83,7 @@ fun CredoTopBar(
             if (onEdit != null) {
                 IconButton(onClick = onEdit) {
                     Icon(painterResource(R.drawable.ic_edit),
-                        contentDescription = stringResource(R.string.edit_semester))
+                        contentDescription = editDescription)
                 }
             }
         }

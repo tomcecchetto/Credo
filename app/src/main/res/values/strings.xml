@@ -67,6 +67,10 @@
     <string name="welcome_step_4">Assign each class to a course</string>
     <string name="import_timetable">Import timetable</string>
     <string name="setup_manually">Set up manually</string>
+    <string name="edit">Edit</string>
+    <string name="edit_timetable">Edit timetable</string>
+    <string name="timetable">Timetable</string>
+    <string name="done">Done</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>

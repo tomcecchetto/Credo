@@ -35,4 +35,18 @@ interface LectureDao {
             "AND Lecture.epochDay * 1440 + Lecture.startMinuteOfDay >= :nowMinutes " +
             "GROUP BY RecurringSlot.courseId")
     suspend fun getNextLecturePerCourse(nowMinutes: Long): List<NextLecture>
+
+    @Query("SELECT Lecture.startMinuteOfDay AS startMinute, " +
+            "Lecture.endMinuteOfDay AS endMinute, " +
+            "Lecture.room AS room, " +
+            "Course.name AS courseName, " +
+            "Course.color AS color " +
+            "FROM Lecture " +
+            "JOIN RecurringSlot ON RecurringSlot.id = Lecture.slotId " +
+            "JOIN Course ON Course.id = RecurringSlot.courseId " +
+            "WHERE Lecture.epochDay = :day " +
+            "AND RecurringSlot.attending = 1 " +
+            "AND Lecture.isHappening = 1 " +
+            "ORDER BY Lecture.startMinuteOfDay ASC")
+    fun getLecturesForDay(day: Long): Flow<List<LectureWithCourse>>
 }

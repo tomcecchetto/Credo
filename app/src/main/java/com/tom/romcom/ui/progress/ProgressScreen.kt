@@ -67,7 +67,8 @@ fun ProgressScreen(
         topBar = {
             CredoTopBar(
                 title = stringResource(R.string.progress),
-                onEdit = if (semester != null) onAddSemester else null
+                onEdit = if (semester != null) onAddSemester else null,
+                editDescription = stringResource(R.string.edit_semester)
             )
         }, floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {

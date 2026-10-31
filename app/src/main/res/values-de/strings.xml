@@ -67,6 +67,10 @@
     <string name="welcome_step_4">Ordne jede Lektion einem Fach zu</string>
     <string name="import_timetable">Stundenplan importieren</string>
     <string name="setup_manually">Manuell einrichten</string>
+    <string name="edit">Bearbeiten</string>
+    <string name="edit_timetable">Stundenplan bearbeiten</string>
+    <string name="timetable">Stundenplan</string>
+    <string name="done">Fertig</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
