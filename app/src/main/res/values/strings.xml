@@ -4,7 +4,6 @@
     <string name="progress">Progress</string>
     <string name="tasks">Tasks</string>
     <string name="no_courses_yet">No courses yet</string>
-    <string name="welcome">Welcome</string>
     <string name="courses">Courses</string>
     <string name="add_semester">Add semester</string>
     <string name="add_course">Add course</string>
@@ -60,7 +59,14 @@
     <string name="edit_semester">Edit semester</string>
     <string name="new_course">+ New course</string>
     <string name="add_new_course">Add new course</string>
-
+    <string name="welcome_title">Welcome to Credo!</string>
+    <string name="welcome_intro">Set up your semester in a few steps:</string>
+    <string name="welcome_step_1">Export your timetable from OpenOLAT as an .ics file</string>
+    <string name="welcome_step_2">Import it in the Calendar tab</string>
+    <string name="welcome_step_3">Tick the classes you attend</string>
+    <string name="welcome_step_4">Assign each class to a course</string>
+    <string name="import_timetable">Import timetable</string>
+    <string name="setup_manually">Set up manually</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>

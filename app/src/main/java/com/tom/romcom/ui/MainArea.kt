@@ -103,7 +103,8 @@ fun MainArea(
                 Tab.PROGRESS -> ProgressScreen(
                     onAddSemester = onAddSemester,
                     onAddCourse = onAddCourse,
-                    onCourseClick = onCourseClick
+                    onCourseClick = onCourseClick,
+                    onImportCalendar = { selectedTab = Tab.CALENDAR }
                 )
 
                 Tab.STUDY -> StudySessionScreen(

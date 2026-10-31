@@ -4,7 +4,6 @@
     <string name="progress">Fortschritt</string>
     <string name="tasks">Aufgaben</string>
     <string name="no_courses_yet">Keine Fächer</string>
-    <string name="welcome">Willkommen</string>
     <string name="courses">Fächer</string>
     <string name="add_semester">Semester hinzufügen</string>
     <string name="add_course">Fach hinzufügen</string>
@@ -60,7 +59,14 @@
     <string name="edit_semester">Semester bearbeiten</string>
     <string name="new_course">+ Neues Fach</string>
     <string name="add_new_course">Neues Fach hinzufügen</string>
-
+    <string name="welcome_title">Willkommen bei Credo!</string>
+    <string name="welcome_intro">In wenigen Schritten ist dein Semester eingerichtet:</string>
+    <string name="welcome_step_1">Exportiere deinen Stundenplan aus OpenOLAT als .ics-Datei</string>
+    <string name="welcome_step_2">Importiere ihn im Tab Kalender</string>
+    <string name="welcome_step_3">Hake die Lektionen an, die du besuchst</string>
+    <string name="welcome_step_4">Ordne jede Lektion einem Fach zu</string>
+    <string name="import_timetable">Stundenplan importieren</string>
+    <string name="setup_manually">Manuell einrichten</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
