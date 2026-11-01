@@ -71,6 +71,7 @@
     <string name="edit_timetable">Edit timetable</string>
     <string name="timetable">Timetable</string>
     <string name="done">Done</string>
+    <string name="no_lectures">No lectures today</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>

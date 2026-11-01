@@ -40,7 +40,7 @@ import java.util.Locale
 fun TimetableSetupScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
-    viewModel: CalendarViewModel = viewModel()
+    viewModel: TimetableSetupViewModel = viewModel()
 ) {
     val slotsWithInfo by viewModel.slotsWithInfo.collectAsState(initial = emptyList())
     val courses by viewModel.courses.collectAsState(initial = emptyList())

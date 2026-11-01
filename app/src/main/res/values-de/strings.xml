@@ -71,6 +71,7 @@
     <string name="edit_timetable">Stundenplan bearbeiten</string>
     <string name="timetable">Stundenplan</string>
     <string name="done">Fertig</string>
+    <string name="no_lectures">Heute keine Lektionen</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
