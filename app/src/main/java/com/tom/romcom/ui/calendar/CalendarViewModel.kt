@@ -18,4 +18,16 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val selectedDay: StateFlow<Long> = _selectedDay
 
     val lectures = _selectedDay.flatMapLatest { day -> lectureDao.getLecturesForDay(day) }
+
+    fun previousDay() {
+        _selectedDay.value -= 1
+    }
+
+    fun nextDay() {
+        _selectedDay.value += 1
+    }
+
+    fun goToToday() {
+        _selectedDay.value = LocalDate.now().toEpochDay()
+    }
 }

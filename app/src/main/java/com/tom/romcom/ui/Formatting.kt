@@ -1,5 +1,6 @@
 package com.tom.romcom.ui
 
+import android.text.format.DateFormat
 import java.text.NumberFormat
 import java.time.Instant
 import java.time.LocalDate
@@ -47,4 +48,10 @@ fun formatHours(hours: Double): String {
 
 fun formatHoursDiff(diff: Double): String {
     return "%+.1f".format(diff)
+}
+
+fun formatDayHeader(epochDay: Long): String {
+    val pattern = DateFormat.getBestDateTimePattern(Locale.getDefault(),"EEEdMMM")
+    val formatter = DateTimeFormatter.ofPattern(pattern)
+    return LocalDate.ofEpochDay(epochDay).format(formatter)
 }

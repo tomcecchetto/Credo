@@ -71,7 +71,12 @@
     <string name="edit_timetable">Stundenplan bearbeiten</string>
     <string name="timetable">Stundenplan</string>
     <string name="done">Fertig</string>
-    <string name="no_lectures">Heute keine Lektionen</string>
+    <string name="no_lectures">Keine Lektionen</string>
+    <string name="previous_day">Vorheriger Tag</string>
+    <string name="next_day">Nächster Tag</string>
+    <string name="today">Heute</string>
+    <string name="yesterday">Gestern</string>
+    <string name="tomorrow">Morgen</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
