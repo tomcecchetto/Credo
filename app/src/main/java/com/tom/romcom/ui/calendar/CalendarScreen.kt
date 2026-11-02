@@ -28,6 +28,9 @@ import com.tom.romcom.ui.CredoTopBar
 import com.tom.romcom.ui.formatDayHeader
 import com.tom.romcom.ui.formatEpochDay
 import java.time.LocalDate
+import java.time.LocalTime
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 @Composable
 fun CalendarScreen(
@@ -38,6 +41,7 @@ fun CalendarScreen(
     val lectures by viewModel.lectures.collectAsState(initial = emptyList())
     val selectedDay by viewModel.selectedDay.collectAsState()
     val today = LocalDate.now().toEpochDay()
+    val currentMinuteOfDay = LocalTime.now().hour * 60 + LocalTime.now().minute
 
     Scaffold(
         modifier = modifier,
@@ -105,7 +109,7 @@ fun CalendarScreen(
                         .weight(1f)
                 ) {
                     items(lectures) { lecture ->
-                        LectureRow(lecture)
+                        LectureRow(lecture = lecture, isPast = (selectedDay == today && currentMinuteOfDay > lecture.endMinute) || selectedDay < today)
                     }
                 }
             }
