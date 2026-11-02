@@ -18,7 +18,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.tom.romcom.R
 import com.tom.romcom.ui.calendar.CalendarScreen
-import com.tom.romcom.ui.calendar.TimetableSetupScreen
 import com.tom.romcom.ui.progress.ProgressScreen
 import com.tom.romcom.ui.study.StudySessionScreen
 import com.tom.romcom.ui.tasks.TaskScreen
@@ -36,6 +35,7 @@ fun MainArea(
     onEditTimetable: () -> Unit,
     onAddSemester: () -> Unit,
     onCourseClick: (Int) -> Unit,
+    onImportTimetable: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var selectedTab by rememberSaveable { mutableStateOf(Tab.PROGRESS) }
@@ -106,7 +106,7 @@ fun MainArea(
                     onAddSemester = onAddSemester,
                     onAddCourse = onAddCourse,
                     onCourseClick = onCourseClick,
-                    onImportCalendar = { selectedTab = Tab.CALENDAR }
+                    onImportCalendar = onImportTimetable
                 )
 
                 Tab.STUDY -> StudySessionScreen(

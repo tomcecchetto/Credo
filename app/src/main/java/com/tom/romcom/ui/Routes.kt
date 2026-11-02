@@ -10,7 +10,7 @@ data object MainAreaRoute : NavKey
 data object SemesterSetupRoute : NavKey
 
 @Serializable
-data object TimetableSetupRoute : NavKey
+data class TimetableSetupRoute(val openPicker: Boolean = false) : NavKey
 
 @Serializable
 data class CourseSetupRoute(val courseId: Int? = null) : NavKey

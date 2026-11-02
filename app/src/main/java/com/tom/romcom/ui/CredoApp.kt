@@ -31,7 +31,8 @@ fun CredoApp() {
                     onCourseClick = { id -> backStack.add(CourseSetupRoute(id)) },
                     onSessionClick = { id -> backStack.add(SessionEditRoute(id)) },
                     onAddSession = { backStack.add(SessionEditRoute()) },
-                    onEditTimetable = { backStack.add(TimetableSetupRoute) }
+                    onEditTimetable = { backStack.add(TimetableSetupRoute()) },
+                    onImportTimetable = { backStack.add(TimetableSetupRoute(openPicker = true)) }
                 )
             }
             entry<SemesterSetupRoute> {
@@ -39,9 +40,10 @@ fun CredoApp() {
                     onBack = { backStack.removeLastOrNull() },
                     onSaved = { backStack.removeLastOrNull() })
             }
-            entry<TimetableSetupRoute> {
+            entry<TimetableSetupRoute> { route ->
                 TimetableSetupScreen(
-                    onBack = { backStack.removeLastOrNull() }
+                    onBack = { backStack.removeLastOrNull() },
+                    openPicker = route.openPicker
                 )
             }
             entry<CourseSetupRoute> { route ->

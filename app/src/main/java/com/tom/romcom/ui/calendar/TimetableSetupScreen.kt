@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -40,6 +41,7 @@ import java.util.Locale
 fun TimetableSetupScreen(
     modifier: Modifier = Modifier,
     onBack: () -> Unit,
+    openPicker: Boolean,
     viewModel: TimetableSetupViewModel = viewModel()
 ) {
     val slotsWithInfo by viewModel.slotsWithInfo.collectAsState(initial = emptyList())
@@ -47,12 +49,14 @@ fun TimetableSetupScreen(
     val byDay = remember(slotsWithInfo) { slotsWithInfo.groupBy { it.slot.dayOfWeek } }
     val message = viewModel.importMessage
 
-
     val picker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
         if (uri == null) return@rememberLauncherForActivityResult
         else viewModel.importCalendar(uri)
+    }
+    LaunchedEffect(Unit) {
+        if (openPicker) picker.launch(arrayOf("text/calendar"))
     }
     Scaffold(
         modifier = modifier,
