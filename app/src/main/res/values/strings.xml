@@ -77,6 +77,8 @@
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>
     <string name="tomorrow">Tomorrow</string>
+    <string name="no_timetable">No timetable yet</string>
+    <string name="no_lectures_chosen">No lectures chosen yet</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>

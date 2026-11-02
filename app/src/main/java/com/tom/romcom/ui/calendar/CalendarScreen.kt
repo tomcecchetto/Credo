@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,19 +23,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.CredoTopBar
 import com.tom.romcom.ui.formatDayHeader
-import com.tom.romcom.ui.formatEpochDay
 import java.time.LocalDate
 import java.time.LocalTime
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
 
 @Composable
 fun CalendarScreen(
     onEditTimetable: () -> Unit,
+    onImportTimetable: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CalendarViewModel = viewModel()
 ) {
@@ -42,6 +42,7 @@ fun CalendarScreen(
     val selectedDay by viewModel.selectedDay.collectAsState()
     val today = LocalDate.now().toEpochDay()
     val currentMinuteOfDay = LocalTime.now().hour * 60 + LocalTime.now().minute
+    val slots by viewModel.slots.collectAsState(initial = null)
 
     Scaffold(
         modifier = modifier,
@@ -54,62 +55,107 @@ fun CalendarScreen(
             )
         }
     ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .padding(innerPadding)
-        ) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(onClick = { viewModel.previousDay() }) {
-                    Icon(
-                        painterResource(R.drawable.ic_chevron_left),
-                        contentDescription = stringResource(R.string.previous_day)
-                    )
+        Column(modifier = Modifier.padding(innerPadding)) {
+            val currentSlots = slots
+            when {
+                (currentSlots == null) -> {}
+
+                (currentSlots.isEmpty()) -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_timetable),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Button(onClick = onImportTimetable) {
+                            Text(stringResource(R.string.import_timetable))
+                        }
+                    }
                 }
-                Text(
-                    text = when {
-                        (selectedDay == today) -> stringResource(R.string.today)
-                        (selectedDay == today + 1) -> stringResource(R.string.tomorrow)
-                        (selectedDay == today - 1) -> stringResource(R.string.yesterday)
-                        else -> formatDayHeader(selectedDay)
-                    },
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                        .clickable(onClick = { viewModel.goToToday() })
-                        .weight(1f)
-                )
-                IconButton(onClick = { viewModel.nextDay() }) {
-                    Icon(
-                        painterResource(R.drawable.ic_chevron_right),
-                        contentDescription = stringResource(R.string.next_day)
-                    )
+
+                currentSlots.none { it.attending } -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_lectures_chosen),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Button(onClick = onEditTimetable) {
+                            Text(stringResource(R.string.edit_timetable))
+                        }
+                    }
                 }
-            }
-            if (lectures.isEmpty()) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.no_lectures),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
-            } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                ) {
-                    items(lectures) { lecture ->
-                        LectureRow(lecture = lecture, isPast = (selectedDay == today && currentMinuteOfDay > lecture.endMinute) || selectedDay < today)
+
+                else -> {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = { viewModel.previousDay() }) {
+                            Icon(
+                                painterResource(R.drawable.ic_chevron_left),
+                                contentDescription = stringResource(R.string.previous_day)
+                            )
+                        }
+                        Text(
+                            text = when {
+                                (selectedDay == today) -> stringResource(R.string.today)
+                                (selectedDay == today + 1) -> stringResource(R.string.tomorrow)
+                                (selectedDay == today - 1) -> stringResource(R.string.yesterday)
+                                else -> formatDayHeader(selectedDay)
+                            },
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .clickable(onClick = { viewModel.goToToday() })
+                                .weight(1f)
+                        )
+                        IconButton(onClick = { viewModel.nextDay() }) {
+                            Icon(
+                                painterResource(R.drawable.ic_chevron_right),
+                                contentDescription = stringResource(R.string.next_day)
+                            )
+                        }
+                    }
+                    if (lectures.isEmpty()) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = stringResource(R.string.no_lectures),
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .weight(1f)
+                        ) {
+                            items(lectures) { lecture ->
+                                LectureRow(
+                                    lecture = lecture,
+                                    isPast = (selectedDay == today && currentMinuteOfDay > lecture.endMinute) || selectedDay < today
+                                )
+                            }
+                        }
                     }
                 }
             }

@@ -15,8 +15,9 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     private val dataBase = CredoDatabase.getDatabase(application)
     private val lectureDao = dataBase.lectureDao()
     private val _selectedDay = MutableStateFlow(LocalDate.now().toEpochDay())
+    private val slotDao = dataBase.recurringSlotDao()
     val selectedDay: StateFlow<Long> = _selectedDay
-
+    val slots = slotDao.getAllSlots()
     val lectures = _selectedDay.flatMapLatest { day -> lectureDao.getLecturesForDay(day) }
 
     fun previousDay() {

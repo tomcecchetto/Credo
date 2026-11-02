@@ -52,8 +52,10 @@ fun TimetableSetupScreen(
     val picker = rememberLauncherForActivityResult(
         ActivityResultContracts.OpenDocument()
     ) { uri ->
-        if (uri == null) return@rememberLauncherForActivityResult
-        else viewModel.importCalendar(uri)
+        if (uri == null) {
+            if (openPicker) onBack()
+            return@rememberLauncherForActivityResult
+        } else viewModel.importCalendar(uri)
     }
     LaunchedEffect(Unit) {
         if (openPicker) picker.launch(arrayOf("text/calendar"))
