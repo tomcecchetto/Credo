@@ -80,6 +80,8 @@
     <string name="no_timetable">No timetable yet</string>
     <string name="no_lectures_chosen">No lectures chosen yet</string>
     <string name="professor">Lecturer</string>
+    <string name="no_lectures_today">No lectures today</string>
+    <string name="lectures_complete">All lectures done. Treat yourself to a break!</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>

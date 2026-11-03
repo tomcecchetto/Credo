@@ -80,6 +80,8 @@
     <string name="no_timetable">Noch kein Stundenplan</string>
     <string name="no_lectures_chosen">Noch keine Lektionen ausgewählt</string>
     <string name="professor">Dozent:in</string>
+    <string name="no_lectures_today">Keine Vorlesungen heute</string>
+    <string name="lectures_complete">Alle Lektionen geschafft. Gönn dir eine Pause! </string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
