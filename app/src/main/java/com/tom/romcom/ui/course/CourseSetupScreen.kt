@@ -160,6 +160,20 @@ fun CourseSetupScreen(
                 onValueChange = { viewModel.onPlannedHoursPerWeekChange(it) },
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Decimal,
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(focusDirection = FocusDirection.Next) }),
+                singleLine = true,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+            )
+            OutlinedTextField(
+                label = { Text(stringResource(R.string.professor)) },
+                value = viewModel.profName,
+                onValueChange = { viewModel.onProfNameChange(it) },
+                keyboardOptions = KeyboardOptions(
+                    capitalization = KeyboardCapitalization.Words,
                     imeAction = ImeAction.Done
                 ),
                 keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),

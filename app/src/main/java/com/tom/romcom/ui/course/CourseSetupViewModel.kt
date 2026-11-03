@@ -49,6 +49,11 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
     var plannedHoursPerWeek by mutableStateOf("")
         private set
 
+    var profName by mutableStateOf("")
+        private set
+
+
+
     private var semesterId: Int? = null
 
     private var editingCourseId: Int? = null
@@ -68,6 +73,7 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
     private val plannedHoursPerWeekValue: Double? get() = plannedHoursPerWeek.replace(',', '.').toDoubleOrNull()
 
     private val praktikumSessionsValue: Int? get() = praktikumSessions.toIntOrNull()
+
 
 
     fun onNameChange(courseName: String) {
@@ -106,6 +112,10 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
         plannedHoursPerWeek = hoursPerWeek
     }
 
+    fun onProfNameChange(name: String) {
+        profName = name
+    }
+
     fun load(courseId: Int?) {
 
         if (loaded)
@@ -128,6 +138,7 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     praktikumHoursPerSession = if (course.praktikumHoursPerSession == 0.0) "" else formatNumber(course.praktikumHoursPerSession)
                     praktikumSessions = if (course.praktikumSessions == 0) "" else course.praktikumSessions.toString()
                     plannedHoursPerWeek = if (course.plannedHoursPerWeek == 0.0) "" else formatNumber(course.plannedHoursPerWeek)
+                    profName = course.profName
                 }
             }
         } else {
@@ -173,7 +184,8 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     lectureHoursPerWeek = lectureHoursNum,
                     praktikumHoursPerSession = praktHours,
                     plannedHoursPerWeek = plannedHours,
-                    praktikumSessions = praktSess
+                    praktikumSessions = praktSess,
+                    profName = profName
                 )
             } else {
                 Course(
@@ -184,7 +196,8 @@ class CourseSetupViewModel(application: Application) : AndroidViewModel(applicat
                     lectureHoursPerWeek = lectureHoursNum,
                     praktikumHoursPerSession = praktHours,
                     plannedHoursPerWeek = plannedHours,
-                    praktikumSessions = praktSess
+                    praktikumSessions = praktSess,
+                    profName = profName
                 )
             }
         viewModelScope.launch {
