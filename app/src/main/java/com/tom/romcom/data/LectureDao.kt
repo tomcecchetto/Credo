@@ -40,7 +40,8 @@ interface LectureDao {
             "Lecture.endMinuteOfDay AS endMinute, " +
             "Lecture.room AS room, " +
             "Course.name AS courseName, " +
-            "Course.color AS color " +
+            "Course.color AS color, " +
+            "Course.profName AS profName " +
             "FROM Lecture " +
             "JOIN RecurringSlot ON RecurringSlot.id = Lecture.slotId " +
             "JOIN Course ON Course.id = RecurringSlot.courseId " +

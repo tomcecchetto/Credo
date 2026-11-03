@@ -5,5 +5,6 @@ data class LectureWithCourse(
     val endMinute: Int,
     val room: String,
     val courseName: String,
-    val color: Long
+    val color: Long,
+    val profName: String
 )

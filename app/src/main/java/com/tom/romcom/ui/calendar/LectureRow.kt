@@ -57,7 +57,7 @@ fun LectureRow(
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = lecture.room,
+                    text = if (lecture.profName.isNotBlank()) "${lecture.room} · ${lecture.profName}" else lecture.room,
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
