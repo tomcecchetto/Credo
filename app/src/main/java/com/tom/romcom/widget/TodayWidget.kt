@@ -35,7 +35,6 @@ import com.tom.romcom.R
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.ui.formatMinuteOfDay
 import kotlinx.coroutines.flow.first
-import org.w3c.dom.Text
 import java.time.LocalDate
 import java.time.LocalTime
 

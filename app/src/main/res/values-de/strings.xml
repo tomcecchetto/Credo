@@ -82,6 +82,9 @@
     <string name="professor">Dozent:in</string>
     <string name="no_lectures_today">Keine Vorlesungen heute</string>
     <string name="lectures_complete">Alle Lektionen geschafft. Gönn dir eine Pause! </string>
+    <string name="day">Tag</string>
+    <string name="week">Woche</string>
+    <string name="month">Monat</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

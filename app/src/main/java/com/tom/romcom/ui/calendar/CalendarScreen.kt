@@ -14,6 +14,9 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SegmentedButton
+import androidx.compose.material3.SegmentedButtonDefaults.itemShape
+import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -40,6 +43,7 @@ fun CalendarScreen(
 ) {
     val lectures by viewModel.lectures.collectAsState(initial = emptyList())
     val selectedDay by viewModel.selectedDay.collectAsState()
+    val selectedView by viewModel.selectedView.collectAsState()
     val today = LocalDate.now().toEpochDay()
     val currentMinuteOfDay = LocalTime.now().hour * 60 + LocalTime.now().minute
     val slots by viewModel.slots.collectAsState(initial = null)
@@ -66,7 +70,10 @@ fun CalendarScreen(
                             .fillMaxWidth()
                             .weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+                        verticalArrangement = Arrangement.spacedBy(
+                            16.dp,
+                            Alignment.CenterVertically
+                        )
                     ) {
                         Text(
                             text = stringResource(R.string.no_timetable),
@@ -85,7 +92,10 @@ fun CalendarScreen(
                             .fillMaxWidth()
                             .weight(1f),
                         horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+                        verticalArrangement = Arrangement.spacedBy(
+                            16.dp,
+                            Alignment.CenterVertically
+                        )
                     ) {
                         Text(
                             text = stringResource(R.string.no_lectures_chosen),
@@ -99,63 +109,85 @@ fun CalendarScreen(
                 }
 
                 else -> {
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalAlignment = Alignment.CenterVertically
+                    SingleChoiceSegmentedButtonRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 8.dp)
                     ) {
-                        IconButton(onClick = { viewModel.previousDay() }) {
-                            Icon(
-                                painterResource(R.drawable.ic_chevron_left),
-                                contentDescription = stringResource(R.string.previous_day)
-                            )
-                        }
-                        Text(
-                            text = when {
-                                (selectedDay == today) -> stringResource(R.string.today)
-                                (selectedDay == today + 1) -> stringResource(R.string.tomorrow)
-                                (selectedDay == today - 1) -> stringResource(R.string.yesterday)
-                                else -> formatDayHeader(selectedDay)
-                            },
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .clickable(onClick = { viewModel.goToToday() })
-                                .weight(1f)
-                        )
-                        IconButton(onClick = { viewModel.nextDay() }) {
-                            Icon(
-                                painterResource(R.drawable.ic_chevron_right),
-                                contentDescription = stringResource(R.string.next_day)
-                            )
-                        }
-                    }
-                    if (lectures.isEmpty()) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center
-                        ) {
-                            Text(
-                                text = stringResource(R.string.no_lectures),
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .weight(1f)
-                        ) {
-                            items(lectures) { lecture ->
-                                LectureRow(
-                                    lecture = lecture,
-                                    isPast = (selectedDay == today && currentMinuteOfDay > lecture.endMinute) || selectedDay < today
-                                )
+                        CalendarView.entries.forEachIndexed { index, view ->
+                            SegmentedButton(
+                                selected = view == selectedView,
+                                onClick = { viewModel.selectView(view) },
+                                shape = itemShape(index = index, count = CalendarView.entries.size)
+                            ) {
+                                Text(viewLabel(view))
                             }
                         }
+                    }
+                    when (selectedView) {
+                        CalendarView.DAY -> {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                IconButton(onClick = { viewModel.previousDay() }) {
+                                    Icon(
+                                        painterResource(R.drawable.ic_chevron_left),
+                                        contentDescription = stringResource(R.string.previous_day)
+                                    )
+                                }
+                                Text(
+                                    text = when {
+                                        (selectedDay == today) -> stringResource(R.string.today)
+                                        (selectedDay == today + 1) -> stringResource(R.string.tomorrow)
+                                        (selectedDay == today - 1) -> stringResource(R.string.yesterday)
+                                        else -> formatDayHeader(selectedDay)
+                                    },
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .clickable(onClick = { viewModel.goToToday() })
+                                        .weight(1f)
+                                )
+                                IconButton(onClick = { viewModel.nextDay() }) {
+                                    Icon(
+                                        painterResource(R.drawable.ic_chevron_right),
+                                        contentDescription = stringResource(R.string.next_day)
+                                    )
+                                }
+                            }
+
+                            if (lectures.isEmpty()) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .weight(1f),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.no_lectures),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            } else {
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .weight(1f)
+                                ) {
+                                    items(lectures) { lecture ->
+                                        LectureRow(
+                                            lecture = lecture,
+                                            isPast = (selectedDay == today && currentMinuteOfDay > lecture.endMinute) || selectedDay < today
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                        CalendarView.WEEK -> { Text("Hello World") }
+                        CalendarView.MONTH -> { Text("Hello World again") }
                     }
                 }
             }
