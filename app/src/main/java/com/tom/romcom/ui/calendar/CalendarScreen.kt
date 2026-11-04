@@ -31,8 +31,11 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.CredoTopBar
 import com.tom.romcom.ui.formatDayHeader
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.format.TextStyle
+import java.util.Locale
 
 @Composable
 fun CalendarScreen(
@@ -187,8 +190,47 @@ fun CalendarScreen(
                                 }
                             }
                         }
-                        CalendarView.WEEK -> { Text("Hello World") }
-                        CalendarView.MONTH -> { Text("Hello World again") }
+
+                        CalendarView.WEEK -> {
+                            Text("Hello World")
+                        }
+
+                        CalendarView.MONTH -> {
+                            val gridStart = monthGridStart(selectedDay)
+                            val daysList = (0..41).map { gridStart + it }
+                            val weeks = daysList.chunked(7)
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 12.dp)
+                            )
+                            {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                ) {
+                                    DayOfWeek.entries.forEach { weekday ->
+                                        Text(
+                                            text = weekday.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                                            textAlign = TextAlign.Center,
+                                            style = MaterialTheme.typography.labelSmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                            modifier = Modifier.weight(1f)
+                                        )
+                                    }
+                                }
+                                weeks.forEach { week ->
+                                    Row(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                    ) {
+                                        week.forEach { day ->
+                                            MonthDayCell(day, modifier = Modifier.weight(1f))
+                                        }
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

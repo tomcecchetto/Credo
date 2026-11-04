@@ -5,6 +5,7 @@ data class LectureWithCourse(
     val endMinute: Int,
     val room: String,
     val courseName: String,
+    val epochDay: Long,
     val color: Long,
     val profName: String
 )

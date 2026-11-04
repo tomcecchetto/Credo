@@ -7,7 +7,9 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.temporal.TemporalAdjusters
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class CalendarViewModel(application: Application) : AndroidViewModel(application){
@@ -21,6 +23,11 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val selectedView: StateFlow<CalendarView> = _selectedView
     val slots = slotDao.getAllSlots()
     val lectures = _selectedDay.flatMapLatest { day -> lectureDao.getLecturesForDay(day) }
+
+    val monthLectures = _selectedDay.flatMapLatest { day ->
+        val startDay = monthGridStart(day)
+        val endDay = startDay + 41
+        lectureDao.getLecturesBetween(startDay, endDay) }
 
     fun previousDay() {
         _selectedDay.value -= 1

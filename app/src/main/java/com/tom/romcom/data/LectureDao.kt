@@ -41,7 +41,8 @@ interface LectureDao {
             "Lecture.room AS room, " +
             "Course.name AS courseName, " +
             "Course.color AS color, " +
-            "Course.profName AS profName " +
+            "Course.profName AS profName, " +
+            "Lecture.epochDay AS epochDay " +
             "FROM Lecture " +
             "JOIN RecurringSlot ON RecurringSlot.id = Lecture.slotId " +
             "JOIN Course ON Course.id = RecurringSlot.courseId " +
@@ -50,4 +51,20 @@ interface LectureDao {
             "AND Lecture.isHappening = 1 " +
             "ORDER BY Lecture.startMinuteOfDay ASC")
     fun getLecturesForDay(day: Long): Flow<List<LectureWithCourse>>
+
+    @Query("SELECT Lecture.startMinuteOfDay AS startMinute, " +
+            "Lecture.endMinuteOfDay AS endMinute, " +
+            "Lecture.room AS room, " +
+            "Course.name AS courseName, " +
+            "Course.color AS color, " +
+            "Course.profName as profName, " +
+            "Lecture.epochDay AS epochDay " +
+            "FROM Lecture " +
+            "JOIN RecurringSlot ON RecurringSlot.id = Lecture.slotId " +
+            "JOIN Course ON Course.id = RecurringSlot.courseId " +
+            "WHERE Lecture.isHappening = 1 " +
+            "AND RecurringSlot.attending = 1 " +
+            "AND Lecture.epochDay BETWEEN :startDay AND :endDay " +
+            "ORDER BY Lecture.epochDay, Lecture.startMinuteOfDay")
+    fun getLecturesBetween(startDay: Long, endDay: Long): Flow<List<LectureWithCourse>>
 }
