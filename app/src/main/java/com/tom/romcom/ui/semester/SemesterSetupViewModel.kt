@@ -4,12 +4,11 @@ import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Semester
-import com.tom.romcom.widget.CredoWidget
+import com.tom.romcom.widget.updateAllWidgets
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
@@ -89,7 +88,7 @@ class SemesterSetupViewModel(application: Application) : AndroidViewModel(applic
             } else {
                 semesterDao.insert(semester)
             }
-            CredoWidget().updateAll(getApplication())
+            updateAllWidgets(getApplication())
             onDone()
         }
     }

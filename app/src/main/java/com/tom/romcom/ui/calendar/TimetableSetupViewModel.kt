@@ -15,6 +15,7 @@ import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.RecurringSlot
 import com.tom.romcom.data.Semester
 import com.tom.romcom.ui.nextFreeColor
+import com.tom.romcom.widget.updateAllWidgets
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +26,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TimetableSetupViewModel(application: Application) : AndroidViewModel(application = application) {
+class TimetableSetupViewModel(application: Application) :
+    AndroidViewModel(application = application) {
 
     private val db = CredoDatabase.getDatabase(context = application)
     private val slotDao = db.recurringSlotDao()
@@ -66,6 +68,7 @@ class TimetableSetupViewModel(application: Application) : AndroidViewModel(appli
                         count
                     )
                     else getApplication<Application>().getString(R.string.no_events_found)
+                updateAllWidgets(getApplication())
             } catch (e: Exception) {
                 Log.e("Credo", "Import failed", e)
                 importMessage = getApplication<Application>().getString(R.string.import_failed)
@@ -75,12 +78,18 @@ class TimetableSetupViewModel(application: Application) : AndroidViewModel(appli
 
     fun setAttending(slot: RecurringSlot, attending: Boolean) {
         val slotCopy = slot.copy(attending = attending)
-        viewModelScope.launch { slotDao.update(slotCopy) }
+        viewModelScope.launch {
+            slotDao.update(slotCopy)
+            updateAllWidgets(getApplication())
+        }
     }
 
     fun setCourseId(slot: RecurringSlot, courseId: Int?) {
         val slotCopy = slot.copy(courseId = courseId)
-        viewModelScope.launch { slotDao.update(slotCopy) }
+        viewModelScope.launch {
+            slotDao.update(slotCopy)
+            updateAllWidgets(getApplication())
+        }
     }
 
     fun createCourseForSlot(
@@ -101,6 +110,7 @@ class TimetableSetupViewModel(application: Application) : AndroidViewModel(appli
             ).toInt()
             val slotCopy = slot.copy(courseId = newId)
             slotDao.update(slotCopy)
+            updateAllWidgets(getApplication())
         }
     }
 }

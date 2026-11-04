@@ -4,14 +4,13 @@ import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.glance.appwidget.updateAll
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tom.romcom.data.Course
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Semester
 import com.tom.romcom.data.StudySession
-import com.tom.romcom.widget.CredoWidget
+import com.tom.romcom.widget.updateAllWidgets
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flatMapLatest
@@ -138,7 +137,7 @@ class SessionEditViewModel(application: Application) : AndroidViewModel(applicat
         viewModelScope.launch {
             if (loadedSess != null) sessionDao.update(session)
             else sessionDao.insert(session)
-            CredoWidget().updateAll(getApplication())
+            updateAllWidgets(getApplication())
             onDone()
         }
 
@@ -147,7 +146,7 @@ class SessionEditViewModel(application: Application) : AndroidViewModel(applicat
         val loadedSess = loadedSession ?: return
         viewModelScope.launch {
             sessionDao.delete(loadedSess)
-            CredoWidget().updateAll(getApplication())
+            updateAllWidgets(getApplication())
             onDone()
         }
     }
