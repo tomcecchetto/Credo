@@ -1,6 +1,7 @@
 package com.tom.romcom.widget
 
 import android.content.Context
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
@@ -11,6 +12,7 @@ import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
+import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
@@ -21,6 +23,7 @@ import androidx.glance.layout.Column
 import androidx.glance.layout.Row
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
+import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.width
 import androidx.glance.text.FontWeight
@@ -130,6 +133,13 @@ class TodayWidget : GlanceAppWidget() {
                                                     fontSize = 12.sp)
                                             )
                                         }
+                                        Box(
+                                            modifier = GlanceModifier
+                                                .width(4.dp)
+                                                .height(36.dp)
+                                                .cornerRadius(2.dp)
+                                                .background(Color(lecture.color))
+                                        ) {}
                                         Column(
                                             modifier = GlanceModifier
                                                 .defaultWeight()
