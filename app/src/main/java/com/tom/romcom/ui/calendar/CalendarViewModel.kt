@@ -16,7 +16,9 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     private val lectureDao = dataBase.lectureDao()
     private val _selectedDay = MutableStateFlow(LocalDate.now().toEpochDay())
     private val slotDao = dataBase.recurringSlotDao()
+    private val _selectedView = MutableStateFlow(CalendarView.DAY)
     val selectedDay: StateFlow<Long> = _selectedDay
+    val selectedView: StateFlow<CalendarView> = _selectedView
     val slots = slotDao.getAllSlots()
     val lectures = _selectedDay.flatMapLatest { day -> lectureDao.getLecturesForDay(day) }
 
@@ -30,5 +32,9 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     fun goToToday() {
         _selectedDay.value = LocalDate.now().toEpochDay()
+    }
+
+    fun selectView(view: CalendarView){
+        _selectedView.value = view
     }
 }
