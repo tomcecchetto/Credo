@@ -54,7 +54,7 @@ fun CourseCard(
 
     ) {
     val hoursDiffWidth = 85.dp
-    val textModifierWidth = 50.dp
+    val textModifierWidth = 55.dp
     val numberStyle = MaterialTheme.typography.bodyMedium.copy(fontFeatureSettings = "tnum")
 
     Card(

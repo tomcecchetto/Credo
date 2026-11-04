@@ -118,7 +118,8 @@ fun CalendarScreen(
                             SegmentedButton(
                                 selected = view == selectedView,
                                 onClick = { viewModel.selectView(view) },
-                                shape = itemShape(index = index, count = CalendarView.entries.size)
+                                shape = itemShape(index = index, count = CalendarView.entries.size),
+                                icon = {}
                             ) {
                                 Text(viewLabel(view))
                             }
