@@ -34,6 +34,7 @@ import com.tom.romcom.ui.formatDayHeader
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
+import java.time.YearMonth
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -50,6 +51,7 @@ fun CalendarScreen(
     val today = LocalDate.now().toEpochDay()
     val currentMinuteOfDay = LocalTime.now().hour * 60 + LocalTime.now().minute
     val slots by viewModel.slots.collectAsState(initial = null)
+    val monthLectures by viewModel.monthLectures.collectAsState(initial = emptyList())
 
     Scaffold(
         modifier = modifier,
@@ -199,6 +201,9 @@ fun CalendarScreen(
                             val gridStart = monthGridStart(selectedDay)
                             val daysList = (0..41).map { gridStart + it }
                             val weeks = daysList.chunked(7)
+                            val shownMonth = YearMonth.from(LocalDate.ofEpochDay(selectedDay))
+                            val lecturesByDay = monthLectures.groupBy { it.epochDay }
+
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
@@ -225,7 +230,19 @@ fun CalendarScreen(
                                             .fillMaxWidth()
                                     ) {
                                         week.forEach { day ->
-                                            MonthDayCell(day, modifier = Modifier.weight(1f))
+                                            val isInShownMonth = YearMonth.from(LocalDate.ofEpochDay(day)) == shownMonth
+                                            val dotColors = lecturesByDay[day]
+                                                ?.map { it.color }
+                                                ?: emptyList()
+
+                                            MonthDayCell(
+                                                day = day,
+                                                dotColors = dotColors,
+                                                isToday = day == today,
+                                                isSelected = day == selectedDay,
+                                                isPast = day < today,
+                                                isInShownMonth = isInShownMonth,
+                                                modifier = Modifier.weight(1f))
                                         }
                                     }
                                 }
