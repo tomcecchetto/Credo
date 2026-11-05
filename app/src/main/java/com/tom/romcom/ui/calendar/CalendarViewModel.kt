@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import java.time.DayOfWeek
 import java.time.LocalDate
+import java.time.MonthDay
 import java.time.temporal.TemporalAdjusters
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -43,5 +44,9 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     fun selectView(view: CalendarView){
         _selectedView.value = view
+    }
+
+    fun selectDay(day: Long) {
+        _selectedDay.value = day
     }
 }

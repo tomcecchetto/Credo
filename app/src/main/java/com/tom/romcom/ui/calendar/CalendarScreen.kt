@@ -242,6 +242,7 @@ fun CalendarScreen(
                                                 isSelected = day == selectedDay,
                                                 isPast = day < today,
                                                 isInShownMonth = isInShownMonth,
+                                                onClick = { viewModel.selectDay(day) },
                                                 modifier = Modifier.weight(1f))
                                         }
                                     }
