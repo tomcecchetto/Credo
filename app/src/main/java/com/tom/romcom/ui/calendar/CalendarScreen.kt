@@ -1,11 +1,13 @@
 package com.tom.romcom.ui.calendar
 
+import android.graphics.fonts.Font
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -25,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -143,12 +146,7 @@ fun CalendarScreen(
                                     )
                                 }
                                 Text(
-                                    text = when {
-                                        (selectedDay == today) -> stringResource(R.string.today)
-                                        (selectedDay == today + 1) -> stringResource(R.string.tomorrow)
-                                        (selectedDay == today - 1) -> stringResource(R.string.yesterday)
-                                        else -> formatDayHeader(selectedDay)
-                                    },
+                                    text = dayLabel(day = selectedDay, today = today),
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     textAlign = TextAlign.Center,
                                     modifier = Modifier
@@ -216,7 +214,10 @@ fun CalendarScreen(
                                 ) {
                                     DayOfWeek.entries.forEach { weekday ->
                                         Text(
-                                            text = weekday.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                                            text = weekday.getDisplayName(
+                                                TextStyle.SHORT,
+                                                Locale.getDefault()
+                                            ),
                                             textAlign = TextAlign.Center,
                                             style = MaterialTheme.typography.labelSmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -230,7 +231,8 @@ fun CalendarScreen(
                                             .fillMaxWidth()
                                     ) {
                                         week.forEach { day ->
-                                            val isInShownMonth = YearMonth.from(LocalDate.ofEpochDay(day)) == shownMonth
+                                            val isInShownMonth =
+                                                YearMonth.from(LocalDate.ofEpochDay(day)) == shownMonth
                                             val dotColors = lecturesByDay[day]
                                                 ?.map { it.color }
                                                 ?: emptyList()
@@ -243,8 +245,47 @@ fun CalendarScreen(
                                                 isPast = day < today,
                                                 isInShownMonth = isInShownMonth,
                                                 onClick = { viewModel.selectDay(day) },
-                                                modifier = Modifier.weight(1f))
+                                                modifier = Modifier.weight(1f)
+                                            )
                                         }
+                                    }
+                                }
+                            }
+                            val date = formatDayHeader(selectedDay)
+                            val label = dayLabel(selectedDay, today)
+                            Text(
+                                text = if (date != label) "$date  ·  $label" else date,
+                                style = MaterialTheme.typography.titleSmall,
+                                fontWeight = FontWeight.Bold,
+                                color = if (selectedDay == today) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp, vertical = 8.dp)
+                            )
+                            if (lectures.isEmpty()) {
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .weight(1f),
+                                    horizontalAlignment = Alignment.CenterHorizontally,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = stringResource(R.string.no_lectures),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            } else {
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .weight(1f)
+                                ) {
+                                    items(lectures) { lecture ->
+                                        LectureRow(
+                                            lecture = lecture,
+                                            isPast = (selectedDay == today && currentMinuteOfDay > lecture.endMinute) || selectedDay < today
+                                        )
                                     }
                                 }
                             }
@@ -255,3 +296,13 @@ fun CalendarScreen(
         }
     }
 }
+
+@Composable
+fun dayLabel(day: Long, today: Long): String =
+    when (day) {
+        today -> stringResource(R.string.today)
+        today + 1 -> stringResource(R.string.tomorrow)
+        today - 1 -> stringResource(R.string.yesterday)
+        else -> formatDayHeader(day)
+    }
+
