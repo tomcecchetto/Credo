@@ -193,7 +193,17 @@ fun CalendarScreen(
                         }
 
                         CalendarView.WEEK -> {
-                            Text("Hello World")
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .weight(1f),
+                                horizontalAlignment = Alignment.CenterHorizontally,
+                                verticalArrangement = Arrangement.Center
+                            ) { Text(
+                                text = "Wochenansicht kommt bald. I LOVE YOU",
+                                style = MaterialTheme.typography.bodyLarge,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
                         }
 
                         CalendarView.MONTH -> {
