@@ -132,33 +132,34 @@ fun CalendarScreen(
                             }
                         }
                     }
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(onClick = { viewModel.previous() }) {
+                            Icon(
+                                painterResource(R.drawable.ic_chevron_left),
+                                contentDescription = stringResource(R.string.previous_day)
+                            )
+                        }
+                        Text(
+                            text = dayLabel(day = selectedDay, today = today),
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .clickable(onClick = { viewModel.goToToday() })
+                                .weight(1f)
+                        )
+                        IconButton(onClick = { viewModel.next() }) {
+                            Icon(
+                                painterResource(R.drawable.ic_chevron_right),
+                                contentDescription = stringResource(R.string.next_day)
+                            )
+                        }
+                    }
                     when (selectedView) {
                         CalendarView.DAY -> {
-                            Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                IconButton(onClick = { viewModel.previousDay() }) {
-                                    Icon(
-                                        painterResource(R.drawable.ic_chevron_left),
-                                        contentDescription = stringResource(R.string.previous_day)
-                                    )
-                                }
-                                Text(
-                                    text = dayLabel(day = selectedDay, today = today),
-                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                    textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .clickable(onClick = { viewModel.goToToday() })
-                                        .weight(1f)
-                                )
-                                IconButton(onClick = { viewModel.nextDay() }) {
-                                    Icon(
-                                        painterResource(R.drawable.ic_chevron_right),
-                                        contentDescription = stringResource(R.string.next_day)
-                                    )
-                                }
-                            }
+
 
                             if (lectures.isEmpty()) {
                                 Column(

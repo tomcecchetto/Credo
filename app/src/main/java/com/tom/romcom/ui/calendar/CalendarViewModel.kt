@@ -7,13 +7,11 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
-import java.time.DayOfWeek
 import java.time.LocalDate
-import java.time.MonthDay
-import java.time.temporal.TemporalAdjusters
+import java.time.YearMonth
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class CalendarViewModel(application: Application) : AndroidViewModel(application){
+class CalendarViewModel(application: Application) : AndroidViewModel(application) {
 
     private val dataBase = CredoDatabase.getDatabase(application)
     private val lectureDao = dataBase.lectureDao()
@@ -25,19 +23,33 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val slots = slotDao.getAllSlots()
     val lectures = _selectedDay.flatMapLatest { day -> lectureDao.getLecturesForDay(day) }
 
-    fun previousDay() {
-        _selectedDay.value -= 1
+    private fun monthJump(direction: Long): Long {
+        val newDate = LocalDate.ofEpochDay(_selectedDay.value).plusMonths(direction)
+        return if (YearMonth.from(newDate) == YearMonth.from(LocalDate.now())) LocalDate.now()
+            .toEpochDay() else newDate.withDayOfMonth(1).toEpochDay()
     }
 
-    fun nextDay() {
-        _selectedDay.value += 1
+    fun previous() {
+        _selectedDay.value = when (_selectedView.value) {
+            CalendarView.DAY -> _selectedDay.value - 1
+            CalendarView.WEEK -> _selectedDay.value - 7
+            CalendarView.MONTH -> monthJump(-1)
+        }
+    }
+
+    fun next() {
+        _selectedDay.value = when (_selectedView.value) {
+            CalendarView.DAY -> _selectedDay.value + 1
+            CalendarView.WEEK -> _selectedDay.value + 7
+            CalendarView.MONTH -> monthJump(1)
+        }
     }
 
     fun goToToday() {
         _selectedDay.value = LocalDate.now().toEpochDay()
     }
 
-    fun selectView(view: CalendarView){
+    fun selectView(view: CalendarView) {
         _selectedView.value = view
     }
 
