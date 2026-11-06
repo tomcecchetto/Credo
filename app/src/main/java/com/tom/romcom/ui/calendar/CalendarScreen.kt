@@ -38,6 +38,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.YearMonth
+import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
 
@@ -143,7 +144,7 @@ fun CalendarScreen(
                             )
                         }
                         Text(
-                            text = dayLabel(day = selectedDay, today = today),
+                            text = headerLabel(selectedView, selectedDay, today),
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
@@ -300,3 +301,17 @@ fun dayLabel(day: Long, today: Long): String =
         else -> formatDayHeader(day)
     }
 
+@Composable
+fun headerLabel(
+    view: CalendarView,
+    selectedDay: Long,
+    today: Long
+): String {
+    val formatter = DateTimeFormatter.ofPattern("LLLL yyyy", Locale.getDefault())
+    val date = LocalDate.ofEpochDay(selectedDay)
+    return when (view) {
+        CalendarView.DAY -> dayLabel(selectedDay, today)
+        CalendarView.WEEK -> date.format(formatter)
+        CalendarView.MONTH -> date.format(formatter)
+    }
+}
