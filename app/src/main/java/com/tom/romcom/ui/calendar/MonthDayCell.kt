@@ -23,7 +23,6 @@ import java.time.LocalDate
 @Composable
 fun MonthDayCell(
     day: Long,
-    dotColors: List<Long>,
     isToday: Boolean,
     isSelected: Boolean,
     isPast: Boolean,
@@ -33,10 +32,10 @@ fun MonthDayCell(
 ) {
     Column(
         modifier = modifier
-            .height(52.dp)
+            .height(44.dp)
             .clickable { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(3.dp, Alignment.CenterVertically)
+        verticalArrangement = Arrangement.Center
     ) {
         Box(
             modifier = Modifier
@@ -56,18 +55,6 @@ fun MonthDayCell(
                 },
                 fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal
             )
-        }
-        Row(
-            modifier = Modifier.height(6.dp),
-            horizontalArrangement = Arrangement.spacedBy(3.dp)
-        ) {
-            dotColors.take(4).forEach { color ->
-                Box(
-                    modifier = Modifier
-                        .size(6.dp)
-                        .background(color = (if (!isInShownMonth || isPast) Color(color).copy(alpha = 0.4f) else Color(color)), shape = CircleShape)
-                )
-            }
         }
     }
 }

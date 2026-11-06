@@ -54,7 +54,6 @@ fun CalendarScreen(
     val today = LocalDate.now().toEpochDay()
     val currentMinuteOfDay = LocalTime.now().hour * 60 + LocalTime.now().minute
     val slots by viewModel.slots.collectAsState(initial = null)
-    val monthLectures by viewModel.monthLectures.collectAsState(initial = emptyList())
 
     Scaffold(
         modifier = modifier,
@@ -200,7 +199,6 @@ fun CalendarScreen(
                             val daysList = (0..41).map { gridStart + it }
                             val weeks = daysList.chunked(7)
                             val shownMonth = YearMonth.from(LocalDate.ofEpochDay(selectedDay))
-                            val lecturesByDay = monthLectures.groupBy { it.epochDay }
 
                             Column(
                                 modifier = Modifier
@@ -233,13 +231,9 @@ fun CalendarScreen(
                                         week.forEach { day ->
                                             val isInShownMonth =
                                                 YearMonth.from(LocalDate.ofEpochDay(day)) == shownMonth
-                                            val dotColors = lecturesByDay[day]
-                                                ?.map { it.color }
-                                                ?: emptyList()
 
                                             MonthDayCell(
                                                 day = day,
-                                                dotColors = dotColors,
                                                 isToday = day == today,
                                                 isSelected = day == selectedDay,
                                                 isPast = day < today,
@@ -282,9 +276,8 @@ fun CalendarScreen(
                                         .weight(1f)
                                 ) {
                                     items(lectures) { lecture ->
-                                        LectureRow(
-                                            lecture = lecture,
-                                            isPast = (selectedDay == today && currentMinuteOfDay > lecture.endMinute) || selectedDay < today
+                                        LectureRowCompact(
+                                            lecture = lecture
                                         )
                                     }
                                 }

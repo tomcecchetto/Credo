@@ -25,11 +25,6 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val slots = slotDao.getAllSlots()
     val lectures = _selectedDay.flatMapLatest { day -> lectureDao.getLecturesForDay(day) }
 
-    val monthLectures = _selectedDay.flatMapLatest { day ->
-        val startDay = monthGridStart(day)
-        val endDay = startDay + 41
-        lectureDao.getLecturesBetween(startDay, endDay) }
-
     fun previousDay() {
         _selectedDay.value -= 1
     }
