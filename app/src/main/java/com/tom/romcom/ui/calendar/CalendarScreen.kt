@@ -3,6 +3,7 @@ package com.tom.romcom.ui.calendar
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -35,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.CredoTopBar
@@ -250,34 +252,105 @@ fun CalendarScreen(
                                         }
                                     }
                                 }
+                                val rowsEnd = startTimesSorted.associateWith { start ->
+                                    weekLectures.filter { it.startMinute == start }
+                                        .maxOf { it.endMinute }
+                                }
                                 LazyColumn(
                                     modifier = Modifier
                                         .fillMaxWidth()
                                         .weight(1f)
                                 ) {
-                                    items(startTimesSorted) { start ->
-                                        Row(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(96.dp)
-                                                .padding(top = 4.dp)
-                                        ) {
-                                            Text(
-                                                text = formatMinuteOfDay(start),
-                                                style = MaterialTheme.typography.labelSmall,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                                modifier = Modifier.width(timeColumnWidth)
-                                            )
-                                            daysListWeek.forEach { day ->
-                                                val lecture =
-                                                    weekLectures.firstOrNull { it.epochDay == day && it.startMinute == start }
-                                                WeekDayCell(
-                                                    lecture = lecture,
-                                                    modifier = modifier
-                                                        .weight(1f)
-                                                        .fillMaxHeight()
-                                                        .padding(2.dp)
-                                                )
+                                    startTimesSorted.forEachIndexed { index, start ->
+                                        val endOfRow = rowsEnd[start] ?: start
+                                        item {
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(96.dp)
+                                                    .padding(top = 4.dp)
+                                            ) {
+                                                Column(
+                                                    modifier = Modifier
+                                                        .width(timeColumnWidth)
+                                                        .padding(top = 6.dp)
+                                                ) {
+                                                    Text(
+                                                        text = formatMinuteOfDay(start),
+                                                        style = MaterialTheme.typography.labelSmall,
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                        modifier = Modifier.width(timeColumnWidth)
+                                                    )
+                                                    Text(
+                                                        text = formatMinuteOfDay(endOfRow),
+                                                        style = MaterialTheme.typography.labelSmall.copy(
+                                                            fontSize = 10.sp
+                                                        ),
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                        modifier = Modifier.width(timeColumnWidth)
+                                                    )
+                                                }
+
+                                                daysListWeek.forEach { day ->
+                                                    val lecture =
+                                                        weekLectures.firstOrNull { it.epochDay == day && it.startMinute == start }
+                                                    WeekDayCell(
+                                                        lecture = lecture,
+                                                        modifier = Modifier
+                                                            .weight(1f)
+                                                            .fillMaxHeight()
+                                                            .padding(2.dp)
+                                                    )
+                                                }
+                                            }
+                                        }
+                                        if (index < startTimesSorted.lastIndex) {
+                                            val nextStart = startTimesSorted[index + 1]
+                                            if (nextStart - endOfRow >= 45) {
+                                                item {
+                                                    Row(
+                                                        modifier = Modifier
+                                                            .padding(top = 4.dp)
+                                                            .height(34.dp)
+                                                            .fillMaxWidth(),
+                                                        verticalAlignment = Alignment.CenterVertically
+                                                    ) {
+                                                        Column(
+                                                            modifier = Modifier
+                                                                .width(timeColumnWidth)
+                                                        ) {
+                                                            Text(
+                                                                text = formatMinuteOfDay(endOfRow),
+                                                                style = MaterialTheme.typography.labelSmall,
+                                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                                modifier = Modifier.width(timeColumnWidth)
+                                                            )
+                                                            Text(
+                                                                text = formatMinuteOfDay(nextStart),
+                                                                style = MaterialTheme.typography.labelSmall.copy(
+                                                                    fontSize = 10.sp
+                                                                ),
+                                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                                modifier = Modifier.width(timeColumnWidth)
+                                                            )
+                                                        }
+                                                        Box(
+                                                            modifier = Modifier
+                                                                .weight(1f)
+                                                                .fillMaxHeight()
+                                                                .padding(horizontal = 2.dp)
+                                                                .background(MaterialTheme.colorScheme.tertiary.copy(alpha = 0.15f),
+                                                                    RoundedCornerShape(8.dp)),
+                                                            contentAlignment = Alignment.Center
+                                                        ) {
+                                                            Text(
+                                                                text = if (endOfRow <= 12 * 60 && nextStart >= 13 * 60) stringResource(R.string.lunch) else stringResource(R.string.break_time),
+                                                                color = MaterialTheme.colorScheme.tertiary,
+                                                                style = MaterialTheme.typography.labelSmall
+                                                            )
+                                                        }
+                                                    }
+                                                }
                                             }
                                         }
                                     }

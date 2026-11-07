@@ -85,6 +85,8 @@
     <string name="day">Tag</string>
     <string name="week">Woche</string>
     <string name="month">Monat</string>
+    <string name="lunch">Mittag</string>
+    <string name="break_time">Pause</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
