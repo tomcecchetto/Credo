@@ -12,3 +12,10 @@ fun monthGridStart(day: Long): Long {
     ).toEpochDay()
     return startDay
 }
+
+fun weekStart(day: Long): Long {
+    val startDay =
+        LocalDate.ofEpochDay(day).with(
+            TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)).toEpochDay()
+    return startDay
+}

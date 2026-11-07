@@ -1,16 +1,20 @@
 package com.tom.romcom.ui.calendar
 
-import android.graphics.fonts.Font
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,6 +29,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -34,6 +39,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
 import com.tom.romcom.ui.CredoTopBar
 import com.tom.romcom.ui.formatDayHeader
+import com.tom.romcom.ui.formatMinuteOfDay
+import com.tom.romcom.ui.formatShortDate
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -55,6 +62,7 @@ fun CalendarScreen(
     val today = LocalDate.now().toEpochDay()
     val currentMinuteOfDay = LocalTime.now().hour * 60 + LocalTime.now().minute
     val slots by viewModel.slots.collectAsState(initial = null)
+    val weekLectures by viewModel.weekLectures.collectAsState(initial = emptyList())
 
     Scaffold(
         modifier = modifier,
@@ -193,16 +201,87 @@ fun CalendarScreen(
                         }
 
                         CalendarView.WEEK -> {
+                            val gridStartWeek = weekStart(selectedDay)
+                            val hasWeekend = weekLectures.any { it.epochDay >= gridStartWeek + 5 }
+                            val daysListWeek =
+                                (if (hasWeekend) 0..6 else 0..4).map { gridStartWeek + it }
+                            val startTimesSorted =
+                                weekLectures.map { it.startMinute }.distinct().sorted()
+                            val timeColumnWidth = 38.dp
+
                             Column(
                                 modifier = Modifier
+                                    .weight(1f)
                                     .fillMaxWidth()
-                                    .weight(1f),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center
-                            ) { Text(
-                                text = "Wochenansicht kommt bald. I LOVE YOU",
-                                style = MaterialTheme.typography.bodyLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                    .padding(horizontal = 12.dp, vertical = 8.dp)
+                            ) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Spacer(Modifier.width(timeColumnWidth))
+                                    daysListWeek.forEach { day ->
+                                        val date = LocalDate.ofEpochDay(day)
+                                        Column(
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .background(
+                                                    color = if (day != today) Color.Transparent else MaterialTheme.colorScheme.secondaryContainer,
+                                                    RoundedCornerShape(10.dp)
+                                                )
+                                                .padding(vertical = 4.dp),
+                                            horizontalAlignment = Alignment.CenterHorizontally
+                                        ) {
+                                            Text(
+                                                text = date.dayOfWeek.getDisplayName(
+                                                    TextStyle.SHORT,
+                                                    Locale.getDefault()
+                                                ),
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = if (day == today) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurfaceVariant
+                                            )
+                                            Text(
+                                                text = date.dayOfMonth.toString(),
+                                                style = MaterialTheme.typography.titleSmall,
+                                                fontWeight = FontWeight.Bold,
+                                                color = if (day == today) MaterialTheme.colorScheme.onSecondaryContainer else MaterialTheme.colorScheme.onSurface
+                                            )
+                                        }
+                                    }
+                                }
+                                LazyColumn(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .weight(1f)
+                                ) {
+                                    items(startTimesSorted) { start ->
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .height(96.dp)
+                                                .padding(top = 4.dp)
+                                        ) {
+                                            Text(
+                                                text = formatMinuteOfDay(start),
+                                                style = MaterialTheme.typography.labelSmall,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                modifier = Modifier.width(timeColumnWidth)
+                                            )
+                                            daysListWeek.forEach { day ->
+                                                val lecture =
+                                                    weekLectures.firstOrNull { it.epochDay == day && it.startMinute == start }
+                                                WeekDayCell(
+                                                    lecture = lecture,
+                                                    modifier = modifier
+                                                        .weight(1f)
+                                                        .fillMaxHeight()
+                                                        .padding(2.dp)
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
 
@@ -321,7 +400,12 @@ fun headerLabel(
     val date = LocalDate.ofEpochDay(selectedDay)
     return when (view) {
         CalendarView.DAY -> dayLabel(selectedDay, today)
-        CalendarView.WEEK -> date.format(formatter)
+        CalendarView.WEEK -> "${formatShortDate(weekStart(selectedDay))} – ${
+            formatShortDate(
+                weekStart(selectedDay) + 6
+            )
+        }"
+
         CalendarView.MONTH -> date.format(formatter)
     }
 }

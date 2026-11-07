@@ -22,6 +22,11 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val selectedView: StateFlow<CalendarView> = _selectedView
     val slots = slotDao.getAllSlots()
     val lectures = _selectedDay.flatMapLatest { day -> lectureDao.getLecturesForDay(day) }
+    val weekLectures = _selectedDay.flatMapLatest { day ->
+        val startDay = weekStart(day)
+        val endDay = startDay + 6
+        lectureDao.getLecturesBetween(startDay, endDay)
+    }
 
     private fun monthJump(direction: Long): Long {
         val newDate = LocalDate.ofEpochDay(_selectedDay.value).plusMonths(direction)

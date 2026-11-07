@@ -51,7 +51,13 @@ fun formatHoursDiff(diff: Double): String {
 }
 
 fun formatDayHeader(epochDay: Long): String {
-    val pattern = DateFormat.getBestDateTimePattern(Locale.getDefault(),"EEEdMMM")
+    val pattern = DateFormat.getBestDateTimePattern(Locale.getDefault(), "EEEdMMM")
+    val formatter = DateTimeFormatter.ofPattern(pattern)
+    return LocalDate.ofEpochDay(epochDay).format(formatter)
+}
+
+fun formatShortDate(epochDay: Long): String {
+    val pattern = DateFormat.getBestDateTimePattern(Locale.getDefault(), "dMMM")
     val formatter = DateTimeFormatter.ofPattern(pattern)
     return LocalDate.ofEpochDay(epochDay).format(formatter)
 }
