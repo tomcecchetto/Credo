@@ -87,6 +87,7 @@
     <string name="month">Monat</string>
     <string name="lunch">Mittag</string>
     <string name="break_time">Pause</string>
+    <string name="no_open_tasks">Keine offenen Aufgaben</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

@@ -87,6 +87,7 @@
     <string name="month">Month</string>
     <string name="lunch">Lunch</string>
     <string name="break_time">Break</string>
+    <string name="no_open_tasks">No open tasks</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>
