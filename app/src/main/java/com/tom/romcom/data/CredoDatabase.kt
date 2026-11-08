@@ -34,6 +34,7 @@ abstract class CredoDatabase : RoomDatabase() {
     abstract fun studySessionDao() : StudySessionDao
     abstract fun recurringSlotDao() : RecurringSlotDao
     abstract fun lectureDao() : LectureDao
+    abstract fun taskDao() : TaskDao
 
     companion object {
         @Volatile
