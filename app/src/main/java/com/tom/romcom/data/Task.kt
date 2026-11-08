@@ -6,7 +6,7 @@ import androidx.room.Index
 import androidx.room.PrimaryKey
 
 enum class TaskType {
-    HOMEWORK, PROJECT, EXAM
+    HOMEWORK, PROJECT, LAB
 }
 
 @Entity(
@@ -14,17 +14,18 @@ enum class TaskType {
         entity = Course::class,
         parentColumns = ["id"],
         childColumns = ["courseId"],
-        onDelete = ForeignKey.CASCADE
+        onDelete = ForeignKey.SET_NULL
     )],
     indices = [Index("courseId")]
 )
 
 data class Task(
-    val courseId: Int,
+    val courseId: Int? = null,
     val taskType: TaskType,
     val title: String,
     val notes: String?,
     val dueEpochDay: Long,
+    val dueMinuteOfDay: Int? = null,
     val isCompleted: Boolean = false,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 )
