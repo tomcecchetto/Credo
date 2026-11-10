@@ -30,6 +30,7 @@ import com.tom.romcom.ui.CredoTopBar
 
 @Composable
 fun TaskScreen(
+    onAddTask: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TaskViewModel = viewModel()
 ) {
@@ -40,7 +41,7 @@ fun TaskScreen(
         topBar = { CredoTopBar(stringResource(R.string.tasks)) },
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
-            ExtendedFloatingActionButton(onClick = {}) {
+            ExtendedFloatingActionButton(onClick = onAddTask) {
                 Icon(painterResource(R.drawable.ic_add),
                     contentDescription = stringResource(R.string.add_task))
                 Text(stringResource(R.string.add_task))

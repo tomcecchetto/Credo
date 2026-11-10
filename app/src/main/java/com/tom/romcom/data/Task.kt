@@ -29,3 +29,5 @@ data class Task(
     val isCompleted: Boolean = false,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 )
+
+

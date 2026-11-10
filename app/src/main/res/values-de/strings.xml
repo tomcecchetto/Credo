@@ -89,6 +89,17 @@
     <string name="break_time">Pause</string>
     <string name="no_open_tasks">Keine offenen Aufgaben</string>
     <string name="add_task">Aufgabe hinzufügen</string>
+    <string name="delete_task">Aufgabe löschen?</string>
+    <string name="task_title">Aufgabe</string>
+    <string name="notes">Notizen</string>
+    <string name="due_date">Abgabetermin</string>
+    <string name="due_time">Abgabezeit</string>
+    <string name="due_time_state">Zu einer bestimmten Uhrzeit abgeben</string>
+    <string name="homework">Hausaufgaben</string>
+    <string name="project">Projekt</string>
+    <string name="lab">Praktikum</string>
+    <string name="new_task">Neue Aufgabe</string>
+    <string name="edit_task">Aufgabe bearbeiten</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

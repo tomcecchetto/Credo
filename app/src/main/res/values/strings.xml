@@ -89,6 +89,17 @@
     <string name="break_time">Break</string>
     <string name="no_open_tasks">No open tasks</string>
     <string name="add_task">Add task</string>
+    <string name="delete_task">Delete task?</string>
+    <string name="task_title">Task title</string>
+    <string name="notes">Notes</string>
+    <string name="due_date">Due date</string>
+    <string name="due_time">Due time</string>
+    <string name="due_time_state">Specific time</string>
+    <string name="homework">Homework</string>
+    <string name="project">Project</string>
+    <string name="lab">Lab</string>
+    <string name="new_task">New task</string>
+    <string name="edit_task">Edit task</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>

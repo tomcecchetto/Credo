@@ -11,6 +11,7 @@ import com.tom.romcom.ui.course.CourseSetupScreen
 import com.tom.romcom.ui.semester.SemesterSetupScreen
 import com.tom.romcom.ui.study.SessionEditScreen
 import com.tom.romcom.ui.study.StudySessionScreen
+import com.tom.romcom.ui.tasks.TaskEditScreen
 
 @Composable
 fun CredoApp() {
@@ -26,6 +27,7 @@ fun CredoApp() {
         entryProvider = entryProvider {
             entry<MainAreaRoute> {
                 MainArea(
+                    onAddTask = { backStack.add(TaskEditRoute()) },
                     onAddSemester = { backStack.add(SemesterSetupRoute) },
                     onAddCourse = { backStack.add(CourseSetupRoute()) },
                     onCourseClick = { id -> backStack.add(CourseSetupRoute(id)) },
@@ -58,6 +60,14 @@ fun CredoApp() {
                 SessionEditScreen(
                     sessionId = route.sessionId,
                     onBack ={ backStack.removeLastOrNull() },
+                    onSaved = { backStack.removeLastOrNull() },
+                    onDeleted = { backStack.removeLastOrNull() }
+                )
+            }
+            entry<TaskEditRoute> { route ->
+                TaskEditScreen(
+                    taskId = route.taskId,
+                    onBack = { backStack.removeLastOrNull() },
                     onSaved = { backStack.removeLastOrNull() },
                     onDeleted = { backStack.removeLastOrNull() }
                 )

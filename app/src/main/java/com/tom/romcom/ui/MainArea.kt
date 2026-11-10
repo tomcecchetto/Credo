@@ -29,6 +29,7 @@ enum class Tab {
 
 @Composable
 fun MainArea(
+    onAddTask: () -> Unit,
     onAddSession: () -> Unit,
     onSessionClick: (Int) -> Unit,
     onAddCourse: () -> Unit,
@@ -117,7 +118,9 @@ fun MainArea(
                     onEditTimetable = onEditTimetable,
                     onImportTimetable = onImportTimetable
                 )
-                Tab.TASK -> TaskScreen()
+                Tab.TASK -> TaskScreen(
+                    onAddTask = onAddTask
+                )
             }
         }
     }

@@ -7,17 +7,22 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.data.Course
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Semester
 import com.tom.romcom.data.Task
 import com.tom.romcom.data.TaskType
+import com.tom.romcom.ui.nextFreeColor
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.concurrent.TimeUnit
+
 @OptIn(ExperimentalCoroutinesApi::class)
 class TaskEditViewModel(application: Application) : AndroidViewModel(application){
 
@@ -57,8 +62,8 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
     fun onCourseIdChange(id: Int?) {
         courseId = id
     }
-    fun onDueDateChange(date: Long) {
-        dueDate = date
+    fun onDueDateChange(millis: Long) {
+        dueDate = TimeUnit.MILLISECONDS.toDays(millis)
     }
     fun onDueTimeChange(time: Int) {
         dueTime = time
@@ -129,6 +134,24 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
         viewModelScope.launch {
             taskDao.delete(existing)
             onDone()
+        }
+    }
+    fun createCourse(
+        name: String,
+        credits: Double
+    ) {
+        viewModelScope.launch {
+            val currentSemester = semester.first() ?: return@launch
+            val color = nextFreeColor(courses.first())
+            val newId = courseDao.insert(
+                Course(
+                    name = name,
+                    credits = credits,
+                    color = color,
+                    semesterId = currentSemester.id
+                )
+            ).toInt()
+            courseId = newId
         }
     }
 }
