@@ -31,6 +31,7 @@ fun TaskRow(
     onCheckedChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val dueStatus = dueStatusFor(taskWithCourse.task.dueEpochDay)
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -43,7 +44,7 @@ fun TaskRow(
         )
         Column(
             modifier = Modifier
-                .fillMaxWidth()
+                .weight(1f)
                 .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
             Text(
@@ -72,5 +73,6 @@ fun TaskRow(
                 )
             }
         }
+        DueChip(dueStatus = dueStatus, dueEpochDay = taskWithCourse.task.dueEpochDay, dueMinuteOfDay = taskWithCourse.task.dueMinuteOfDay, modifier = Modifier.padding(end = 16.dp))
     }
 }

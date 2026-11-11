@@ -21,7 +21,7 @@ fun DueChip(
     dueStatus: DueStatus, dueEpochDay: Long, dueMinuteOfDay: Int?, modifier: Modifier = Modifier
 ) {
     val day = dueLabelText(dueLabel = dueStatus.day, dueEpochDay = dueEpochDay)
-    val label = if (dueMinuteOfDay != null && dueStatus.level != Urgency.OVERDUE) "$day ${formatMinuteOfDay(dueMinuteOfDay)}"
+    val label = if (dueMinuteOfDay != null && dueStatus.level == Urgency.SOON) "$day ${formatMinuteOfDay(dueMinuteOfDay)}"
     else day
     val backgroundColor = when (dueStatus.level) {
         Urgency.OVERDUE -> MaterialTheme.colorScheme.error.copy(alpha = 0.18f)
