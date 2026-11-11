@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -37,6 +38,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.unit.dp
@@ -105,7 +107,7 @@ fun TaskEditScreen(
                 .imePadding()
                 .verticalScroll(rememberScrollState())
                 .pointerInput(Unit) {
-                    detectTapGestures(onTap =  { focusManager.clearFocus() })
+                    detectTapGestures(onTap = { focusManager.clearFocus() })
                 }
         ) {
             Column(
@@ -119,14 +121,14 @@ fun TaskEditScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                 ) {
-                    TaskType.entries.forEachIndexed { index, task ->
+                    TaskType.entries.forEachIndexed { index, type ->
                         SegmentedButton(
-                            selected = task == viewModel.taskType,
-                            onClick = { viewModel.onTaskTypeChange(task) },
+                            selected = type == viewModel.taskType,
+                            onClick = { viewModel.onTaskTypeChange(type) },
                             shape = itemShape(index = index, count = TaskType.entries.size),
                             icon = {}
                         ) {
-                            Text(taskLabel(task))
+                            Text(taskLabel(type))
                         }
                     }
                 }
@@ -136,7 +138,7 @@ fun TaskEditScreen(
                     label = { Text(stringResource(R.string.task_title)) },
                     singleLine = true,
                     keyboardOptions = KeyboardOptions(
-                        KeyboardCapitalization.Sentences,
+                        capitalization = KeyboardCapitalization.Sentences,
                         imeAction = ImeAction.Done
                     ),
                     keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
@@ -158,11 +160,18 @@ fun TaskEditScreen(
                 )
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .toggleable(
+                            value = viewModel.timeSet,
+                            onValueChange = { viewModel.onTimeSetChange(it) },
+                            role = Role.Switch
+                        )
                 ) {
                     Switch(
                         checked = viewModel.timeSet,
-                        onCheckedChange = { viewModel.onTimeSetChange(it) }
+                        onCheckedChange = null
                     )
                     Text(
                         text = stringResource(R.string.due_time_state),
@@ -182,7 +191,8 @@ fun TaskEditScreen(
                     onValueChange = { viewModel.onNotesChange(it) },
                     label = { Text(stringResource(R.string.notes)) },
                     keyboardOptions = KeyboardOptions(
-                        capitalization = KeyboardCapitalization.Sentences),
+                        capitalization = KeyboardCapitalization.Sentences
+                    ),
                     minLines = 3,
                     modifier = Modifier
                         .fillMaxWidth()
