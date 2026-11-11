@@ -27,6 +27,7 @@ fun CredoApp() {
         entryProvider = entryProvider {
             entry<MainAreaRoute> {
                 MainArea(
+                    onTaskClick = { id -> backStack.add(TaskEditRoute(id)) },
                     onAddTask = { backStack.add(TaskEditRoute()) },
                     onAddSemester = { backStack.add(SemesterSetupRoute) },
                     onAddCourse = { backStack.add(CourseSetupRoute()) },

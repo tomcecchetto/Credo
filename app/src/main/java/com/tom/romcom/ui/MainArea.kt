@@ -32,6 +32,7 @@ fun MainArea(
     onAddTask: () -> Unit,
     onAddSession: () -> Unit,
     onSessionClick: (Int) -> Unit,
+    onTaskClick: (Int) -> Unit,
     onAddCourse: () -> Unit,
     onEditTimetable: () -> Unit,
     onAddSemester: () -> Unit,
@@ -119,7 +120,8 @@ fun MainArea(
                     onImportTimetable = onImportTimetable
                 )
                 Tab.TASK -> TaskScreen(
-                    onAddTask = onAddTask
+                    onAddTask = onAddTask,
+                    onTaskClick = onTaskClick
                 )
             }
         }

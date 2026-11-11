@@ -88,7 +88,7 @@ fun TaskEditScreen(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
         topBar = {
             CredoTopBar(
-                title = if (taskId == null) stringResource(R.string.new_task) else stringResource(R.string.new_task),
+                title = if (taskId == null) stringResource(R.string.new_task) else stringResource(R.string.edit_task),
                 windowInsets = TopAppBarDefaults.windowInsets,
                 onBack = onBack,
                 onSave = { viewModel.save(onDone = onSaved) },
