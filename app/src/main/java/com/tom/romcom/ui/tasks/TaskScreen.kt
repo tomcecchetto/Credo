@@ -46,8 +46,10 @@ fun TaskScreen(
         floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
             ExtendedFloatingActionButton(onClick = onAddTask) {
-                Icon(painterResource(R.drawable.ic_add),
-                    contentDescription = stringResource(R.string.add_task))
+                Icon(
+                    painterResource(R.drawable.ic_add),
+                    contentDescription = stringResource(R.string.add_task)
+                )
                 Text(stringResource(R.string.add_task))
             }
         }
@@ -59,27 +61,11 @@ fun TaskScreen(
                 contentPadding = PaddingValues(bottom = 88.dp)
             ) {
                 items(items = openTasks, key = { it.task.id }) { taskWithCourse ->
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clickable(onClick = { onTaskClick(taskWithCourse.task.id) })
-                    ) {
-                        Checkbox(
-                            checked = taskWithCourse.task.isCompleted,
-                            onCheckedChange = { checked ->
-                                viewModel.setCompleted(
-                                    taskWithCourse.task,
-                                    checked
-                                )
-                            }
-                        )
-                        Text(
-                            text = taskWithCourse.task.title,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
+                    TaskRow(
+                        taskWithCourse = taskWithCourse,
+                        onClick = { onTaskClick(taskWithCourse.task.id) },
+                        onCheckedChange = { checked -> viewModel.setCompleted(taskWithCourse.task, checked) }
+                    )
                 }
             }
         } else {
