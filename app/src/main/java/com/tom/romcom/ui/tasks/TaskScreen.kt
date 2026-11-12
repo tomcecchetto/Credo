@@ -1,5 +1,6 @@
 package com.tom.romcom.ui.tasks
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -19,8 +20,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -37,6 +42,7 @@ fun TaskScreen(
 ) {
     val openTasks by viewModel.openTasks.collectAsState(initial = emptyList())
     val completedTasks by viewModel.completedTasks.collectAsState(initial = emptyList())
+    var expanded by remember { mutableStateOf(false) }
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -101,12 +107,17 @@ fun TaskScreen(
                             modifier =
                                 Modifier
                                     .fillMaxWidth()
+                                    .clickable(onClick = { expanded = !expanded })
                                     .padding(horizontal = 16.dp, vertical = 10.dp),
                             verticalAlignment = Alignment.CenterVertically,
                             horizontalArrangement = Arrangement.spacedBy(6.dp)
                         ) {
                             Icon(
-                                painterResource(R.drawable.ic_chevron_right), contentDescription = null
+                                painterResource(R.drawable.ic_chevron_right),
+                                contentDescription = null,
+                                modifier = if (expanded) Modifier.rotate(90f) else Modifier.rotate(
+                                    0f
+                                )
                             )
                             Text(
                                 text = stringResource(R.string.done_header, completedTasks.size),
@@ -116,17 +127,19 @@ fun TaskScreen(
                         }
                     }
                 }
-                items(items = completedTasks, key = { it.task.id }) { taskWithCourse ->
-                    TaskRow(
-                        taskWithCourse = taskWithCourse,
-                        onClick = { onTaskClick(taskWithCourse.task.id) },
-                        onCheckedChange = { checked ->
-                            viewModel.setCompleted(
-                                task = taskWithCourse.task,
-                                completed = checked
-                            )
-                        }
-                    )
+                if (expanded) {
+                    items(items = completedTasks, key = { it.task.id }) { taskWithCourse ->
+                        TaskRow(
+                            taskWithCourse = taskWithCourse,
+                            onClick = { onTaskClick(taskWithCourse.task.id) },
+                            onCheckedChange = { checked ->
+                                viewModel.setCompleted(
+                                    task = taskWithCourse.task,
+                                    completed = checked
+                                )
+                            }
+                        )
+                    }
                 }
             }
         }
