@@ -69,7 +69,8 @@ fun TaskScreen(
                 Text(
                     text = stringResource(R.string.no_open_tasks),
                     style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier
                 )
             }
         } else {
@@ -78,16 +79,39 @@ fun TaskScreen(
                     .padding(innerPadding),
                 contentPadding = PaddingValues(bottom = 88.dp)
             ) {
+                item(key = "open_header") {
+                    Text(
+                        text = if (openTasks.isNotEmpty()) stringResource(
+                            R.string.open_header,
+                            openTasks.size
+                        ) else stringResource(R.string.open_header_done),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 10.dp)
+                    )
+                }
                 if (openTasks.isEmpty()) {
                     item {
-                        Text(
-                            text = stringResource(R.string.tasks_done),
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            modifier = Modifier.padding(16.dp)
-                        )
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(
+                                6.dp,
+                                alignment = Alignment.CenterHorizontally
+                            )
+                        ) {
+                            Text(
+                                text = stringResource(R.string.tasks_done),
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            )
+                        }
                     }
                 } else {
+
                     items(items = openTasks, key = { it.task.id }) { taskWithCourse ->
                         TaskRow(
                             taskWithCourse = taskWithCourse,
