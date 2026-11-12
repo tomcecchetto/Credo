@@ -101,6 +101,7 @@
     <string name="new_task">New task</string>
     <string name="edit_task">Edit task</string>
     <string name="tasks_done">All tasks completed!</string>
+    <string name="done_header">Done (%d)</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>
