@@ -100,6 +100,7 @@
     <string name="lab">Praktikum</string>
     <string name="new_task">Neue Aufgabe</string>
     <string name="edit_task">Aufgabe bearbeiten</string>
+    <string name="tasks_done">Alle Aufgaben erledigt!</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
