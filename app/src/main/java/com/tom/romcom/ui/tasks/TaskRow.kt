@@ -33,6 +33,7 @@ fun TaskRow(
 ) {
     val dueStatus = dueStatusFor(taskWithCourse.task.dueEpochDay)
     val fadedColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+    val colorDotFade = if (taskWithCourse.task.isCompleted) 0.4f else 1f
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -65,7 +66,7 @@ fun TaskRow(
                     modifier = Modifier
                         .size(8.dp)
                         .background(
-                            color = if (taskWithCourse.color != null) Color(taskWithCourse.color).copy(alpha = 0.4f) else Color.LightGray.copy(alpha = 0.4f),
+                            color = if (taskWithCourse.color != null) Color(taskWithCourse.color).copy(alpha = colorDotFade) else Color.LightGray.copy(alpha = colorDotFade),
                             shape = CircleShape
                         )
                 )
