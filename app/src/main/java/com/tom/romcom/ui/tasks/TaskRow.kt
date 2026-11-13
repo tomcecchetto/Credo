@@ -32,6 +32,7 @@ fun TaskRow(
     modifier: Modifier = Modifier
 ) {
     val dueStatus = dueStatusFor(taskWithCourse.task.dueEpochDay)
+    val fadedColor = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -50,7 +51,7 @@ fun TaskRow(
             Text(
                 text = taskWithCourse.task.title,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
+                color = if (taskWithCourse.task.isCompleted) fadedColor else MaterialTheme.colorScheme.onSurface,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
@@ -63,16 +64,26 @@ fun TaskRow(
                 Box(
                     modifier = Modifier
                         .size(8.dp)
-                        .background(color = if (taskWithCourse.color != null) Color(taskWithCourse.color) else Color.LightGray, shape = CircleShape)
+                        .background(
+                            color = if (taskWithCourse.color != null) Color(taskWithCourse.color).copy(alpha = 0.4f) else Color.LightGray.copy(alpha = 0.4f),
+                            shape = CircleShape
+                        )
                 )
                 Text(
                     text = "${taskWithCourse.courseName ?: stringResource(R.string.no_course)} · ${taskLabel(taskWithCourse.task.taskType)}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    color = if (taskWithCourse.task.isCompleted) fadedColor else MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(6.dp)
                 )
             }
         }
-        DueChip(dueStatus = dueStatus, dueEpochDay = taskWithCourse.task.dueEpochDay, dueMinuteOfDay = taskWithCourse.task.dueMinuteOfDay, modifier = Modifier.padding(end = 16.dp))
+        if (!taskWithCourse.task.isCompleted) {
+            DueChip(
+                dueStatus = dueStatus,
+                dueEpochDay = taskWithCourse.task.dueEpochDay,
+                dueMinuteOfDay = taskWithCourse.task.dueMinuteOfDay,
+                modifier = Modifier.padding(end = 16.dp)
+            )
+        }
     }
 }
