@@ -125,32 +125,34 @@ fun TaskScreen(
                         )
                     }
                 }
-                if (completedTasks.isNotEmpty()) {
-                    item("done_header") {
-                        Row(
-                            modifier =
-                                Modifier
-                                    .fillMaxWidth()
-                                    .clickable(onClick = { expanded = !expanded })
-                                    .padding(horizontal = 16.dp, vertical = 10.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.spacedBy(6.dp)
-                        ) {
-                            Icon(
-                                painterResource(R.drawable.ic_chevron_right),
-                                contentDescription = null,
-                                modifier = if (expanded) Modifier.rotate(90f) else Modifier.rotate(
-                                    0f
-                                )
+                item("done_header") {
+                    Row(
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable(onClick = { expanded = !expanded })
+                                .padding(horizontal = 16.dp, vertical = 10.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        Icon(
+                            painterResource(R.drawable.ic_chevron_right),
+                            contentDescription = null,
+                            modifier = if (expanded) Modifier.rotate(90f) else Modifier.rotate(
+                                0f
                             )
-                            Text(
-                                text = stringResource(R.string.done_header, completedTasks.size),
-                                style = MaterialTheme.typography.labelLarge,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                        }
+                        )
+                        Text(
+                            text = if (completedTasks.isEmpty()) stringResource(R.string.done_header_empty) else stringResource(
+                                R.string.done_header,
+                                completedTasks.size
+                            ),
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
                     }
                 }
+
                 if (expanded) {
                     items(items = completedTasks, key = { it.task.id }) { taskWithCourse ->
                         TaskRow(

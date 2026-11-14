@@ -104,6 +104,7 @@
     <string name="done_header">Done (%d)</string>
     <string name="open_header">Open (%d)</string>
     <string name="open_header_done">Open</string>
+    <string name="done_header_empty">Done</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>
