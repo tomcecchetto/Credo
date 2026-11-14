@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Task
+import com.tom.romcom.data.TaskWithCourse
 import kotlinx.coroutines.launch
 
 class TaskViewModel(application: Application) : AndroidViewModel(application) {
@@ -18,6 +19,13 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         val taskCopy = task.copy(isCompleted = completed)
         viewModelScope.launch {
             taskDao.update(taskCopy)
+        }
+    }
+
+    fun deleteTasks(tasks: List<TaskWithCourse>) {
+        val listOfTasks = tasks.map { it.task }
+        viewModelScope.launch {
+            taskDao.deleteTasks(listOfTasks)
         }
     }
 }

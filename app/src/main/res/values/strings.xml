@@ -118,4 +118,8 @@
         <item quantity="one">%d weekly goal reached</item>
         <item quantity="other">%d weekly goals reached</item>
     </plurals>
+    <plurals name="delete_tasks">
+        <item quantity="one">Delete %d task?</item>
+        <item quantity="other">Delete %d tasks?</item>
+    </plurals>
 </resources>

@@ -39,4 +39,7 @@ interface TaskDao {
 
     @Delete
     suspend fun delete(task: Task)
+
+    @Delete
+    suspend fun deleteTasks(tasks: List<Task>)
 }
