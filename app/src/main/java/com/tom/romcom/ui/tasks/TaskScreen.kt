@@ -46,8 +46,8 @@ fun TaskScreen(
     modifier: Modifier = Modifier,
     viewModel: TaskViewModel = viewModel()
 ) {
-    val openTasks by viewModel.openTasks.collectAsState(initial = emptyList())
-    val completedTasks by viewModel.completedTasks.collectAsState(initial = emptyList())
+    val openTasks by viewModel.openTasksByType.collectAsState(initial = emptyList())
+    val completedTasks by viewModel.completedTasksByType.collectAsState(initial = emptyList())
     var expanded by remember { mutableStateOf(false) }
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
 
