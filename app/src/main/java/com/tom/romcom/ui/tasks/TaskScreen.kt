@@ -1,6 +1,7 @@
 package com.tom.romcom.ui.tasks
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -11,9 +12,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -36,6 +39,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.R
+import com.tom.romcom.data.TaskType
 import com.tom.romcom.ui.CredoTopBar
 
 
@@ -46,19 +50,29 @@ fun TaskScreen(
     modifier: Modifier = Modifier,
     viewModel: TaskViewModel = viewModel()
 ) {
-    val openTasks by viewModel.openTasksByType.collectAsState(initial = emptyList())
-    val completedTasks by viewModel.completedTasksByType.collectAsState(initial = emptyList())
+    val filteredOpenTasks by viewModel.openTasksByType.collectAsState(initial = emptyList())
+    val filteredCompletedTasks by viewModel.completedTasksByType.collectAsState(initial = emptyList())
+    val openTasks by viewModel.openTasks.collectAsState(initial = emptyList())
+    val completedTasks by viewModel.completedTasks.collectAsState(initial = emptyList())
+    val selectedTypes by viewModel.selectedTypes.collectAsState()
     var expanded by remember { mutableStateOf(false) }
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
 
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
-            title = { Text(pluralStringResource(R.plurals.delete_tasks, completedTasks.size )) },
+            title = {
+                Text(
+                    pluralStringResource(
+                        R.plurals.delete_tasks,
+                        filteredCompletedTasks.size
+                    )
+                )
+            },
             text = { Text(stringResource(R.string.cannot_be_undone)) },
             confirmButton = {
                 TextButton(onClick = {
-                    viewModel.deleteTasks(completedTasks); showDeleteDialog = false
+                    viewModel.deleteTasks(filteredCompletedTasks); showDeleteDialog = false
                 }) {
                     Text(stringResource(R.string.delete))
                 }
@@ -107,11 +121,37 @@ fun TaskScreen(
                     .padding(innerPadding),
                 contentPadding = PaddingValues(bottom = 88.dp)
             ) {
+                item(key = "filter_chips") {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .horizontalScroll(rememberScrollState())
+                            .padding(horizontal = 16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        TaskType.entries.forEach { type ->
+                            FilterChip(
+                                selected = type in selectedTypes,
+                                onClick = { viewModel.toggleType(type) },
+                                label = { Text(taskLabel(type)) },
+                                leadingIcon = if (type in selectedTypes) {
+                                    {
+                                        Icon(
+                                            painterResource(R.drawable.ic_check),
+                                            contentDescription = null
+                                        )
+                                    }
+                                } else null
+                            )
+                        }
+                    }
+                }
                 item(key = "open_header") {
                     Text(
-                        text = if (openTasks.isNotEmpty()) stringResource(
+                        text = if (filteredOpenTasks.isNotEmpty()) stringResource(
                             R.string.open_header,
-                            openTasks.size
+                            filteredOpenTasks.size
                         ) else stringResource(R.string.open_header_done),
                         style = MaterialTheme.typography.labelLarge,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -120,7 +160,7 @@ fun TaskScreen(
                             .padding(horizontal = 16.dp, vertical = 10.dp)
                     )
                 }
-                if (openTasks.isEmpty()) {
+                if (filteredOpenTasks.isEmpty()) {
                     item {
                         Row(
                             modifier = Modifier
@@ -132,7 +172,8 @@ fun TaskScreen(
                             )
                         ) {
                             Text(
-                                text = stringResource(R.string.tasks_done),
+                                text = if (openTasks.isEmpty()) stringResource(R.string.tasks_done)
+                                else stringResource(R.string.no_open_tasks_filter),
                                 style = MaterialTheme.typography.titleMedium,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                             )
@@ -140,7 +181,7 @@ fun TaskScreen(
                     }
                 } else {
 
-                    items(items = openTasks, key = { it.task.id }) { taskWithCourse ->
+                    items(items = filteredOpenTasks, key = { it.task.id }) { taskWithCourse ->
                         TaskRow(
                             taskWithCourse = taskWithCourse,
                             onClick = { onTaskClick(taskWithCourse.task.id) },
@@ -172,9 +213,9 @@ fun TaskScreen(
                             )
                         )
                         Text(
-                            text = if (completedTasks.isEmpty()) stringResource(R.string.done_header_empty) else stringResource(
+                            text = if (filteredCompletedTasks.isEmpty()) stringResource(R.string.done_header_empty) else stringResource(
                                 R.string.done_header,
-                                completedTasks.size
+                                filteredCompletedTasks.size
                             ),
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
@@ -182,7 +223,7 @@ fun TaskScreen(
                         )
                         IconButton(
                             onClick = { showDeleteDialog = true },
-                            enabled = completedTasks.isNotEmpty()
+                            enabled = filteredCompletedTasks.isNotEmpty()
                         ) {
                             Icon(
                                 painterResource(R.drawable.ic_delete),
@@ -193,7 +234,7 @@ fun TaskScreen(
                 }
 
                 if (expanded) {
-                    items(items = completedTasks, key = { it.task.id }) { taskWithCourse ->
+                    items(items = filteredCompletedTasks, key = { it.task.id }) { taskWithCourse ->
                         TaskRow(
                             taskWithCourse = taskWithCourse,
                             onClick = { onTaskClick(taskWithCourse.task.id) },

@@ -9,6 +9,7 @@ import com.tom.romcom.data.TaskType
 import com.tom.romcom.data.TaskWithCourse
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.launch
 
@@ -18,11 +19,12 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
     private val taskDao = db.taskDao()
     val openTasks = taskDao.getOpenTasks()
     val completedTasks = taskDao.getCompletedTasks()
-    val selectedTypes = MutableStateFlow<Set<TaskType>>(value = emptySet())
+    private val _selectedTypes = MutableStateFlow<Set<TaskType>>(value = emptySet())
+    val selectedTypes: StateFlow<Set<TaskType>> = _selectedTypes
     val openTasksByType: Flow<List<TaskWithCourse>> = combine(openTasks, selectedTypes) { tasks, types ->
         if (types.isEmpty()) tasks else tasks.filter { it.task.taskType in types }
     }
-    val completedTasksByType: Flow<List<TaskWithCourse>> = combine(completedTasks, selectedTypes ) { tasks, types ->
+    val completedTasksByType: Flow<List<TaskWithCourse>> = combine(completedTasks, _selectedTypes) { tasks, types ->
         if (types.isEmpty()) tasks else tasks.filter { it.task.taskType in types }
     }
 
@@ -37,6 +39,10 @@ class TaskViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             taskDao.deleteTasks(listOfTasks)
         }
+    }
+    fun toggleType(taskType: TaskType) {
+        _selectedTypes.value = if (taskType in _selectedTypes.value) _selectedTypes.value - taskType
+            else _selectedTypes.value + taskType
     }
 
 }

@@ -97,7 +97,7 @@
     <string name="due_time_state">Zu einer bestimmten Uhrzeit abgeben</string>
     <string name="homework">Hausaufgaben</string>
     <string name="project">Projekt</string>
-    <string name="lab">Praktikum</string>
+    <string name="lab">Labor</string>
     <string name="new_task">Neue Aufgabe</string>
     <string name="edit_task">Aufgabe bearbeiten</string>
     <string name="tasks_done">Alle Aufgaben erledigt!</string>
@@ -105,6 +105,7 @@
     <string name="open_header">Offen (%d)</string>
     <string name="open_header_done">Offen</string>
     <string name="done_header_empty">Erledigt</string>
+    <string name="no_open_tasks_filter">Keine offenen Aufgaben für diesen Filter</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
