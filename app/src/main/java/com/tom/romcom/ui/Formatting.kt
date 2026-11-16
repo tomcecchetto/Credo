@@ -30,10 +30,13 @@ fun formatDuration(millis: Long): String {
 }
 
 fun formatDateTime(millis: Long): String {
-    val formatter = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM, FormatStyle.SHORT)
-    return Instant.ofEpochMilli(millis)
+    val dateFormatter = DateTimeFormatter.ofLocalizedDate(FormatStyle.MEDIUM)
+    val dateTime = Instant.ofEpochMilli(millis)
         .atZone(ZoneId.systemDefault())
-        .format(formatter)
+    val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+    val date = dateTime.format(dateFormatter)
+    val time = dateTime.format(timeFormatter)
+    return "$date, $time"
 }
 
 fun formatMinuteOfDay(minute: Int?): String {
