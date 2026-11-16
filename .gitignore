@@ -16,3 +16,4 @@ local.properties
 reviews/
 *.jks
 /app/release
+/Claude outputs/
