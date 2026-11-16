@@ -7,13 +7,17 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
+import androidx.glance.ImageProvider
 import androidx.glance.action.ActionParameters
+import androidx.glance.action.actionParametersOf
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.action.ActionCallback
+import androidx.glance.appwidget.action.actionRunCallback
+import androidx.glance.appwidget.components.CircleIconButton
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
@@ -27,6 +31,7 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
+import androidx.glance.layout.size
 import androidx.glance.layout.width
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
@@ -35,6 +40,7 @@ import androidx.glance.text.TextStyle
 import com.tom.romcom.MainActivity
 import com.tom.romcom.R
 import com.tom.romcom.data.CredoDatabase
+import com.tom.romcom.data.StudySession
 import kotlinx.coroutines.flow.first
 
 class StudySessionWidget : GlanceAppWidget() {
@@ -147,6 +153,14 @@ class StudySessionWidget : GlanceAppWidget() {
                                                 .defaultWeight()
                                                 .padding(start = 12.dp)
                                         )
+                                        CircleIconButton(
+                                            imageProvider = ImageProvider(R.drawable.ic_play),
+                                            contentDescription = context.getString(R.string.start),
+                                            onClick = actionRunCallback<StartSessionCallback>(
+                                                actionParametersOf(CourseIdKey to course.id)
+                                            ),
+                                            modifier = GlanceModifier.size(48.dp)
+                                        )
                                     }
                                 }
                             }
@@ -163,13 +177,22 @@ class StudySessionWidgetReceiver : GlanceAppWidgetReceiver() {
 }
 
 val CourseIdKey = ActionParameters.Key<Int>("courseIdKey")
-class RecordSessionCallback : ActionCallback {
+
+class StartSessionCallback : ActionCallback {
     override suspend fun onAction(
         context: Context,
         glanceId: GlanceId,
         parameters: ActionParameters
     ) {
-
+        val courseId = parameters[CourseIdKey] ?: return
+        val studySessionDao = CredoDatabase.getDatabase(context).studySessionDao()
+        studySessionDao.startIfNoneRunning(
+            session = StudySession(
+                courseId = courseId,
+                startTime = System.currentTimeMillis()
+            )
+        )
+        updateAllWidgets(context)
     }
 }
 
