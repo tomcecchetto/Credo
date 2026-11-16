@@ -106,6 +106,7 @@
     <string name="open_header_done">Open</string>
     <string name="done_header_empty">Done</string>
     <string name="no_open_tasks_filter">No open tasks for this filter</string>
+    <string name="since">Since %s</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>

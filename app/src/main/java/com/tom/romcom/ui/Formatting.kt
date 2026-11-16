@@ -39,6 +39,12 @@ fun formatDateTime(millis: Long): String {
     return "$date, $time"
 }
 
+fun formatTime(millis: Long): String {
+    val formatter = DateTimeFormatter.ofPattern("HH:mm")
+    val dateTime = Instant.ofEpochMilli(millis).atZone(ZoneId.systemDefault())
+    return dateTime.format(formatter)
+}
+
 fun formatMinuteOfDay(minute: Int?): String {
     if (minute == null) return ""
     val formatter = DateTimeFormatter.ofPattern("HH:mm")

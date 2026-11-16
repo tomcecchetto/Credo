@@ -58,6 +58,7 @@ class StudyViewModel(application: Application) : AndroidViewModel(application) {
                     startTime = System.currentTimeMillis()
                 )
             )
+            updateAllWidgets(getApplication())
         }
     }
 

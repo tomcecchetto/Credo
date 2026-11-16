@@ -1,6 +1,8 @@
 package com.tom.romcom.widget
 
 import android.content.Context
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,6 +35,7 @@ import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
 import androidx.glance.layout.width
+import androidx.glance.text.FontStyle
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
@@ -41,6 +44,7 @@ import com.tom.romcom.MainActivity
 import com.tom.romcom.R
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.StudySession
+import com.tom.romcom.ui.formatTime
 import kotlinx.coroutines.flow.first
 
 class StudySessionWidget : GlanceAppWidget() {
@@ -51,6 +55,7 @@ class StudySessionWidget : GlanceAppWidget() {
         val db = CredoDatabase.getDatabase(context)
         val semesterDao = db.semesterDao()
         val courseDao = db.courseDao()
+        val studySessionDao = db.studySessionDao()
 
         val semester = semesterDao.getCurrentSemesterOnce() ?: provideContent {
             GlanceTheme {
@@ -72,6 +77,7 @@ class StudySessionWidget : GlanceAppWidget() {
         }
         val courses = courseDao.getCoursesForSemester(semester.id).first()
         provideContent {
+            val runningSession by studySessionDao.getRunningSession().collectAsState(initial = null)
             GlanceTheme {
                 Box(
                     modifier = GlanceModifier
@@ -128,10 +134,23 @@ class StudySessionWidget : GlanceAppWidget() {
                                     .defaultWeight()
                             ) {
                                 items(courses, itemId = { it.id.toLong() }) { course ->
+                                    val isRunning = runningSession?.courseId == course.id
+                                    val isOtherRunning = runningSession != null && !isRunning
                                     Row(
                                         modifier = GlanceModifier
                                             .fillMaxWidth()
-                                            .padding(vertical = 4.dp)
+                                            .padding(
+                                                start = 8.dp,
+                                                top = 4.dp,
+                                                end = 4.dp,
+                                                bottom = 4.dp
+                                            )
+                                            .background(
+                                                if (isRunning) Color(course.color).copy(
+                                                    alpha = 0.18f
+                                                ) else Color.Transparent
+                                            )
+                                            .cornerRadius(12.dp)
                                             .clickable(onClick = actionStartActivity<MainActivity>()),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
@@ -142,17 +161,30 @@ class StudySessionWidget : GlanceAppWidget() {
                                                 .cornerRadius(2.dp)
                                                 .background(Color(course.color))
                                         ) { }
-                                        Text(
-                                            text = course.name,
-                                            style = TextStyle(
-                                                color = GlanceTheme.colors.onSurface,
-                                                fontWeight = FontWeight.Medium
-                                            ),
-                                            maxLines = 1,
-                                            modifier = GlanceModifier
-                                                .defaultWeight()
+                                        Column(
+                                            modifier = GlanceModifier.defaultWeight()
                                                 .padding(start = 12.dp)
-                                        )
+                                        ) {
+                                            Text(
+                                                text = course.name,
+                                                style = TextStyle(
+                                                    color = GlanceTheme.colors.onSurface,
+                                                    fontWeight = FontWeight.Medium
+                                                ),
+                                                maxLines = 1
+                                            )
+                                            if (isRunning) {
+                                                Text(
+                                                    text = context.getString(R.string.since,
+                                                        formatTime(runningSession?.startTime ?: return@Column)
+                                                    ),
+                                                    style = TextStyle(
+                                                        color = GlanceTheme.colors.onSurfaceVariant,
+                                                        fontSize = 12.sp
+                                                    )
+                                                )
+                                            }
+                                        }
                                         CircleIconButton(
                                             imageProvider = ImageProvider(R.drawable.ic_play),
                                             contentDescription = context.getString(R.string.start),
@@ -161,6 +193,7 @@ class StudySessionWidget : GlanceAppWidget() {
                                             ),
                                             modifier = GlanceModifier.size(48.dp)
                                         )
+
                                     }
                                 }
                             }
