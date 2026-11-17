@@ -35,7 +35,6 @@ import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
 import androidx.glance.layout.width
-import androidx.glance.text.FontStyle
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
@@ -136,6 +135,24 @@ class StudySessionWidget : GlanceAppWidget() {
                                 items(courses, itemId = { it.id.toLong() }) { course ->
                                     val isRunning = runningSession?.courseId == course.id
                                     val isOtherRunning = runningSession != null && !isRunning
+                                    val icon = if (isRunning) ImageProvider(R.drawable.ic_stop) else ImageProvider(R.drawable.ic_play)
+                                    val contentDescription = if (isRunning) context.getString(R.string.stop) else context.getString(R.string.start)
+                                    val onClick = if (isRunning) actionRunCallback<StartSessionCallback>(
+                                        parameters = actionParametersOf(CourseIdKey to course.id)
+                                    ) else actionRunCallback<StartSessionCallback>(
+                                        parameters = actionParametersOf(CourseIdKey to course.id)
+                                    )
+                                    val backgroundColor = when {
+                                        isRunning -> GlanceTheme.colors.primary
+                                        isOtherRunning -> GlanceTheme.colors.widgetBackground
+                                        else -> GlanceTheme.colors.background
+                                    }
+                                    val enabled = !isOtherRunning
+                                    val contentColor = when {
+                                        isRunning -> GlanceTheme.colors.onPrimary
+                                        isOtherRunning -> GlanceTheme.colors.outline
+                                        else -> GlanceTheme.colors.onSurface
+                                    }
                                     Row(
                                         modifier = GlanceModifier
                                             .fillMaxWidth()
@@ -186,11 +203,12 @@ class StudySessionWidget : GlanceAppWidget() {
                                             }
                                         }
                                         CircleIconButton(
-                                            imageProvider = ImageProvider(R.drawable.ic_play),
-                                            contentDescription = context.getString(R.string.start),
-                                            onClick = actionRunCallback<StartSessionCallback>(
-                                                actionParametersOf(CourseIdKey to course.id)
-                                            ),
+                                            imageProvider = icon,
+                                            contentDescription = contentDescription,
+                                            onClick = onClick,
+                                            enabled = enabled,
+                                            backgroundColor = backgroundColor,
+                                            contentColor = contentColor,
                                             modifier = GlanceModifier.size(48.dp)
                                         )
 
