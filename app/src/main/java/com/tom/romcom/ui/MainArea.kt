@@ -38,9 +38,10 @@ fun MainArea(
     onAddSemester: () -> Unit,
     onCourseClick: (Int) -> Unit,
     onImportTimetable: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    startTab: Tab = Tab.PROGRESS,
 ) {
-    var selectedTab by rememberSaveable { mutableStateOf(Tab.PROGRESS) }
+    var selectedTab by rememberSaveable { mutableStateOf(startTab) }
 
 
     Scaffold(

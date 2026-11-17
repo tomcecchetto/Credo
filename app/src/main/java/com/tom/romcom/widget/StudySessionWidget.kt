@@ -1,6 +1,7 @@
 package com.tom.romcom.widget
 
 import android.content.Context
+import androidx.compose.material3.Tab
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.Color
@@ -41,8 +42,10 @@ import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
 import com.tom.romcom.MainActivity
 import com.tom.romcom.R
+import com.tom.romcom.START_TAB_EXTRA
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.StudySession
+import com.tom.romcom.ui.Tab
 import com.tom.romcom.ui.formatTime
 import kotlinx.coroutines.flow.first
 
@@ -61,7 +64,8 @@ class StudySessionWidget : GlanceAppWidget() {
                 Box(
                     modifier = GlanceModifier
                         .fillMaxSize()
-                        .background(GlanceTheme.colors.widgetBackground),
+                        .background(GlanceTheme.colors.widgetBackground)
+                        .clickable(onClick = actionStartActivity<MainActivity>()),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(
@@ -83,7 +87,7 @@ class StudySessionWidget : GlanceAppWidget() {
                         .fillMaxSize()
                         .background(GlanceTheme.colors.widgetBackground)
                         .padding(16.dp)
-                        .clickable(actionStartActivity<MainActivity>())
+                        .clickable(actionStartActivity<MainActivity>(parameters = actionParametersOf(StartTabKey to Tab.STUDY.name)))
                 ) {
                     Column(
                         modifier = GlanceModifier
@@ -133,13 +137,13 @@ class StudySessionWidget : GlanceAppWidget() {
                                     .defaultWeight()
                             ) {
                                 items(courses, itemId = { it.id.toLong() }) { course ->
+
                                     val isRunning = runningSession?.courseId == course.id
                                     val isOtherRunning = runningSession != null && !isRunning
                                     val icon = if (isRunning) ImageProvider(R.drawable.ic_stop) else ImageProvider(R.drawable.ic_play)
                                     val contentDescription = if (isRunning) context.getString(R.string.stop) else context.getString(R.string.start)
-                                    val onClick = if (isRunning) actionRunCallback<StartSessionCallback>(
-                                        parameters = actionParametersOf(CourseIdKey to course.id)
-                                    ) else actionRunCallback<StartSessionCallback>(
+                                    val onClick = if (isRunning) actionRunCallback<StopSessionCallback>()
+                                    else actionRunCallback<StartSessionCallback>(
                                         parameters = actionParametersOf(CourseIdKey to course.id)
                                     )
                                     val backgroundColor = when {
@@ -153,6 +157,7 @@ class StudySessionWidget : GlanceAppWidget() {
                                         isOtherRunning -> GlanceTheme.colors.outline
                                         else -> GlanceTheme.colors.onSurface
                                     }
+
                                     Row(
                                         modifier = GlanceModifier
                                             .fillMaxWidth()
@@ -168,7 +173,9 @@ class StudySessionWidget : GlanceAppWidget() {
                                                 ) else Color.Transparent
                                             )
                                             .cornerRadius(12.dp)
-                                            .clickable(onClick = actionStartActivity<MainActivity>()),
+                                            .clickable(onClick = actionStartActivity<MainActivity>(
+                                                parameters = actionParametersOf(StartTabKey to Tab.STUDY.name)
+                                            )),
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
                                         Box(
@@ -228,6 +235,7 @@ class StudySessionWidgetReceiver : GlanceAppWidgetReceiver() {
 }
 
 val CourseIdKey = ActionParameters.Key<Int>("courseIdKey")
+val StartTabKey = ActionParameters.Key<String>(START_TAB_EXTRA)
 
 class StartSessionCallback : ActionCallback {
     override suspend fun onAction(
@@ -243,6 +251,23 @@ class StartSessionCallback : ActionCallback {
                 startTime = System.currentTimeMillis()
             )
         )
+        updateAllWidgets(context)
+    }
+}
+
+class StopSessionCallback : ActionCallback {
+    override suspend fun onAction(
+        context: Context,
+        glanceId: GlanceId,
+        parameters: ActionParameters
+    ) {
+        val studySessionDao = CredoDatabase.getDatabase(context).studySessionDao()
+        val running = studySessionDao.getRunningSessionNow()
+        if (running != null) {
+            studySessionDao.update(
+                running.copy(endTime = System.currentTimeMillis())
+            )
+        }
         updateAllWidgets(context)
     }
 }
