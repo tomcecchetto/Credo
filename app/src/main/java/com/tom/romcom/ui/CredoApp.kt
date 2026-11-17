@@ -15,7 +15,9 @@ import com.tom.romcom.ui.tasks.TaskEditScreen
 
 @Composable
 fun CredoApp(
-    startTab: Tab = Tab.PROGRESS
+    startTab: Tab = Tab.PROGRESS,
+    tabRequest: Tab? = null,
+    onTabRequestHandled: () -> Unit = {}
 ) {
     val backStack = rememberNavBackStack(MainAreaRoute)
 
@@ -38,7 +40,9 @@ fun CredoApp(
                     onAddSession = { backStack.add(SessionEditRoute()) },
                     onEditTimetable = { backStack.add(TimetableSetupRoute()) },
                     onImportTimetable = { backStack.add(TimetableSetupRoute(openPicker = true)) },
-                    startTab = startTab
+                    startTab = startTab,
+                    tabRequest = tabRequest,
+                    onTabRequestHandled = onTabRequestHandled
                 )
             }
             entry<SemesterSetupRoute> {
