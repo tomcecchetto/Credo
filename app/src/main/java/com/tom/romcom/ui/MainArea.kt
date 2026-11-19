@@ -127,7 +127,8 @@ fun MainArea(
                 )
                 Tab.CALENDAR -> CalendarScreen(
                     onEditTimetable = onEditTimetable,
-                    onImportTimetable = onImportTimetable
+                    onImportTimetable = onImportTimetable,
+                    onTaskClick = onTaskClick
                 )
                 Tab.TASK -> TaskScreen(
                     onAddTask = onAddTask,

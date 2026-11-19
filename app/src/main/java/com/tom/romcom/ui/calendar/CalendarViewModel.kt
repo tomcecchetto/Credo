@@ -2,9 +2,11 @@ package com.tom.romcom.ui.calendar
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Exam
 import com.tom.romcom.data.Semester
+import com.tom.romcom.data.Task
 import com.tom.romcom.data.TaskWithCourse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -13,6 +15,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -51,11 +54,19 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val selectedDay: StateFlow<Long> = _selectedDay
     val selectedView: StateFlow<CalendarView> = _selectedView
     val slots = slotDao.getAllSlots()
-    val lectures = _selectedDay.flatMapLatest { day -> lectureDao.getLecturesForDay(day) }
+    val lectures = _selectedDay.flatMapLatest { day ->
+        lectureDao.getLecturesForDay(day)
+    }
+    val tasksForDay = _selectedDay.flatMapLatest { day ->
+        taskDao.getTasksForDay(day)
+    }
     val weekLectures = _selectedDay.flatMapLatest { day ->
         val startDay = weekStart(day)
         val endDay = startDay + 6
         lectureDao.getLecturesBetween(startDay, endDay)
+    }
+    val examsForDay = _selectedDay.flatMapLatest { day ->
+        examDao.getExamsForDay(day)
     }
 
     private fun monthJump(direction: Long): Long {
@@ -90,5 +101,12 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     fun selectDay(day: Long) {
         _selectedDay.value = day
+    }
+
+    fun setCompleted(task: Task, completed: Boolean) {
+        val taskCopy = task.copy(isCompleted = completed)
+        viewModelScope.launch {
+            taskDao.update(taskCopy)
+        }
     }
 }

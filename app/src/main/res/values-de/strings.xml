@@ -107,6 +107,8 @@
     <string name="done_header_empty">Erledigt</string>
     <string name="no_open_tasks_filter">Keine offenen Aufgaben für diesen Filter</string>
     <string name="since">Seit %s</string>
+    <string name="no_tasks_or_exams">Keine Aufgaben oder Prüfungen</string>
+    <string name="exam_row_title">Prüfung %s</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

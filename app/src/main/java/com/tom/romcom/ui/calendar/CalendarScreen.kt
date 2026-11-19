@@ -43,6 +43,7 @@ import com.tom.romcom.ui.CredoTopBar
 import com.tom.romcom.ui.formatDayHeader
 import com.tom.romcom.ui.formatMinuteOfDay
 import com.tom.romcom.ui.formatShortDate
+import com.tom.romcom.ui.tasks.TaskRow
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
@@ -55,6 +56,7 @@ import java.util.Locale
 fun CalendarScreen(
     onEditTimetable: () -> Unit,
     onImportTimetable: () -> Unit,
+    onTaskClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: CalendarViewModel = viewModel()
 ) {
@@ -68,6 +70,8 @@ fun CalendarScreen(
     val openDeadlineDays by viewModel.openDeadlineDays.collectAsState(initial = emptySet())
     val completedDeadlineDays by viewModel.completedDeadlineDays.collectAsState(initial = emptySet())
     val examDays by viewModel.examDays.collectAsState(initial = emptySet())
+    val examsForDay by viewModel.examsForDay.collectAsState(initial = emptyList())
+    val tasksForDay by viewModel.tasksForDay.collectAsState(initial = emptyList())
 
     Scaffold(
         modifier = modifier,
@@ -425,7 +429,7 @@ fun CalendarScreen(
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp, vertical = 8.dp)
                             )
-                            if (lectures.isEmpty()) {
+                            if (examsForDay.isEmpty() && tasksForDay.isEmpty()) {
                                 Column(
                                     modifier = Modifier
                                         .fillMaxWidth()
@@ -434,7 +438,7 @@ fun CalendarScreen(
                                     verticalArrangement = Arrangement.Center
                                 ) {
                                     Text(
-                                        text = stringResource(R.string.no_lectures),
+                                        text = stringResource(R.string.no_tasks_or_exams),
                                         style = MaterialTheme.typography.bodyLarge,
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
@@ -445,9 +449,21 @@ fun CalendarScreen(
                                         .fillMaxWidth()
                                         .weight(1f)
                                 ) {
-                                    items(lectures) { lecture ->
-                                        LectureRowCompact(
-                                            lecture = lecture
+                                    items(examsForDay) { exam ->
+                                        ExamRow(
+                                            exam = exam,
+                                            modifier = Modifier
+                                                .padding(horizontal = 8.dp)
+                                                .padding(bottom = 4.dp))
+                                    }
+
+                                    items(tasksForDay) {taskWithCourse ->
+                                        TaskRow(
+                                            taskWithCourse = taskWithCourse,
+                                            onClick = { onTaskClick(taskWithCourse.task.id) },
+                                            onCheckedChange = { checked ->
+                                                viewModel.setCompleted(taskWithCourse.task, checked)
+                                            }
                                         )
                                     }
                                 }
