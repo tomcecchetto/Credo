@@ -65,6 +65,9 @@ fun CalendarScreen(
     val currentMinuteOfDay = LocalTime.now().hour * 60 + LocalTime.now().minute
     val slots by viewModel.slots.collectAsState(initial = null)
     val weekLectures by viewModel.weekLectures.collectAsState(initial = emptyList())
+    val openDeadlineDays by viewModel.openDeadlineDays.collectAsState(initial = emptySet())
+    val completedDeadlineDays by viewModel.completedDeadlineDays.collectAsState(initial = emptySet())
+    val examDays by viewModel.examDays.collectAsState(initial = emptySet())
 
     Scaffold(
         modifier = modifier,
@@ -402,6 +405,9 @@ fun CalendarScreen(
                                                 isSelected = day == selectedDay,
                                                 isPast = day < today,
                                                 isInShownMonth = isInShownMonth,
+                                                hasExam = day in examDays,
+                                                hasOpenProjectOrLabDeadline = day in openDeadlineDays,
+                                                hasCompletedProjectOrLabDeadline = day in completedDeadlineDays,
                                                 onClick = { viewModel.selectDay(day) },
                                                 modifier = Modifier.weight(1f)
                                             )

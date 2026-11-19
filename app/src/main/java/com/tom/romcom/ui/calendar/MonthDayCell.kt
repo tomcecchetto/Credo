@@ -6,7 +6,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
@@ -18,6 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.tom.romcom.ui.theme.Green
+import com.tom.romcom.ui.theme.NearBlack
+import com.tom.romcom.ui.theme.SoftRed
 import java.time.LocalDate
 
 @Composable
@@ -27,6 +29,9 @@ fun MonthDayCell(
     isSelected: Boolean,
     isPast: Boolean,
     isInShownMonth: Boolean,
+    hasExam: Boolean,
+    hasOpenProjectOrLabDeadline: Boolean,
+    hasCompletedProjectOrLabDeadline: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -40,20 +45,43 @@ fun MonthDayCell(
         Box(
             modifier = Modifier
                 .size(34.dp)
-                .background(color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Transparent, shape = CircleShape)
-                .border(width = 1.5.dp, if (isToday) MaterialTheme.colorScheme.primary else Color.Transparent, shape = CircleShape),
+                .background(
+                    color = when {
+                        isSelected -> MaterialTheme.colorScheme.primary
+                        hasExam -> SoftRed
+                        hasOpenProjectOrLabDeadline -> SoftRed.copy(alpha = 0.2f)
+                        else -> Color.Transparent
+                    }, shape = CircleShape
+                )
+                .border(
+                    width = 1.5.dp,
+                    color = when {
+                        hasOpenProjectOrLabDeadline -> SoftRed
+                        hasCompletedProjectOrLabDeadline -> Green.copy(alpha = 0.3f)
+                        isToday -> MaterialTheme.colorScheme.primary
+                        else -> Color.Transparent
+                    },
+                    shape = CircleShape
+                ),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = LocalDate.ofEpochDay(day).dayOfMonth.toString(),
                 color = when {
                     isSelected -> MaterialTheme.colorScheme.onPrimary
+                    hasExam -> NearBlack
+                    hasOpenProjectOrLabDeadline -> SoftRed
                     isToday -> MaterialTheme.colorScheme.primary
                     !isInShownMonth -> (MaterialTheme.colorScheme.onSurfaceVariant).copy(alpha = 0.4f)
                     isPast -> MaterialTheme.colorScheme.onSurfaceVariant
                     else -> MaterialTheme.colorScheme.onSurface
                 },
-                fontWeight = if (isToday) FontWeight.Bold else FontWeight.Normal
+                fontWeight = when {
+                    hasExam -> FontWeight.Bold
+                    hasOpenProjectOrLabDeadline -> FontWeight.Bold
+                    isToday -> FontWeight.Bold
+                    else -> FontWeight.Normal
+                }
             )
         }
     }

@@ -31,6 +31,17 @@ interface TaskDao {
     @Query("SELECT Task.* FROM Task WHERE Task.id = :id")
     suspend fun getTaskById(id: Int): Task?
 
+    @Query("SELECT Task.*, " +
+            "Course.name AS courseName, " +
+            "Course.color AS color " +
+            "FROM Task " +
+            "LEFT JOIN Course ON Course.id = Task.courseId " +
+            "WHERE Task.taskType IN ('PROJECT', 'LAB') " +
+            "AND (Course.semesterId = :semesterId OR " +
+            "(Task.courseId IS NULL AND Task.dueEpochDay BETWEEN :startDay AND :endDay)) " +
+            "ORDER BY Task.dueEpochDay, COALESCE(Task.dueMinuteOfDay, 1440)")
+    fun getDeadlines(startDay: Long, endDay: Long, semesterId: Int): Flow<List<TaskWithCourse>>
+
     @Insert
     suspend fun insert(task: Task)
 

@@ -3,10 +3,16 @@ package com.tom.romcom.ui.calendar
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import com.tom.romcom.data.CredoDatabase
+import com.tom.romcom.data.Exam
+import com.tom.romcom.data.Semester
+import com.tom.romcom.data.TaskWithCourse
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 import java.time.LocalDate
 import java.time.YearMonth
 
@@ -15,9 +21,33 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
 
     private val dataBase = CredoDatabase.getDatabase(application)
     private val lectureDao = dataBase.lectureDao()
+    private val semesterDao = dataBase.semesterDao()
+    private val taskDao = dataBase.taskDao()
+    private val examDao = dataBase.examDao()
     private val _selectedDay = MutableStateFlow(LocalDate.now().toEpochDay())
     private val slotDao = dataBase.recurringSlotDao()
     private val _selectedView = MutableStateFlow(CalendarView.DAY)
+    private val currentSemester: Flow<Semester?> = semesterDao.getCurrentSemester()
+    val exams: Flow<List<Exam>> = currentSemester.flatMapLatest { semester ->
+        if (semester == null) flowOf(emptyList())
+        else examDao.getExamsForSemester(semester.id)
+    }
+    val deadlines: Flow<List<TaskWithCourse>> = currentSemester.flatMapLatest { semester ->
+        if (semester == null) flowOf(emptyList())
+        else taskDao.getDeadlines(
+            startDay = semester.startEpochDay,
+            endDay = semester.endEpochDay,
+            semesterId = semester.id)
+    }
+    val openDeadlineDays = deadlines.map { list ->
+        list.filter { !it.task.isCompleted }.map { it.task.dueEpochDay }.toSet()
+    }
+    val completedDeadlineDays = deadlines.map { list ->
+        list.filter { it.task.isCompleted }.map { it.task.dueEpochDay }.toSet()
+    }
+    val examDays = exams.map { list ->
+        list.map { it.epochDay }.toSet()
+    }
     val selectedDay: StateFlow<Long> = _selectedDay
     val selectedView: StateFlow<CalendarView> = _selectedView
     val slots = slotDao.getAllSlots()
