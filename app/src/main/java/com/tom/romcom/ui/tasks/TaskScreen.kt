@@ -48,6 +48,7 @@ import com.tom.romcom.ui.CredoTopBar
 fun TaskScreen(
     onAddTask: () -> Unit,
     onTaskClick: (Int) -> Unit,
+    onExamClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TaskViewModel = viewModel()
 ) {
@@ -155,6 +156,7 @@ fun TaskScreen(
                     key = { "exam_${it.exam.id}" }) {
                     ExamCard(
                         exam = it,
+                        onClick = { onExamClick(it.exam.id) },
                         modifier = Modifier
                             .padding(start = 16.dp, end = 16.dp)
                             .padding(bottom = 8.dp)

@@ -50,7 +50,6 @@ import com.tom.romcom.ui.DateField
 import com.tom.romcom.ui.TimeField
 import com.tom.romcom.ui.calendar.CourseDropdown
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TaskEditScreen(
     taskId: Int? = null,

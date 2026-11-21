@@ -11,6 +11,7 @@ import com.tom.romcom.ui.course.CourseSetupScreen
 import com.tom.romcom.ui.semester.SemesterSetupScreen
 import com.tom.romcom.ui.study.SessionEditScreen
 import com.tom.romcom.ui.study.StudySessionScreen
+import com.tom.romcom.ui.tasks.ExamEditScreen
 import com.tom.romcom.ui.tasks.TaskEditScreen
 
 @Composable
@@ -39,6 +40,7 @@ fun CredoApp(
                     onSessionClick = { id -> backStack.add(SessionEditRoute(id)) },
                     onAddSession = { backStack.add(SessionEditRoute()) },
                     onEditTimetable = { backStack.add(TimetableSetupRoute()) },
+                    onExamClick = { id -> backStack.add(ExamEditRoute(id)) },
                     onImportTimetable = { backStack.add(TimetableSetupRoute(openPicker = true)) },
                     startTab = startTab,
                     tabRequest = tabRequest,
@@ -75,6 +77,14 @@ fun CredoApp(
             entry<TaskEditRoute> { route ->
                 TaskEditScreen(
                     taskId = route.taskId,
+                    onBack = { backStack.removeLastOrNull() },
+                    onSaved = { backStack.removeLastOrNull() },
+                    onDeleted = { backStack.removeLastOrNull() }
+                )
+            }
+            entry<ExamEditRoute> { route ->
+                ExamEditScreen(
+                    examId = route.examId,
                     onBack = { backStack.removeLastOrNull() },
                     onSaved = { backStack.removeLastOrNull() },
                     onDeleted = { backStack.removeLastOrNull() }

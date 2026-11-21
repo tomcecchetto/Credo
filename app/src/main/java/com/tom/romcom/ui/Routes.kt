@@ -21,3 +21,6 @@ data class SessionEditRoute(val sessionId: Int? = null) : NavKey
 @Serializable
 data class TaskEditRoute(val taskId: Int? = null) : NavKey
 
+@Serializable
+data class ExamEditRoute(val examId: Int) : NavKey
+

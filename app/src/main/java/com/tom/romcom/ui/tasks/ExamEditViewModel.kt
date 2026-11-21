@@ -1,0 +1,75 @@
+package com.tom.romcom.ui.tasks
+
+import android.app.Application
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
+import com.tom.romcom.data.CredoDatabase
+import com.tom.romcom.data.ExamWithCourse
+import kotlinx.coroutines.launch
+import java.time.LocalDate
+
+class ExamEditViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val db = CredoDatabase.getDatabase(application)
+    private val examDao = db.examDao()
+
+    var epochDay by mutableLongStateOf(LocalDate.now().plusDays(1).toEpochDay())
+        private set
+    var startMinuteOfDay by mutableStateOf<Int?>(null)
+        private set
+    var endMinuteOfDay by mutableStateOf<Int?>(null)
+        private set
+    var room by mutableStateOf("")
+        private set
+    var courseName by mutableStateOf("")
+        private set
+    private var loaded = false
+    private var loadedExamWithCourse: ExamWithCourse? = null
+
+    fun onEpochDayChange(newDate: Long) {
+        epochDay = newDate
+    }
+    fun onStartMinuteOfDayChange(startMinute: Int) {
+        startMinuteOfDay = startMinute
+    }
+    fun onEndMinuteOfDayChange(endMinute: Int) {
+        endMinuteOfDay = endMinute
+    }
+    fun onRoomChange(newRoom: String) {
+        room = newRoom
+    }
+    fun onStartMinuteOfDayClear() {
+        startMinuteOfDay = null
+    }
+    fun onEndMinuteOfDayClear() {
+        endMinuteOfDay = null
+    }
+
+    fun load(examId: Int) {
+
+        if (loaded)
+            return
+        loaded = true
+
+        viewModelScope.launch {
+            val examWithCourse = examDao.getExamById(examId)
+            if (examWithCourse != null) {
+                loadedExamWithCourse = examWithCourse
+                epochDay = examWithCourse.exam.epochDay
+                startMinuteOfDay = examWithCourse.exam.startMinuteOfDay
+                endMinuteOfDay = examWithCourse.exam.endMinuteOfDay
+                room = examWithCourse.exam.room ?: ""
+                courseName = examWithCourse.courseName
+            }
+        }
+
+        fun save(onDone: () -> Unit) {
+
+            val existing = loadedExamWithCourse
+        }
+    }
+}
