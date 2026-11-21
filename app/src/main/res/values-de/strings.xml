@@ -109,6 +109,10 @@
     <string name="since">Seit %s</string>
     <string name="no_tasks_or_exams">Keine Aufgaben oder Prüfungen</string>
     <string name="exam_row_title">Prüfung %s</string>
+    <string name="exams">Prüfungen</string>
+    <string name="no_exams">Keine anstehenden Prüfungen</string>
+    <string name="show_all">Alle anzeigen (%d)</string>
+    <string name="show_less">Weniger anzeigen</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
@@ -125,5 +129,9 @@
     <plurals name="delete_tasks">
         <item quantity="one">%d Aufgabe löschen?</item>
         <item quantity="other">%d Aufgaben löschen?</item>
+    </plurals>
+    <plurals name="days">
+        <item quantity="one">Tag</item>
+        <item quantity="other">Tage</item>
     </plurals>
 </resources>

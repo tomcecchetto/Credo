@@ -24,6 +24,15 @@ interface ExamDao{
             "ORDER BY COALESCE(Exam.startMinuteOfDay, 1440)")
     fun getExamsForDay(day: Long): Flow<List<ExamWithCourse>>
 
+    @Query("SELECT Exam.*, " +
+            "Course.name AS courseName, " +
+            "Course.color AS courseColor " +
+            "FROM Exam " +
+            "JOIN Course ON Exam.courseId = Course.id " +
+            "WHERE Exam.epochDay >= :today " +
+            "ORDER BY Exam.epochDay, COALESCE(Exam.startMinuteOfDay, 1440)")
+    fun getRemainingExams(today: Long): Flow<List<ExamWithCourse>>
+
     @Insert
     suspend fun insert(exam: Exam)
 

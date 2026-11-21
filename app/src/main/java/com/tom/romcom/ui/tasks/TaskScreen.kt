@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -55,8 +56,10 @@ fun TaskScreen(
     val openTasks by viewModel.openTasks.collectAsState(initial = emptyList())
     val completedTasks by viewModel.completedTasks.collectAsState(initial = emptyList())
     val selectedTypes by viewModel.selectedTypes.collectAsState()
+    val remainingExams by viewModel.remainingExams.collectAsState(initial = emptyList())
     var expanded by remember { mutableStateOf(false) }
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
+    var expandedExamList by rememberSaveable { mutableStateOf(false) }
 
     if (showDeleteDialog) {
         AlertDialog(
@@ -100,27 +103,80 @@ fun TaskScreen(
             }
         }
     ) { innerPadding ->
-        if (openTasks.isEmpty() && completedTasks.isEmpty()) {
-            Column(
-                modifier = Modifier
-                    .padding(innerPadding)
-                    .fillMaxSize(),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Text(
-                    text = stringResource(R.string.no_open_tasks),
-                    style = MaterialTheme.typography.titleMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+        LazyColumn(
+            modifier = Modifier
+                .padding(innerPadding),
+            contentPadding = PaddingValues(bottom = 88.dp)
+        ) {
+            item(key = "exams") {
+                Row(
                     modifier = Modifier
-                )
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp)
+                        .heightIn(min = 48.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(R.string.exams),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier
+                            .weight(1f)
+                    )
+                    if (remainingExams.size > 3) {
+                        TextButton(
+                            onClick = { expandedExamList = !expandedExamList },
+                            contentPadding = PaddingValues()
+                        ) {
+                            Text(
+                                text = if (expandedExamList) stringResource(R.string.show_less)
+                                else stringResource(R.string.show_all, remainingExams.size),
+                                style = MaterialTheme.typography.labelLarge,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                    }
+                }
             }
-        } else {
-            LazyColumn(
-                modifier = Modifier
-                    .padding(innerPadding),
-                contentPadding = PaddingValues(bottom = 88.dp)
-            ) {
+            if (remainingExams.isEmpty()) {
+                item("no_exams") {
+                    Text(
+                        text = stringResource(R.string.no_exams),
+                        style = MaterialTheme.typography.labelLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp, vertical = 10.dp)
+                    )
+                }
+            } else {
+                items(
+                    if (!expandedExamList) remainingExams.take(3) else remainingExams,
+                    key = { "exam_${it.exam.id}" }) {
+                    ExamCard(
+                        exam = it,
+                        modifier = Modifier
+                            .padding(start = 16.dp, end = 16.dp)
+                            .padding(bottom = 8.dp)
+                    )
+                }
+            }
+            if (openTasks.isEmpty() && completedTasks.isEmpty()) {
+                item(key = "no_tasks") {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = stringResource(R.string.no_open_tasks),
+                            style = MaterialTheme.typography.titleMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            } else {
                 item(key = "filter_chips") {
                     Row(
                         modifier = Modifier
