@@ -113,6 +113,7 @@
     <string name="no_exams">Keine anstehenden Prüfungen</string>
     <string name="show_all">Alle anzeigen (%d)</string>
     <string name="show_less">Weniger anzeigen</string>
+    <string name="clear_time">Zeit löschen</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

@@ -42,7 +42,7 @@
     <string name="if_lab">If course has lab</string>
     <string name="exam">Exam</string>
     <string name="plan">Plan</string>
-    <string name="clear">Clear Date</string>
+    <string name="clear">Clear date</string>
     <string name="semester">Semester</string>
     <string name="course_color">Course color</string>
     <string name="color">Color</string>
@@ -113,6 +113,7 @@
     <string name="no_exams">No remaining exams</string>
     <string name="show_all">Show all (%d)</string>
     <string name="show_less">Show less</string>
+    <string name="clear_time">Clear time</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>
