@@ -114,6 +114,10 @@
     <string name="show_all">Show all (%d)</string>
     <string name="show_less">Show less</string>
     <string name="clear_time">Clear time</string>
+    <string name="delete_exam">Delete exam?</string>
+    <string name="start_time_optional">Start time (optional)</string>
+    <string name="end_time_optional">End time (optional)</string>
+    <string name="room">Room</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>

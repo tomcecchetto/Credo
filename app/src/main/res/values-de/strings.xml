@@ -114,6 +114,10 @@
     <string name="show_all">Alle anzeigen (%d)</string>
     <string name="show_less">Weniger anzeigen</string>
     <string name="clear_time">Zeit löschen</string>
+    <string name="delete_exam">Prüfung löschen?</string>
+    <string name="start_time_optional">Startzeit (optional)</string>
+    <string name="end_time_optional">Endzeit (optional)</string>
+    <string name="room">Raum</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

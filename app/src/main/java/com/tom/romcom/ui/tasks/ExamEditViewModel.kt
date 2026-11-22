@@ -12,6 +12,7 @@ import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.ExamWithCourse
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.concurrent.TimeUnit
 
 class ExamEditViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -31,8 +32,8 @@ class ExamEditViewModel(application: Application) : AndroidViewModel(application
     private var loaded = false
     private var loadedExamWithCourse: ExamWithCourse? = null
 
-    fun onEpochDayChange(newDate: Long) {
-        epochDay = newDate
+    fun onEpochDayChange(millis: Long) {
+        epochDay = TimeUnit.MILLISECONDS.toDays(millis)
     }
     fun onStartMinuteOfDayChange(startMinute: Int) {
         startMinuteOfDay = startMinute
@@ -68,6 +69,12 @@ class ExamEditViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
+    val canSave: Boolean
+        get() {
+            val start = startMinuteOfDay
+            val end = endMinuteOfDay
+            return !(start != null && end != null && start > end)
+        }
     fun save(onDone: () -> Unit) {
 
         val start = startMinuteOfDay
