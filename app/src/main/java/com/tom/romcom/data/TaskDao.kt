@@ -60,6 +60,9 @@ interface TaskDao {
     @Delete
     suspend fun delete(task: Task)
 
+    @Query("DELETE FROM Task WHERE Task.seriesId = :seriesId AND Task.dueEpochDay >= :fromEpochDay")
+    suspend fun deleteThisAndFollowingTasks(seriesId: String, fromEpochDay: Long)
+
     @Delete
     suspend fun deleteTasks(tasks: List<Task>)
 }
