@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.data.Course
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Semester
@@ -23,6 +22,10 @@ import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
+enum class RepeatOption(val days: Long? = null) {
+    NONE, WEEKLY(7), BIWEEKLY(14)
+}
+
 @OptIn(ExperimentalCoroutinesApi::class)
 class TaskEditViewModel(application: Application) : AndroidViewModel(application){
 
@@ -32,6 +35,8 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
     private val taskDao = db.taskDao()
 
     var taskTitle by mutableStateOf("")
+        private set
+    var repeatOption by mutableStateOf(RepeatOption.NONE)
         private set
     var taskType by mutableStateOf(TaskType.HOMEWORK)
         private set
@@ -45,6 +50,9 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
         private set
     var timeSet by mutableStateOf(false)
         private set
+    var repeatEndDate by mutableLongStateOf(LocalDate.now().toEpochDay())
+        private set
+
     val semester: Flow<Semester?> = semesterDao.getCurrentSemester()
     val courses: Flow<List<Course>> = semester.flatMapLatest { current ->
         if (current == null) flowOf(emptyList())
@@ -58,6 +66,12 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
     }
     fun onTaskTypeChange(newTaskType: TaskType) {
         taskType = newTaskType
+    }
+    fun onRepeatOptionChange(newRepeatOption: RepeatOption) {
+        repeatOption = newRepeatOption
+    }
+    fun onRepeatEndChange(millis: Long) {
+        repeatEndDate = TimeUnit.MILLISECONDS.toDays(millis)
     }
     fun onCourseIdChange(id: Int?) {
         courseId = id
@@ -94,6 +108,11 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
                     dueTime = task.dueMinuteOfDay
                     timeSet = task.dueMinuteOfDay != null
                 }
+            }
+        } else {
+            viewModelScope.launch {
+                val currentSemester = semester.first() ?: return@launch
+                repeatEndDate = currentSemester.endEpochDay
             }
         }
     }
