@@ -69,7 +69,7 @@ fun ExamRow(
             val timePart = when {
                 exam.exam.startMinuteOfDay == null -> null
                 exam.exam.endMinuteOfDay == null -> startTime
-                else -> "$startTime–$endTime"
+                else -> "$startTime – $endTime"
             }
             val joined = listOfNotNull(timePart, room)
                 .joinToString("  ·  ")

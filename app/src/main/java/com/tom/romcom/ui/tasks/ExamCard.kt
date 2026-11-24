@@ -71,8 +71,13 @@ fun ExamCard(
             )
             val date = formatDayHeader(exam.exam.epochDay)
             val startTime = formatMinuteOfDay(exam.exam.startMinuteOfDay)
+            val endTime = formatMinuteOfDay(exam.exam.endMinuteOfDay)
             val room = exam.exam.room
-            val timePart = if (exam.exam.startMinuteOfDay == null) null else startTime
+            val timePart = when {
+                exam.exam.startMinuteOfDay == null -> null
+                exam.exam.endMinuteOfDay == null -> startTime
+                else -> "$startTime – $endTime"
+            }
             val joined = listOfNotNull(date, timePart, room)
                 .joinToString("  ·  ")
             Text(

@@ -7,7 +7,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.ExamWithCourse
 import kotlinx.coroutines.launch
@@ -77,15 +76,13 @@ class ExamEditViewModel(application: Application) : AndroidViewModel(application
         }
     fun save(onDone: () -> Unit) {
 
-        val start = startMinuteOfDay
-        val end = endMinuteOfDay
         val cleanRoom = if (room.isBlank()) null else room
         val existing = loadedExamWithCourse ?: return
-        if (start != null && end != null && start > end) return
+        if (!canSave) return
 
         val exam = existing.exam.copy(
-            startMinuteOfDay = start,
-            endMinuteOfDay = end,
+            startMinuteOfDay = startMinuteOfDay,
+            endMinuteOfDay = endMinuteOfDay,
             epochDay = epochDay,
             room = cleanRoom
         )
