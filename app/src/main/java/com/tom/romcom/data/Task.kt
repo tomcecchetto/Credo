@@ -27,6 +27,7 @@ data class Task(
     val dueEpochDay: Long,
     val dueMinuteOfDay: Int? = null,
     val isCompleted: Boolean = false,
+    val seriesId: String? = null,
     @PrimaryKey(autoGenerate = true) val id: Int = 0
 )
 
