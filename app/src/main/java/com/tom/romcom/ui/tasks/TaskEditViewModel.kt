@@ -20,6 +20,7 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 import java.time.LocalDate
+import java.util.UUID
 import java.util.concurrent.TimeUnit
 
 enum class RepeatOption(val days: Long? = null) {
@@ -116,10 +117,14 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
+    val canSave: Boolean
+        get() = !(taskTitle.isBlank() || (timeSet && dueTime == null)) &&
+                (dueDate <= repeatEndDate || repeatOption.days == null || loadedTask != null)
+
     fun save(onDone: () -> Unit) {
 
         val existing = loadedTask
-        if (taskTitle.isBlank() || (timeSet && dueTime == null)) return
+        if (!canSave) return
         val dueMinute = if (timeSet) dueTime else null
         val cleanNotes = if (notes.isNullOrBlank()) null else notes
         val task =
@@ -142,9 +147,18 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
                     dueMinuteOfDay = dueMinute
                 )
             }
+        val repeatDays = repeatOption.days
         viewModelScope.launch {
-            if (existing != null) taskDao.update(task)
-            else taskDao.insert(task)
+            when {
+                existing != null -> taskDao.update(task)
+                repeatDays == null -> taskDao.insert(task)
+                else -> {
+                    val seriesId = UUID.randomUUID().toString()
+                    val listOfTasks = ((dueDate..repeatEndDate) step repeatDays).map { day ->
+                        task.copy(dueEpochDay = day, seriesId = seriesId) }
+                    taskDao.insertTasks(listOfTasks)
+                }
+            }
             onDone()
         }
     }

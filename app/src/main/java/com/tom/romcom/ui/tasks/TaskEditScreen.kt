@@ -94,7 +94,8 @@ fun TaskEditScreen(
                 onSave = { viewModel.save(onDone = onSaved) },
                 onDelete = if (taskId != null) {
                     { showDeleteDialog = true }
-                } else null
+                } else null,
+                saveEnabled = viewModel.canSave
             )
         }
     ) { innerPadding ->
