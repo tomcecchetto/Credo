@@ -22,6 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.tom.romcom.R
+import java.util.concurrent.TimeUnit
 
 @Composable
 fun DateField(
@@ -33,9 +34,11 @@ fun DateField(
 
     ) {
     var showDialog by rememberSaveable { mutableStateOf(false) }
-    val pickerState = rememberDatePickerState()
+
 
     if (showDialog) {
+        val initialMillis = epochDay?.let { TimeUnit.DAYS.toMillis(it) }
+        val pickerState = rememberDatePickerState(initialSelectedDateMillis = initialMillis)
         DatePickerDialog(
             onDismissRequest = { showDialog = false },
             confirmButton = {
