@@ -118,6 +118,9 @@
     <string name="start_time_optional">Startzeit (optional)</string>
     <string name="end_time_optional">Endzeit (optional)</string>
     <string name="room">Raum</string>
+    <string name="repeat_once">Einmalig</string>
+    <string name="repeat_weekly">Wöchentlich</string>
+    <string name="repeat_biweekly">Alle 2 Wochen</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

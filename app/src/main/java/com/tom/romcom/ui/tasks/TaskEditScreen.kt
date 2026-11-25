@@ -157,6 +157,22 @@ fun TaskEditScreen(
                     epochDay = viewModel.dueDate,
                     onDateSelected = { viewModel.onDueDateChange(it) }
                 )
+                if (taskId == null) {
+                    SingleChoiceSegmentedButtonRow(
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        RepeatOption.entries.forEachIndexed { index, option ->
+                            SegmentedButton(
+                                selected = option == viewModel.repeatOption,
+                                onClick = { viewModel.onRepeatOptionChange(option) },
+                                shape = itemShape(index = index, count = RepeatOption.entries.size),
+                                icon = {}
+                            ) {
+                                Text(repeatOptionLabel(option))
+                            }
+                        }
+                    }
+                }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
