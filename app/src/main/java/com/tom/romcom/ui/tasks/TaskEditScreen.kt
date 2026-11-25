@@ -7,9 +7,12 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.selection.selectable
+import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,6 +20,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults.itemShape
@@ -64,17 +68,64 @@ fun TaskEditScreen(
 
     val courses by viewModel.courses.collectAsState(initial = emptyList())
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
+    var deleteFollowing by rememberSaveable { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
 
     if (showDeleteDialog) {
         AlertDialog(
             onDismissRequest = { showDeleteDialog = false },
             title = { Text(stringResource(R.string.delete_task)) },
-            text = { Text(stringResource(R.string.cannot_be_undone)) },
+            text = {
+                Column(
+                    modifier = Modifier.selectableGroup()
+                ) {
+                    Text(stringResource(R.string.cannot_be_undone))
+                    if (viewModel.isInSeries) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 48.dp)
+                                .selectable(
+                                    selected = !deleteFollowing,
+                                    onClick = { deleteFollowing = false },
+                                    role = Role.RadioButton
+                                ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(selected = !deleteFollowing, onClick = null)
+                            Text(
+                                text = stringResource(R.string.delete_only_this_task),
+                                modifier = Modifier.padding(start = 12.dp)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 48.dp)
+                                .selectable(
+                                    selected = deleteFollowing,
+                                    onClick = { deleteFollowing = true },
+                                    role = Role.RadioButton
+                                ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(selected = deleteFollowing, onClick = null)
+                            Text(
+                                text = stringResource(R.string.delete_this_and_all_following),
+                                modifier = Modifier.padding(start = 12.dp)
+                            )
+                        }
+                    }
+                }
+            },
             confirmButton = {
                 TextButton(onClick = {
-                    viewModel.delete(onDone = onDeleted); showDeleteDialog = false
-                })
+                    if (viewModel.isInSeries && deleteFollowing) {
+                        viewModel.deleteThisAndFollowingTasks(onDone = onDeleted)
+                    } else viewModel.delete(onDone = onDeleted)
+                    showDeleteDialog = false
+                }
+                )
                 { Text(stringResource(R.string.delete)) }
             },
             dismissButton = {
@@ -93,7 +144,7 @@ fun TaskEditScreen(
                 onBack = onBack,
                 onSave = { viewModel.save(onDone = onSaved) },
                 onDelete = if (taskId != null) {
-                    { showDeleteDialog = true }
+                    { showDeleteDialog = true; deleteFollowing = false }
                 } else null,
                 saveEnabled = viewModel.canSave
             )

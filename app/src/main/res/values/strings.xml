@@ -122,6 +122,8 @@
     <string name="repeat_weekly">Weekly</string>
     <string name="repeat_biweekly">Every 2 weeks</string>
     <string name="repeat_until">Repeat until</string>
+    <string name="delete_only_this_task">Only this task</string>
+    <string name="delete_this_and_all_following">This and all following</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>

@@ -28,7 +28,7 @@ enum class RepeatOption(val days: Long? = null) {
 }
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class TaskEditViewModel(application: Application) : AndroidViewModel(application){
+class TaskEditViewModel(application: Application) : AndroidViewModel(application) {
 
     private val db = CredoDatabase.getDatabase(application)
     private val semesterDao = db.semesterDao()
@@ -65,27 +65,35 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
     fun onTaskTitleChange(title: String) {
         taskTitle = title
     }
+
     fun onTaskTypeChange(newTaskType: TaskType) {
         taskType = newTaskType
     }
+
     fun onRepeatOptionChange(newRepeatOption: RepeatOption) {
         repeatOption = newRepeatOption
     }
+
     fun onRepeatEndChange(millis: Long) {
         repeatEndDate = TimeUnit.MILLISECONDS.toDays(millis)
     }
+
     fun onCourseIdChange(id: Int?) {
         courseId = id
     }
+
     fun onDueDateChange(millis: Long) {
         dueDate = TimeUnit.MILLISECONDS.toDays(millis)
     }
+
     fun onDueTimeChange(time: Int) {
         dueTime = time
     }
+
     fun onNotesChange(note: String) {
         notes = note
     }
+
     fun onTimeSetChange(state: Boolean) {
         timeSet = state
     }
@@ -117,9 +125,13 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
             }
         }
     }
+
     val canSave: Boolean
         get() = !(taskTitle.isBlank() || (timeSet && dueTime == null)) &&
                 (dueDate <= repeatEndDate || repeatOption.days == null || loadedTask != null)
+
+    val isInSeries: Boolean
+        get() = loadedTask?.seriesId != null
 
     fun save(onDone: () -> Unit) {
 
@@ -155,13 +167,15 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
                 else -> {
                     val seriesId = UUID.randomUUID().toString()
                     val listOfTasks = ((dueDate..repeatEndDate) step repeatDays).map { day ->
-                        task.copy(dueEpochDay = day, seriesId = seriesId) }
+                        task.copy(dueEpochDay = day, seriesId = seriesId)
+                    }
                     taskDao.insertTasks(listOfTasks)
                 }
             }
             onDone()
         }
     }
+
     fun delete(onDone: () -> Unit) {
         val existing = loadedTask ?: return
         viewModelScope.launch {
@@ -169,6 +183,20 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
             onDone()
         }
     }
+
+    fun deleteThisAndFollowingTasks(onDone: () -> Unit) {
+        val existing = loadedTask ?: return
+        if (existing.seriesId != null) {
+            viewModelScope.launch {
+                taskDao.deleteThisAndFollowingTasks(
+                    seriesId = existing.seriesId,
+                    fromEpochDay = existing.dueEpochDay
+                )
+                onDone()
+            }
+        }
+    }
+
     fun createCourse(
         name: String,
         credits: Double
