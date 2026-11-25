@@ -172,6 +172,13 @@ fun TaskEditScreen(
                             }
                         }
                     }
+                    if (viewModel.repeatOption != RepeatOption.NONE) {
+                        DateField(
+                            label = stringResource(R.string.repeat_until),
+                            epochDay = viewModel.repeatEndDate,
+                            onDateSelected = { viewModel.onRepeatEndChange(it) }
+                        )
+                    }
                 }
                 Row(
                     verticalAlignment = Alignment.CenterVertically,

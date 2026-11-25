@@ -51,7 +51,7 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
         private set
     var timeSet by mutableStateOf(false)
         private set
-    var repeatEndDate by mutableLongStateOf(LocalDate.now().toEpochDay())
+    var repeatEndDate by mutableLongStateOf(LocalDate.now().plusMonths(3).toEpochDay())
         private set
 
     val semester: Flow<Semester?> = semesterDao.getCurrentSemester()

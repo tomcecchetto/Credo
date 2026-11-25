@@ -121,6 +121,7 @@
     <string name="repeat_once">Einmalig</string>
     <string name="repeat_weekly">Wöchentlich</string>
     <string name="repeat_biweekly">Alle 2 Wochen</string>
+    <string name="repeat_until">Wiederholen bis</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
