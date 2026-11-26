@@ -39,7 +39,6 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
         if (semester == null) flowOf(emptyList())
         else taskDao.getDeadlines(
             startDay = semester.startEpochDay,
-            endDay = semester.endEpochDay,
             semesterId = semester.id)
     }
     val openDeadlineDays = deadlines.map { list ->
