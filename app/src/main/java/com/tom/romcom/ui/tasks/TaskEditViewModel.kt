@@ -213,6 +213,15 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
                     seriesId = existing.seriesId,
                     fromEpochDay = existing.dueEpochDay
                 )
+                val task = existing.copy(
+                    title = taskTitle,
+                    taskType = taskType,
+                    courseId = courseId,
+                    dueEpochDay = dueDate,
+                    notes = cleanNotes,
+                    dueMinuteOfDay = dueMinute
+                )
+                taskDao.update(task)
                 onDone()
             }
         }
