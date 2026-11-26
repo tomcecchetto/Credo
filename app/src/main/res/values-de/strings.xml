@@ -122,8 +122,9 @@
     <string name="repeat_weekly">Wöchentlich</string>
     <string name="repeat_biweekly">Alle 2 Wochen</string>
     <string name="repeat_until">Wiederholen bis</string>
-    <string name="delete_only_this_task">Nur diese Aufgabe</string>
-    <string name="delete_this_and_all_following">Diese und alle folgenden</string>
+    <string name="only_this_task">Nur diese Aufgabe</string>
+    <string name="this_and_all_following">Diese und alle folgenden</string>
+    <string name="apply_changes">Änderungen übernehmen für…</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

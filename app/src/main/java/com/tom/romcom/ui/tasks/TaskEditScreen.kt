@@ -69,6 +69,8 @@ fun TaskEditScreen(
     val courses by viewModel.courses.collectAsState(initial = emptyList())
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
     var deleteFollowing by rememberSaveable { mutableStateOf(false) }
+    var showSaveDialog by rememberSaveable { mutableStateOf(false) }
+    var updateFollowing by rememberSaveable { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
 
     if (showDeleteDialog) {
@@ -94,7 +96,7 @@ fun TaskEditScreen(
                         ) {
                             RadioButton(selected = !deleteFollowing, onClick = null)
                             Text(
-                                text = stringResource(R.string.delete_only_this_task),
+                                text = stringResource(R.string.only_this_task),
                                 modifier = Modifier.padding(start = 12.dp)
                             )
                         }
@@ -111,7 +113,7 @@ fun TaskEditScreen(
                         ) {
                             RadioButton(selected = deleteFollowing, onClick = null)
                             Text(
-                                text = stringResource(R.string.delete_this_and_all_following),
+                                text = stringResource(R.string.this_and_all_following),
                                 modifier = Modifier.padding(start = 12.dp)
                             )
                         }
@@ -134,6 +136,71 @@ fun TaskEditScreen(
             }
         )
     }
+
+    if (showSaveDialog) {
+        AlertDialog(
+            onDismissRequest = { showSaveDialog = false },
+            title = { Text(stringResource(R.string.apply_changes)) },
+            text = {
+                Column(
+                    modifier = Modifier.selectableGroup()
+                ) {
+                    if (viewModel.isInSeries) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 48.dp)
+                                .selectable(
+                                    selected = !updateFollowing,
+                                    onClick = { updateFollowing = false },
+                                    role = Role.RadioButton
+                                ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(selected = !updateFollowing, onClick = null)
+                            Text(
+                                text = stringResource(R.string.only_this_task),
+                                modifier = Modifier.padding(start = 12.dp)
+                            )
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .heightIn(min = 48.dp)
+                                .selectable(
+                                    selected = updateFollowing,
+                                    onClick = { updateFollowing = true },
+                                    role = Role.RadioButton
+                                ),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            RadioButton(selected = updateFollowing, onClick = null)
+                            Text(
+                                text = stringResource(R.string.this_and_all_following),
+                                modifier = Modifier.padding(start = 12.dp)
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                TextButton(onClick = {
+                    if (viewModel.isInSeries && updateFollowing) {
+                        viewModel.updateThisAndFollowingTasks(onDone = onSaved)
+                    } else viewModel.save(onDone = onSaved)
+                    showSaveDialog = false
+                }
+                ) {
+                    Text(stringResource(R.string.save))
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showSaveDialog = false }) {
+                    Text(stringResource(R.string.cancel))
+                }
+            }
+        )
+    }
     Scaffold(
         modifier = modifier,
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
@@ -142,7 +209,11 @@ fun TaskEditScreen(
                 title = if (taskId == null) stringResource(R.string.new_task) else stringResource(R.string.edit_task),
                 windowInsets = TopAppBarDefaults.windowInsets,
                 onBack = onBack,
-                onSave = { viewModel.save(onDone = onSaved) },
+                onSave = {
+                    if (viewModel.isInSeries && viewModel.seriesFieldChanged) {
+                        showSaveDialog = true; updateFollowing = false
+                    } else viewModel.save(onDone = onSaved)
+                },
                 onDelete = if (taskId != null) {
                     { showDeleteDialog = true; deleteFollowing = false }
                 } else null,
