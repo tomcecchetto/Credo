@@ -60,6 +60,23 @@ interface TaskDao {
     @Update
     suspend fun update(task: Task)
 
+    @Query("UPDATE Task SET " +
+            "title = :title, " +
+            "taskType = :taskType, " +
+            "courseId = :courseId, " +
+            "notes = :notes, " +
+            "dueMinuteOfDay = :dueMinuteOfDay " +
+            "WHERE Task.seriesId = :seriesId AND Task.dueEpochDay >= :fromEpochDay")
+    suspend fun updateThisAndFollowingTasks(
+        title: String,
+        taskType: TaskType,
+        courseId: Int?,
+        notes: String?,
+        dueMinuteOfDay: Int?,
+        seriesId: String,
+        fromEpochDay: Long
+    )
+
     @Delete
     suspend fun delete(task: Task)
 
