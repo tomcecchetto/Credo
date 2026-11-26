@@ -133,6 +133,18 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
     val isInSeries: Boolean
         get() = loadedTask?.seriesId != null
 
+    val seriesFieldChanged: Boolean
+        get() {
+            val existing = loadedTask ?: return false
+            val cleanNotes = if (notes.isNullOrBlank()) null else notes
+            val dueMinute = if (timeSet) dueTime else null
+            return existing.title != taskTitle ||
+                    existing.taskType != taskType ||
+                    existing.courseId != courseId ||
+                    existing.notes != cleanNotes ||
+                    existing.dueMinuteOfDay != dueMinute
+        }
+
     fun save(onDone: () -> Unit) {
 
         val existing = loadedTask
