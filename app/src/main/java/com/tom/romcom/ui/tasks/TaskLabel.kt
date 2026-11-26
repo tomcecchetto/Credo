@@ -7,7 +7,7 @@ import com.tom.romcom.data.TaskType
 
 @Composable
 fun taskLabel(task: TaskType): String = when (task) {
-    TaskType.HOMEWORK -> stringResource(R.string.homework)
+    TaskType.HOMEWORK -> stringResource(R.string.exercise)
     TaskType.PROJECT -> stringResource(R.string.project)
     TaskType.LAB -> stringResource(R.string.lab)
 }
