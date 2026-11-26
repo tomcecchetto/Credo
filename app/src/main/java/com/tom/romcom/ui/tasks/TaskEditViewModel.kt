@@ -197,6 +197,27 @@ class TaskEditViewModel(application: Application) : AndroidViewModel(application
         }
     }
 
+    fun updateThisAndFollowingTasks(onDone: () -> Unit) {
+        val existing = loadedTask ?: return
+        if (!canSave) return
+        val dueMinute = if (timeSet) dueTime else null
+        val cleanNotes = if (notes.isNullOrBlank()) null else notes
+        if (existing.seriesId != null) {
+            viewModelScope.launch {
+                taskDao.updateThisAndFollowingTasks(
+                    title = taskTitle,
+                    taskType = taskType,
+                    courseId = courseId,
+                    notes = cleanNotes,
+                    dueMinuteOfDay = dueMinute,
+                    seriesId = existing.seriesId,
+                    fromEpochDay = existing.dueEpochDay
+                )
+                onDone()
+            }
+        }
+    }
+
     fun createCourse(
         name: String,
         credits: Double
