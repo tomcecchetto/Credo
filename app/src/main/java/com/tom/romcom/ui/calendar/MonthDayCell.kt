@@ -6,7 +6,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -32,15 +34,16 @@ fun MonthDayCell(
     hasExam: Boolean,
     hasOpenProjectOrLabDeadline: Boolean,
     hasCompletedProjectOrLabDeadline: Boolean,
+    openExercisesCount: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
-            .height(44.dp)
+            .height(52.dp)
             .clickable { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.spacedBy(4.dp, Alignment.CenterVertically)
     ) {
         Box(
             modifier = Modifier
@@ -83,6 +86,21 @@ fun MonthDayCell(
                     else -> FontWeight.Normal
                 }
             )
+        }
+        Row(
+            modifier = Modifier.heightIn(min = 4.dp),
+            horizontalArrangement = Arrangement.spacedBy(3.dp, Alignment.CenterHorizontally)
+        ) {
+            repeat(openExercisesCount.coerceAtMost(4)) {
+                Box(
+                    modifier = Modifier
+                        .size(4.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            shape = CircleShape
+                        )
+                )
+            }
         }
     }
 }

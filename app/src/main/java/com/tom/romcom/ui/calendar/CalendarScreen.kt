@@ -69,6 +69,7 @@ fun CalendarScreen(
     val weekLectures by viewModel.weekLectures.collectAsState(initial = emptyList())
     val openDeadlineDays by viewModel.openDeadlineDays.collectAsState(initial = emptySet())
     val completedDeadlineDays by viewModel.completedDeadlineDays.collectAsState(initial = emptySet())
+    val openExerciseCountByDay by viewModel.openExerciseCountByDay.collectAsState(initial = emptyMap())
     val examDays by viewModel.examDays.collectAsState(initial = emptySet())
     val examsForDay by viewModel.examsForDay.collectAsState(initial = emptyList())
     val tasksForDay by viewModel.tasksForDay.collectAsState(initial = emptyList())
@@ -412,6 +413,7 @@ fun CalendarScreen(
                                                 hasExam = day in examDays,
                                                 hasOpenProjectOrLabDeadline = day in openDeadlineDays,
                                                 hasCompletedProjectOrLabDeadline = day in completedDeadlineDays,
+                                                openExercisesCount = openExerciseCountByDay[day] ?: 0,
                                                 onClick = { viewModel.selectDay(day) },
                                                 modifier = Modifier.weight(1f)
                                             )
