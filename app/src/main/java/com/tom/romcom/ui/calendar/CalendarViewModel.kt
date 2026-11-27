@@ -47,6 +47,16 @@ class CalendarViewModel(application: Application) : AndroidViewModel(application
     val completedDeadlineDays = deadlines.map { list ->
         list.filter { it.task.isCompleted }.map { it.task.dueEpochDay }.toSet()
     }
+    private val exerciseDeadlines: Flow<List<Task>> = currentSemester.flatMapLatest { semester ->
+        if (semester == null) flowOf(emptyList())
+        else taskDao.getExerciseDeadlines(
+            semesterId = semester.id,
+            startDay = semester.startEpochDay
+        )
+    }
+    val openExerciseCountByDay: Flow<Map<Long, Int>> = exerciseDeadlines.map { list ->
+        list.filter { !it.isCompleted }.groupingBy { it.dueEpochDay }.eachCount()
+    }
     val examDays = exams.map { list ->
         list.map { it.epochDay }.toSet()
     }

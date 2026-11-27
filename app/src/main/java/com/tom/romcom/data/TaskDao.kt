@@ -42,6 +42,14 @@ interface TaskDao {
             "ORDER BY Task.dueEpochDay, COALESCE(Task.dueMinuteOfDay, 1440)")
     fun getDeadlines(startDay: Long, semesterId: Int): Flow<List<TaskWithCourse>>
 
+    @Query("SELECT Task.* " +
+            "FROM Task " +
+            "LEFT JOIN Course ON Course.id = Task.courseId " +
+            "WHERE Task.taskType = 'HOMEWORK' " +
+            "AND (Course.semesterId = :semesterId OR " +
+            "(Task.courseId IS NULL AND Task.dueEpochDay >= :startDay))")
+    fun getExerciseDeadlines(semesterId: Int, startDay: Long): Flow<List<Task>>
+
     @Query("SELECT Task.*, " +
             "Course.name AS courseName, " +
             "Course.color AS color " +
