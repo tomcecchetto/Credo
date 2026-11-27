@@ -4,11 +4,13 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
+import kotlinx.serialization.Serializable
 
 enum class TaskType {
     HOMEWORK, PROJECT, LAB
 }
 
+@Serializable
 @Entity(
     foreignKeys = [ForeignKey(
         entity = Course::class,
@@ -18,7 +20,6 @@ enum class TaskType {
     )],
     indices = [Index("courseId")]
 )
-
 data class Task(
     val courseId: Int? = null,
     val taskType: TaskType,
