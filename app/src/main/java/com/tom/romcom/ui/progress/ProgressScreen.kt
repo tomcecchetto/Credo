@@ -1,5 +1,7 @@
 package com.tom.romcom.ui.progress
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,11 +22,15 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -56,10 +62,25 @@ fun ProgressScreen(
     val exams by viewModel.exams.collectAsState(initial = emptyList())
     val classHoursPerCourse by viewModel.classHoursPerCourse.collectAsState(initial = emptyList())
     val finishedSessions by viewModel.finishedSessions.collectAsState(initial = emptyList())
+    val snackBarHostState = remember { SnackbarHostState() }
     val hoursThisWeek = hoursThisWeek(finishedSessions)
     val reachedCourseGoals = courses.count { isWeeklyGoalReached(it, finishedSessions) }
-
     val today = LocalDate.now().toEpochDay()
+    val message = viewModel.exportMessage
+
+    val picker = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("application/json")) { uri ->
+            if (uri != null) {
+                viewModel.exportBackup(uri)
+            }
+    }
+
+    LaunchedEffect(message) {
+        if (message != null) {
+            snackBarHostState.showSnackbar(message)
+            viewModel.clearExportMessage()
+        }
+    }
 
     Scaffold(
         modifier = modifier,
@@ -68,7 +89,8 @@ fun ProgressScreen(
             CredoTopBar(
                 title = stringResource(R.string.progress),
                 onEdit = if (semester != null) onAddSemester else null,
-                editDescription = stringResource(R.string.edit_semester)
+                editDescription = stringResource(R.string.edit_semester),
+                onExportBackup = { picker.launch("credo-backup-${LocalDate.now()}.json") }
             )
         }, floatingActionButtonPosition = FabPosition.Center,
         floatingActionButton = {
@@ -81,7 +103,9 @@ fun ProgressScreen(
                     Text(stringResource(R.string.add_course))
                 }
             }
-        }) { innerPadding ->
+        },
+        snackbarHost = { SnackbarHost(snackBarHostState) }
+    ) { innerPadding ->
         val currentSemester = semester
         when {
             currentSemester == null -> Column(

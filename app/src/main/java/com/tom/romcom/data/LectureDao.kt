@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface LectureDao {
 
+    @Query("SELECT * FROM Lecture")
+    suspend fun getAllLecturesOnce(): List<Lecture>
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(lectures: List<Lecture>): List<Long>
 

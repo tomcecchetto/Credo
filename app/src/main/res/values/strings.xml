@@ -125,6 +125,10 @@
     <string name="only_this_task">Only this task</string>
     <string name="this_and_all_following">This and all following</string>
     <string name="apply_changes">Apply changes to…</string>
+    <string name="more_options">More options</string>
+    <string name="export_backup">Export backup</string>
+    <string name="backup_failed">Backup could not be saved. Please try again.</string>
+    <string name="backup_saved">Backup saved</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Exam in %d day</item>

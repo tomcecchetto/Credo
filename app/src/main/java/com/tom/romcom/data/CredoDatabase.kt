@@ -7,7 +7,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 @Database(
-    version = 8,
+    version = CredoDatabase.DATABASE_VERSION,
     entities = [
         Lecture::class,
         Task::class,
@@ -38,6 +38,8 @@ abstract class CredoDatabase : RoomDatabase() {
     abstract fun taskDao() : TaskDao
 
     companion object {
+        const val DATABASE_VERSION = 8
+
         @Volatile
         private var INSTANCE: CredoDatabase? = null
 

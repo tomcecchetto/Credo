@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SemesterDao {
 
+    @Query("SELECT * FROM semester")
+    suspend fun getAllSemestersOnce(): List<Semester>
+
     @Query("SELECT * FROM semester ORDER BY startEpochDay DESC LIMIT 1")
     fun getCurrentSemester(): Flow<Semester?>
 

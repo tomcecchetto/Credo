@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface TaskDao {
 
+    @Query("SELECT * FROM Task")
+    suspend fun getAllTasksOnce(): List<Task>
+
     @Query("SELECT Task.*, " +
             "Course.name AS courseName, " +
             "Course.color AS color " +

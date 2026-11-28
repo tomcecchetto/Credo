@@ -1,7 +1,10 @@
 package com.tom.romcom.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -9,6 +12,10 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -26,6 +33,7 @@ fun CredoTopBar(
     onEdit: (() -> Unit)? = null,
     editDescription: String = stringResource(R.string.edit),
     onBack: (() -> Unit)? = null,
+    onExportBackup: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
     onImport: (() -> Unit)? = null,
@@ -79,14 +87,41 @@ fun CredoTopBar(
             }
             if (onImport != null) {
                 IconButton(onClick = onImport) {
-                    Icon(painterResource(R.drawable.ic_attach),
-                        contentDescription = stringResource(R.string.import_calendar))
+                    Icon(
+                        painterResource(R.drawable.ic_attach),
+                        contentDescription = stringResource(R.string.import_calendar)
+                    )
                 }
             }
             if (onEdit != null) {
                 IconButton(onClick = onEdit) {
-                    Icon(painterResource(R.drawable.ic_edit),
-                        contentDescription = editDescription)
+                    Icon(
+                        painterResource(R.drawable.ic_edit),
+                        contentDescription = editDescription
+                    )
+                }
+            }
+            if (onExportBackup != null) {
+                var open by remember { mutableStateOf(false) }
+                Box {
+                    IconButton(onClick = { open = true }) {
+                        Icon(
+                            painterResource(R.drawable.ic_more_vert),
+                            contentDescription = stringResource(R.string.more_options)
+                        )
+                    }
+                    DropdownMenu(
+                        expanded = open,
+                        onDismissRequest = { open = false }
+                    ) {
+                        DropdownMenuItem(
+                            text = { Text(stringResource(R.string.export_backup)) },
+                            onClick = {
+                                onExportBackup()
+                                open = false
+                            }
+                        )
+                    }
                 }
             }
         }

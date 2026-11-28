@@ -11,6 +11,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface StudySessionDao {
 
+    @Query("SELECT * FROM StudySession")
+    suspend fun getAllStudySessionsOnce(): List<StudySession>
+
     @Query("SELECT StudySession.* FROM StudySession INNER JOIN Course ON StudySession.courseId = Course.id WHERE Course.semesterId = :semesterId AND StudySession.endTime IS NOT NULL ORDER BY StudySession.startTime DESC")
     fun getFinishedSessionsForSemester(semesterId: Int): Flow<List<StudySession>>
 

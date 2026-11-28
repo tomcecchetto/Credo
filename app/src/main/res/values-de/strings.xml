@@ -125,6 +125,10 @@
     <string name="only_this_task">Nur diese Aufgabe</string>
     <string name="this_and_all_following">Diese und alle folgenden</string>
     <string name="apply_changes">Änderungen übernehmen für…</string>
+    <string name="more_options">Weitere Optionen</string>
+    <string name="export_backup">Backup exportieren</string>
+    <string name="backup_failed">Backup konnte nicht gespeichert werden. Bitte erneut versuchen.</string>
+    <string name="backup_saved">Backup gespeichert</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>

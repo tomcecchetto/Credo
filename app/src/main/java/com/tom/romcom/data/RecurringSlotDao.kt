@@ -18,6 +18,9 @@ interface RecurringSlotDao {
         startMinuteOfDay: Int
     ): RecurringSlot?
 
+    @Query("SELECT * FROM RecurringSlot")
+    suspend fun getAllSlotsOnce(): List<RecurringSlot>
+
     @Query("SELECT * FROM RecurringSlot ORDER BY dayOfWeek, startMinuteOfDay")
     fun getAllSlots(): Flow<List<RecurringSlot>>
 
