@@ -62,6 +62,9 @@ interface TaskDao {
             "ORDER BY Task.isCompleted, COALESCE(Task.dueMinuteOfDay, 1440)")
     fun getTasksForDay(day: Long): Flow<List<TaskWithCourse>>
 
+    @Query("DELETE FROM Task")
+    suspend fun deleteAllTasks()
+
     @Insert
     suspend fun insert(task: Task)
 

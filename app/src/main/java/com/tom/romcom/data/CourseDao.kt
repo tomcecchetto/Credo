@@ -19,6 +19,12 @@ interface CourseDao {
     @Query("SELECT * FROM Course")
     suspend fun getAllCoursesOnce(): List<Course>
 
+    @Query("DELETE FROM Course")
+    suspend fun deleteAllCourses()
+
+    @Insert
+    suspend fun insertCourses(courses: List<Course>)
+
     @Insert
     suspend fun insert(course: Course): Long
 

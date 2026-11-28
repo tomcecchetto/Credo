@@ -23,9 +23,11 @@ interface StudySessionDao {
     @Query("SELECT * FROM StudySession WHERE endTime IS NULL LIMIT 1")
     suspend fun getRunningSessionNow(): StudySession?
 
-
     @Query("SELECT * FROM StudySession WHERE id = :sessionId")
     suspend fun getSessionById(sessionId: Int): StudySession?
+
+    @Query("DELETE FROM StudySession")
+    suspend fun deleteAllStudySessions()
 
     @Transaction
     suspend fun startIfNoneRunning(session: StudySession) {
@@ -33,6 +35,9 @@ interface StudySessionDao {
             insert(session)
         }
     }
+
+    @Insert
+    suspend fun insertStudySessions(studySessions: List<StudySession>)
 
     @Insert
     suspend fun insert(studySession: StudySession)

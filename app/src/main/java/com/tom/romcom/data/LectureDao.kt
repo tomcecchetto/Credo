@@ -70,4 +70,10 @@ interface LectureDao {
             "AND Lecture.epochDay BETWEEN :startDay AND :endDay " +
             "ORDER BY Lecture.epochDay, Lecture.startMinuteOfDay")
     fun getLecturesBetween(startDay: Long, endDay: Long): Flow<List<LectureWithCourse>>
+
+    @Query("DELETE FROM Lecture")
+    suspend fun deleteAllLectures()
+
+    @Insert
+    suspend fun insertLectures(lectures: List<Lecture>)
 }

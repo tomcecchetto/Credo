@@ -44,6 +44,12 @@ interface ExamDao{
             "WHERE Exam.id = :id")
     suspend fun getExamById(id: Int): ExamWithCourse?
 
+    @Query("DELETE FROM Exam")
+    suspend fun deleteAllExams()
+
+    @Insert
+    suspend fun insertExams(exams: List<Exam>)
+
     @Insert
     suspend fun insert(exam: Exam)
 

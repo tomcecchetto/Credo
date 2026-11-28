@@ -34,6 +34,12 @@ interface RecurringSlotDao {
             "ORDER BY RecurringSlot.dayOfWeek, RecurringSlot.startMinuteOfDay")
     fun getSlotsWithInfo(): Flow<List<SlotWithInfo>>
 
+    @Query("DELETE FROM RecurringSlot")
+    suspend fun deleteAllSlots()
+
+    @Insert
+    suspend fun insertSlots(recurringSlots: List<RecurringSlot>)
+
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insert(slot: RecurringSlot): Long
 

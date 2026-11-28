@@ -19,6 +19,12 @@ interface SemesterDao {
     @Query("SELECT * FROM semester ORDER BY startEpochDay DESC LIMIT 1")
     suspend fun getCurrentSemesterOnce(): Semester?
 
+    @Query("DELETE FROM semester")
+    suspend fun deleteAllSemesters()
+
+    @Insert
+    suspend fun insertSemesters(semesters: List<Semester>)
+
     @Insert
     suspend fun insert(semester: Semester)
 
