@@ -34,6 +34,7 @@ fun CredoTopBar(
     editDescription: String = stringResource(R.string.edit),
     onBack: (() -> Unit)? = null,
     onExportBackup: (() -> Unit)? = null,
+    onImportBackup: (() -> Unit)? = null,
     onSave: (() -> Unit)? = null,
     onDelete: (() -> Unit)? = null,
     onImport: (() -> Unit)? = null,
@@ -101,7 +102,7 @@ fun CredoTopBar(
                     )
                 }
             }
-            if (onExportBackup != null) {
+            if (onExportBackup != null || onImportBackup != null) {
                 var open by remember { mutableStateOf(false) }
                 Box {
                     IconButton(onClick = { open = true }) {
@@ -114,13 +115,24 @@ fun CredoTopBar(
                         expanded = open,
                         onDismissRequest = { open = false }
                     ) {
-                        DropdownMenuItem(
-                            text = { Text(stringResource(R.string.export_backup)) },
-                            onClick = {
-                                onExportBackup()
-                                open = false
-                            }
-                        )
+                        if (onExportBackup != null) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.export_backup)) },
+                                onClick = {
+                                    onExportBackup()
+                                    open = false
+                                }
+                            )
+                        }
+                        if (onImportBackup != null) {
+                            DropdownMenuItem(
+                                text = { Text(stringResource(R.string.import_backup)) },
+                                onClick = {
+                                    onImportBackup()
+                                    open = false
+                                }
+                            )
+                        }
                     }
                 }
             }

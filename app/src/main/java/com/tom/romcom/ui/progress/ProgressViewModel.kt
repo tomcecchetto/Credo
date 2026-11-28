@@ -16,6 +16,7 @@ import com.tom.romcom.data.CredoDatabase
 import com.tom.romcom.data.Exam
 import com.tom.romcom.data.Semester
 import com.tom.romcom.data.StudySession
+import com.tom.romcom.widget.updateAllWidgets
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -50,11 +51,11 @@ class ProgressViewModel(application: Application) : AndroidViewModel(application
     }
     val classHoursPerCourse: Flow<List<CourseClassHours>> = lectureDao.getClassHoursPerCourse()
 
-    var exportMessage by mutableStateOf<String?>(null)
+    var backupMessage by mutableStateOf<String?>(null)
         private set
 
-    fun clearExportMessage() {
-        exportMessage = null
+    fun clearBackupMessage() {
+        backupMessage = null
     }
 
     fun addCourse(course: Course) {
@@ -71,10 +72,29 @@ class ProgressViewModel(application: Application) : AndroidViewModel(application
                     getApplication<Application>().contentResolver.openOutputStream(uri)
                         ?.use { it.write(json.toByteArray()) }
                 } ?: error("Could not write file")
-                exportMessage = getApplication<Application>().getString(R.string.backup_saved)
+                backupMessage = getApplication<Application>().getString(R.string.backup_saved)
             } catch (e: Exception) {
                 Log.e("Credo", "Export failed", e)
-                exportMessage = getApplication<Application>().getString(R.string.backup_failed)
+                backupMessage = getApplication<Application>().getString(R.string.backup_failed)
+            }
+        }
+    }
+
+    fun importBackup(uri: Uri) {
+        viewModelScope.launch {
+            try {
+                val manager = BackupManager(db)
+                val text = withContext(Dispatchers.IO) {
+                    getApplication<Application>().contentResolver.openInputStream(uri)
+                        ?.bufferedReader()?.use { it.readText() }
+                } ?: error("Could not read file")
+                val backup = manager.fromJson(text)
+                manager.restore(backup)
+                updateAllWidgets(getApplication())
+                backupMessage = getApplication<Application>().getString(R.string.backup_imported)
+            } catch (e: Exception) {
+                Log.e("Credo", "Backup import failed", e)
+                backupMessage = getApplication<Application>().getString(R.string.backup_import_failed)
             }
         }
     }

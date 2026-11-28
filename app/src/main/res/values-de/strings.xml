@@ -129,6 +129,11 @@
     <string name="export_backup">Backup exportieren</string>
     <string name="backup_failed">Backup konnte nicht gespeichert werden. Bitte erneut versuchen.</string>
     <string name="backup_saved">Backup gespeichert</string>
+    <string name="backup_imported">Backup importiert</string>
+    <string name="backup_import_failed">Backup konnte nicht importiert werden. Bitte erneut versuchen.</string>
+    <string name="import_backup">Backup importieren</string>
+    <string name="import_confirm">Importieren</string>
+    <string name="import_backup_warning">Dadurch werden alle Daten auf diesem Gerät ersetzt. Dies kann nicht rückgängig gemacht werden.</string>
 
     <plurals name="exam_in_days">
         <item quantity="one">Prüfung in %d Tag</item>
